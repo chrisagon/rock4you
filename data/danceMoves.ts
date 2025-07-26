@@ -2186,7 +2186,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_94',
-    courseName: 'Cours 19 : Balades 3',
+    courseName: 'Cours 19 : Balades',
     courseOrder: 94,
     movementName: 'Guidage à la taille 2 mains',
     hasGif: true,
@@ -2210,7 +2210,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_95',
-    courseName: 'Cours 19 : Balades 4',
+    courseName: 'Cours 19 : Balades',
     courseOrder: 95,
     movementName: 'Guidage aux coudes',
     hasGif: true,
@@ -2234,7 +2234,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_96',
-    courseName: 'Cours 19 : Balades 5',
+    courseName: 'Cours 19 : Balades',
     courseOrder: 96,
     movementName: 'Guidage à la taille MD',
     hasGif: true,
@@ -2258,7 +2258,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_97',
-    courseName: 'Cours 19 : Balades 6',
+    courseName: 'Cours 19 : Balades',
     courseOrder: 97,
     movementName: 'Guidage à la taille MG',
     hasGif: true,
@@ -2282,7 +2282,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_98',
-    courseName: 'Cours 19 : Balades 7',
+    courseName: 'Cours 19 : Balades',
     courseOrder: 98,
     movementName: 'Guidage à la taille 2 mains avec tombé',
     hasGif: true,
@@ -2306,7 +2306,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_99',
-    courseName: 'Cours 20 : Jeux de regards V3',
+    courseName: 'Cours 20 : Jeux de regards',
     courseOrder: 99,
     movementName: 'Panier inversé',
     hasGif: true,
@@ -2330,7 +2330,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_100',
-    courseName: 'Cours 20 : Jeux de regards V4',
+    courseName: 'Cours 20 : Jeux de regards',
     courseOrder: 100,
     movementName: 'Berceau inversé',
     hasGif: true,
@@ -2354,7 +2354,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_101',
-    courseName: 'Cours 20 : Jeux de regards V5',
+    courseName: 'Cours 20 : Jeux de regards',
     courseOrder: 101,
     movementName: 'Corbeille inversée',
     hasGif: true,
@@ -2378,7 +2378,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_102',
-    courseName: 'Cours 20 : Jeux de regards V6',
+    courseName: 'Cours 20 : Jeux de regards',
     courseOrder: 102,
     movementName: 'Tire-Bouchon',
     hasGif: true,
@@ -2402,7 +2402,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_103',
-    courseName: 'Cours 21 : Changements de mains V3',
+    courseName: 'Cours 21 : Changements de mains',
     courseOrder: 103,
     movementName: 'Genuflexion',
     hasGif: true,
@@ -2426,7 +2426,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_104',
-    courseName: 'Cours 21 : Changements de mains V4',
+    courseName: 'Cours 21 : Changements de mains',
     courseOrder: 104,
     movementName: 'Genuflexion retour',
     hasGif: true,
@@ -2450,7 +2450,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_105',
-    courseName: 'Cours 21 : Changements de mains V5',
+    courseName: 'Cours 21 : Changements de mains',
     courseOrder: 105,
     movementName: 'Glissé nuque MG MD',
     hasGif: true,
@@ -2474,7 +2474,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_106',
-    courseName: 'Cours 21 : Changements de mains V6',
+    courseName: 'Cours 21 : Changements de mains',
     courseOrder: 106,
     movementName: 'Glissé nuque MD MG',
     hasGif: true,
@@ -2498,7 +2498,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_107',
-    courseName: 'Cours 21 : Changements de mains V7',
+    courseName: 'Cours 21 : Changements de mains',
     courseOrder: 107,
     movementName: 'Chgt main 4 tours extérieurs',
     hasGif: true,
@@ -2522,7 +2522,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_108',
-    courseName: 'Cours 21 : Changements de mains V8',
+    courseName: 'Cours 21 : Changements de mains',
     courseOrder: 108,
     movementName: 'Chgt main dans le dos infini',
     hasGif: true,
@@ -2546,7 +2546,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_109',
-    courseName: 'Cours 21 : Changements de mains V9',
+    courseName: 'Cours 21 : Changements de mains',
     courseOrder: 109,
     movementName: 'Tour libre dans le dos MD MG =_ MG MD',
     hasGif: true,
