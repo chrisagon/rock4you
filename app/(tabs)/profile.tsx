@@ -96,7 +96,6 @@ export default function ProfileScreen() {
               onChangeText={setLoginPassword}
               secureTextEntry
             />
-            
             {isRegistering && (
               <TextInput
                 style={styles.loginInput}
