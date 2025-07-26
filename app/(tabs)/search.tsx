@@ -185,22 +185,26 @@ export default function SearchScreen() {
 
         {filteredMoves.map((move) => (
           <TouchableOpacity key={move.id} style={styles.moveCard}>
-            <View style={styles.imageContainer}>
+            <View style={styles.moveImageContainer}>
               <Image source={getImageSource(move)} style={styles.moveImage} />
               <TouchableOpacity 
                 style={styles.playButton}
                 onPress={() => toggleGifPlayback(move.id)}
               >
                 {playingGifs.has(move.id) ? (
-                  <Pause size={16} color="#FFF" />
+                  <Pause size={24} color="#FFF" />
                 ) : (
-                  <Play size={16} color="#FFF" />
+                  <Play size={24} color="#FFF" />
                 )}
               </TouchableOpacity>
+              {!move.hasGif && (
+                <View style={styles.noGifIndicator}>
+                  <Text style={styles.noGifText}>Pas de GIF</Text>
+                </View>
+              )}
             </View>
             
             <View style={styles.moveContent}>
-              <Text style={styles.courseName}>{move.courseName}</Text>
               <View style={styles.moveHeader}>
                 <Text style={styles.moveName}>{move.movementName}</Text>
                 <View style={styles.difficultyBadge}>
@@ -219,12 +223,27 @@ export default function SearchScreen() {
                 <View style={[styles.levelBadge, { backgroundColor: getLevelColor(move.level) }]}>
                   <Text style={styles.levelText}>{move.level}</Text>
                 </View>
-                <Text style={styles.family}>{move.family}</Text>
-                <Text style={styles.duration}>{move.timeCount || ''}</Text>
+                <Text style={styles.duration}>{move.timeCount}</Text>
               </View>
+              
               <Text style={styles.courseName}>{move.courseName}</Text>
+              <Text style={styles.family}>Famille: {move.family}</Text>
+              
               {move.remarks && (
-                <Text style={styles.remarks}>{move.remarks || ''}</Text>
+                <Text style={styles.remarks}>{move.remarks}</Text>
+              )}
+              
+              <View style={styles.technicalInfo}>
+                <Text style={styles.technicalText}>
+                  {move.startPosition} → {move.endPosition}
+                </Text>
+                {move.displacement && (
+                  <Text style={styles.displacement}>• {move.displacement}</Text>
+                )}
+              </View>
+              
+              {move.gifFileName && (
+                <Text style={styles.fileName}>GIF: {move.gifFileName}</Text>
               )}
             </View>
           </TouchableOpacity>
@@ -348,89 +367,118 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#333',
-    flexDirection: 'row',
   },
-  imageContainer: {
+  moveImageContainer: {
     position: 'relative',
-    width: 100,
-    height: 100,
+    height: 200,
   },
   moveImage: {
-    width: 100,
-    height: 100,
+    width: '100%',
+    height: '100%',
     resizeMode: 'cover',
   },
   playButton: {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: [{ translateX: -12 }, { translateY: -12 }],
+    transform: [{ translateX: -20 }, { translateY: -20 }],
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    borderRadius: 12,
-    padding: 4,
+    borderRadius: 20,
+    padding: 8,
   },
   moveContent: {
-    flex: 1,
     padding: 15,
   },
   moveHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
   },
   moveName: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#FFF',
   },
   difficultyBadge: {
     backgroundColor: '#333',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8,
-    marginRight: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+    marginRight: 10,
   },
   difficultyText: {
-    fontSize: 10,
+    fontSize: 12,
     color: '#FF6B35',
     fontWeight: 'bold',
   },
   moveInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
   },
   levelBadge: {
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 10,
-    marginRight: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginRight: 10,
   },
   levelText: {
-    fontSize: 10,
+    fontSize: 12,
     color: '#FFF',
     fontWeight: 'bold',
   },
   family: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#FF6B35',
-    marginRight: 8,
     fontWeight: '600',
+    marginBottom: 8,
   },
   duration: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#666',
   },
   courseName: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#CCC',
-    marginBottom: 4,
+    marginBottom: 8,
   },
   remarks: {
-    fontSize: 11,
-    color: '#999',
+    fontSize: 13,
+    color: '#CCC',
     fontStyle: 'italic',
+    marginBottom: 8,
+  },
+  technicalInfo: {
+    marginBottom: 8,
+  },
+  technicalText: {
+    fontSize: 12,
+    color: '#999',
+  },
+  displacement: {
+    fontSize: 12,
+    color: '#999',
+    marginTop: 2,
+  },
+  fileName: {
+    fontSize: 12,
+    color: '#666',
+    fontStyle: 'italic',
+  },
+  noGifIndicator: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: 'rgba(244, 67, 54, 0.8)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  noGifText: {
+    fontSize: 10,
+    color: '#FFF',
+    fontWeight: 'bold',
   },
   noResults: {
     alignItems: 'center',
