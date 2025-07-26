@@ -62,6 +62,7 @@ export default function AppDocumentation() {
           <Text style={styles.featureText}>
             Ajout/suppression de passes favorites et création de listes personnalisées.
             avec codes couleur pour organiser l'apprentissage.
+          </Text>
         </View>
         <View style={styles.feature}>
           <Text style={styles.featureTitle}>4. Profil utilisateur</Text>
