@@ -81,8 +81,8 @@ export default function SearchScreen() {
         </View>
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersContainer}>
-        <View style={styles.filtersRow}>
+      <View style={styles.filtersContainer}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.filterSection}>
             <Text style={styles.filterTitle}>Niveau:</Text>
             <View style={styles.filterOptions}>
@@ -174,8 +174,8 @@ export default function SearchScreen() {
               ))}
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
 
       <ScrollView style={styles.resultsContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.resultsHeader}>
@@ -283,14 +283,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   filtersContainer: {
+    maxHeight: 200,
     paddingHorizontal: 20,
     marginBottom: 20,
   },
-  filtersRow: {
-    flexDirection: 'row',
-  },
   filterSection: {
-    marginRight: 20,
+    marginBottom: 15,
   },
   filterTitle: {
     fontSize: 14,
@@ -300,6 +298,7 @@ const styles = StyleSheet.create({
   },
   filterOptions: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   filterButton: {
     paddingHorizontal: 12,
@@ -309,6 +308,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333',
     marginRight: 8,
+    marginBottom: 8,
   },
   filterButtonActive: {
     backgroundColor: '#FF6B35',
