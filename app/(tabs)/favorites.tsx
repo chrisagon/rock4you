@@ -184,6 +184,7 @@ export default function FavoritesScreen() {
                   <Text style={styles.remarks}>{move.remarks}</Text>
                 )}
               </View>
+          </TouchableOpacity>
           ))}
 
           {favorites.length === 0 && (
