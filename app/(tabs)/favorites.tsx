@@ -179,13 +179,11 @@ export default function FavoritesScreen() {
                   </View>
                   <Text style={styles.duration}>{move.timeCount}</Text>
                 </View>
-            <TouchableOpacity onPress={() => toggleFavorite(move.id)}>
                 <Text style={styles.family}>{move.family}</Text>
                 {move.remarks && (
                   <Text style={styles.remarks}>{move.remarks}</Text>
                 )}
               </View>
-            </TouchableOpacity>
           ))}
 
           {favorites.length === 0 && (
