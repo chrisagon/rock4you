@@ -26,7 +26,7 @@ export interface DanceMove {
 export const danceMoves: DanceMove[] = [
   {
     id: 'move_1',
-    courseName: 'Cours 1 : Dynamique de base',
+    courseName: ' 1 : Dynamique de base',
     courseOrder: 1,
     movementName: 'Avant arrière mains parallèles',
     hasGif: true,
@@ -50,7 +50,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_2',
-    courseName: 'Cours 1 : Dynamique de base',
+    courseName: ' 1 : Dynamique de base',
     courseOrder: 2,
     movementName: 'Avant-Arrière MG-MD',
     hasGif: true,
@@ -74,7 +74,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_3',
-    courseName: 'Cours 1 : Dynamique de base',
+    courseName: ' 1 : Dynamique de base',
     courseOrder: 3,
     movementName: 'Traversée à droite',
     hasGif: true,
@@ -98,7 +98,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_4',
-    courseName: 'Cours 1 : Dynamique de base',
+    courseName: ' 1 : Dynamique de base',
     courseOrder: 4,
     movementName: 'Traversée à gauche',
     hasGif: true,
@@ -122,7 +122,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_5',
-    courseName: 'Cours 2 : Tours et traversées',
+    courseName: ' 2 : Tours et traversées',
     courseOrder: 5,
     movementName: 'Tour intérieur',
     hasGif: true,
@@ -146,7 +146,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_6',
-    courseName: 'Cours 2 : Tours et traversées',
+    courseName: ' 2 : Tours et traversées',
     courseOrder: 6,
     movementName: 'Tour extérieur',
     hasGif: true,
@@ -170,7 +170,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_7',
-    courseName: 'Cours 2 : Tours et traversées',
+    courseName: ' 2 : Tours et traversées',
     courseOrder: 7,
     movementName: 'Traversée tour intérieur à droite',
     hasGif: true,
@@ -194,7 +194,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_8',
-    courseName: 'Cours 2 : Tours et traversées',
+    courseName: ' 2 : Tours et traversées',
     courseOrder: 8,
     movementName: 'Traversée tour extérieur à droite',
     hasGif: true,
@@ -218,7 +218,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_9',
-    courseName: 'Cours 2 : Tours et traversées',
+    courseName: ' 2 : Tours et traversées',
     courseOrder: 9,
     movementName: 'Barrage',
     hasGif: true,
@@ -242,7 +242,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_10',
-    courseName: 'Cours 2 : Tours et traversées',
+    courseName: ' 2 : Tours et traversées',
     courseOrder: 10,
     movementName: 'Couple sortie sous le bras',
     hasGif: true,
@@ -266,7 +266,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_11',
-    courseName: 'Cours 2 : Tours et traversées',
+    courseName: ' 2 : Tours et traversées',
     courseOrder: 11,
     movementName: 'Couple sortie relâchée',
     hasGif: true,
@@ -290,7 +290,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_12',
-    courseName: 'Cours 3 : Positions',
+    courseName: ' 3 : Positions',
     courseOrder: 12,
     movementName: 'Trois tapes et tour cavalière',
     hasGif: true,
@@ -314,7 +314,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_13',
-    courseName: 'Cours 3 : Positions',
+    courseName: ' 3 : Positions',
     courseOrder: 13,
     movementName: 'Trois tapes les deux tournent',
     hasGif: true,
@@ -338,7 +338,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_14',
-    courseName: 'Cours 3 : Positions',
+    courseName: ' 3 : Positions',
     courseOrder: 14,
     movementName: 'Mise en corbeille',
     hasGif: true,
@@ -362,7 +362,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_15',
-    courseName: 'Cours 3 : Positions',
+    courseName: ' 3 : Positions',
     courseOrder: 15,
     movementName: 'Mise en panier',
     hasGif: true,
@@ -386,7 +386,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_16',
-    courseName: 'Cours 3 : Positions',
+    courseName: ' 3 : Positions',
     courseOrder: 16,
     movementName: 'Mise en berceau',
     hasGif: true,
@@ -410,7 +410,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_17',
-    courseName: 'Cours 4 : Balades',
+    courseName: ' 4 : Balades',
     courseOrder: 17,
     movementName: 'Balade panier ligne fille',
     hasGif: true,
@@ -434,7 +434,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_18',
-    courseName: 'Cours 4 : Balades',
+    courseName: ' 4 : Balades',
     courseOrder: 18,
     movementName: 'Balade panier ligne garçon',
     hasGif: true,
@@ -458,7 +458,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_19',
-    courseName: 'Cours 4 : Balades',
+    courseName: ' 4 : Balades',
     courseOrder: 19,
     movementName: 'Balade corbeille ligne fille',
     hasGif: true,
@@ -482,7 +482,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_20',
-    courseName: 'Cours 4 : Balades',
+    courseName: ' 4 : Balades',
     courseOrder: 20,
     movementName: 'Balade corbeille ligne garçon',
     hasGif: true,
@@ -506,7 +506,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_21',
-    courseName: 'Cours 4 : Balades',
+    courseName: ' 4 : Balades',
     courseOrder: 21,
     movementName: 'Balade berceau ligne fille',
     hasGif: true,
@@ -530,7 +530,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_22',
-    courseName: 'Cours 4 : Balades',
+    courseName: ' 4 : Balades',
     courseOrder: 22,
     movementName: 'Balade berceau ligne garçon',
     hasGif: true,
@@ -554,7 +554,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_23',
-    courseName: 'Cours 4 : Balades',
+    courseName: ' 4 : Balades',
     courseOrder: 23,
     movementName: 'Balade mains parallèles ligne fille',
     hasGif: true,
@@ -578,7 +578,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_24',
-    courseName: 'Cours 4 : Balades',
+    courseName: ' 4 : Balades',
     courseOrder: 24,
     movementName: 'Balade mains parallèles ligne garçon',
     hasGif: true,
@@ -602,7 +602,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_25',
-    courseName: 'Cours 4 : Balades',
+    courseName: ' 4 : Balades',
     courseOrder: 25,
     movementName: 'Cha-cha',
     hasGif: true,
@@ -626,7 +626,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_26',
-    courseName: 'Cours 5 : Spaghetti',
+    courseName: ' 5 : Spaghetti',
     courseOrder: 26,
     movementName: 'Spaghetti simple',
     hasGif: true,
@@ -650,7 +650,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_27',
-    courseName: 'Cours 5 : Spaghetti',
+    courseName: ' 5 : Spaghetti',
     courseOrder: 27,
     movementName: 'Spaghetti infini',
     hasGif: true,
@@ -674,7 +674,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_28',
-    courseName: 'Cours 5 : Spaghetti',
+    courseName: ' 5 : Spaghetti',
     courseOrder: 28,
     movementName: 'Feinte de spaghetti',
     hasGif: true,
@@ -698,7 +698,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_29',
-    courseName: 'Cours 6 : Enroulés',
+    courseName: ' 6 : Enroulés',
     courseOrder: 29,
     movementName: 'Enroulé simple',
     hasGif: true,
@@ -722,7 +722,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_30',
-    courseName: 'Cours 6 : Enroulés',
+    courseName: ' 6 : Enroulés',
     courseOrder: 30,
     movementName: 'Enroulé genou',
     hasGif: true,
@@ -746,7 +746,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_31',
-    courseName: 'Cours 6 : Enroulés',
+    courseName: ' 6 : Enroulés',
     courseOrder: 31,
     movementName: 'Enroulé long',
     hasGif: true,
@@ -770,7 +770,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_32',
-    courseName: 'Cours 6 : Enroulés',
+    courseName: ' 6 : Enroulés',
     courseOrder: 32,
     movementName: 'Enroulés infinis',
     hasGif: true,
@@ -794,7 +794,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_33',
-    courseName: 'Cours 7 : Changements de mains',
+    courseName: ' 7 : Changements de mains',
     courseOrder: 33,
     movementName: 'Tour extérieur MG MD',
     hasGif: true,
@@ -818,7 +818,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_34',
-    courseName: 'Cours 7 : Changements de mains',
+    courseName: ' 7 : Changements de mains',
     courseOrder: 34,
     movementName: 'Tour intérieur MD MG',
     hasGif: true,
@@ -842,7 +842,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_35',
-    courseName: 'Cours 7 : Changements de mains',
+    courseName: ' 7 : Changements de mains',
     courseOrder: 35,
     movementName: 'Caresse MD MG',
     hasGif: true,
@@ -866,7 +866,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_36',
-    courseName: 'Cours 7 : Changements de mains',
+    courseName: ' 7 : Changements de mains',
     courseOrder: 36,
     movementName: 'Caresse inversée',
     hasGif: true,
@@ -890,7 +890,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_37',
-    courseName: 'Cours 7 : Changements de mains',
+    courseName: ' 7 : Changements de mains',
     courseOrder: 37,
     movementName: 'Traversée 2 tours extérieurs',
     hasGif: true,
@@ -914,7 +914,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_38',
-    courseName: 'Cours 7 : Changements de mains',
+    courseName: ' 7 : Changements de mains',
     courseOrder: 38,
     movementName: 'Chgt main dans le dos',
     hasGif: true,
@@ -938,7 +938,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_39',
-    courseName: 'Cours 8 : Jeux de regards',
+    courseName: ' 8 : Jeux de regards',
     courseOrder: 39,
     movementName: 'Jeu de regard panier',
     hasGif: true,
@@ -962,7 +962,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_40',
-    courseName: 'Cours 8 : Jeux de regards',
+    courseName: ' 8 : Jeux de regards',
     courseOrder: 40,
     movementName: 'Jeu de regard corbeille',
     hasGif: true,
@@ -986,7 +986,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_41',
-    courseName: 'Cours 8 : Jeux de regards',
+    courseName: ' 8 : Jeux de regards',
     courseOrder: 41,
     movementName: 'Jeu de regard berceau',
     hasGif: true,
@@ -1010,7 +1010,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_42',
-    courseName: 'Cours 8 : Jeux de regards',
+    courseName: ' 8 : Jeux de regards',
     courseOrder: 42,
     movementName: 'Engrenage',
     hasGif: true,
@@ -1034,7 +1034,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_43',
-    courseName: 'Cours 8 : Jeux de regards',
+    courseName: ' 8 : Jeux de regards',
     courseOrder: 43,
     movementName: 'Epaule-Epaule',
     hasGif: true,
@@ -1058,7 +1058,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_44',
-    courseName: 'Cours 8 : Jeux de regards',
+    courseName: ' 8 : Jeux de regards',
     courseOrder: 44,
     movementName: 'L_incontournable',
     hasGif: true,
@@ -1082,7 +1082,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_45',
-    courseName: 'Cours 9 : Penchés',
+    courseName: ' 9 : Penchés',
     courseOrder: 45,
     movementName: 'Décalé',
     hasGif: true,
@@ -1106,7 +1106,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_46',
-    courseName: 'Cours 9 : Penchés',
+    courseName: ' 9 : Penchés',
     courseOrder: 46,
     movementName: 'Penché',
     hasGif: true,
@@ -1130,7 +1130,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_47',
-    courseName: 'Cours 10 : Tombés',
+    courseName: ' 10 : Tombés',
     courseOrder: 47,
     movementName: 'Tombé à droite',
     hasGif: true,
@@ -1154,7 +1154,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_48',
-    courseName: 'Cours 10 : Tombés',
+    courseName: ' 10 : Tombés',
     courseOrder: 48,
     movementName: 'Tombé à gauche',
     hasGif: true,
@@ -1178,7 +1178,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_49',
-    courseName: 'Cours 11 : Bossus',
+    courseName: ' 11 : Bossus',
     courseOrder: 49,
     movementName: 'Bossu à une main',
     hasGif: true,
@@ -1202,7 +1202,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_50',
-    courseName: 'Cours 11 : Bossus',
+    courseName: ' 11 : Bossus',
     courseOrder: 50,
     movementName: 'Bossu à 2 mains',
     hasGif: true,
@@ -1226,7 +1226,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_51',
-    courseName: 'Cours 11 : Bossus',
+    courseName: ' 11 : Bossus',
     courseOrder: 51,
     movementName: 'Clé de bras infinie',
     hasGif: true,
@@ -1250,7 +1250,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_52',
-    courseName: 'Cours 12 : Espagnoles',
+    courseName: ' 12 : Espagnoles',
     courseOrder: 52,
     movementName: 'Espagnole simple',
     hasGif: true,
@@ -1274,7 +1274,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_53',
-    courseName: 'Cours 12 : Espagnoles',
+    courseName: ' 12 : Espagnoles',
     courseOrder: 53,
     movementName: 'Espagnole infinie',
     hasGif: true,
@@ -1298,7 +1298,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_54',
-    courseName: 'Cours 12 : Espagnoles',
+    courseName: ' 12 : Espagnoles',
     courseOrder: 54,
     movementName: 'Espagnole et enroulés',
     hasGif: true,
@@ -1322,7 +1322,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_55',
-    courseName: 'Cours 12 : Espagnoles',
+    courseName: ' 12 : Espagnoles',
     courseOrder: 55,
     movementName: 'Espagnole déboulés infini',
     hasGif: true,
@@ -1346,7 +1346,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_56',
-    courseName: 'Cours 12 : Espagnoles',
+    courseName: ' 12 : Espagnoles',
     courseOrder: 56,
     movementName: 'Espagnole Jeu de regard V1',
     hasGif: true,
@@ -1370,7 +1370,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_57',
-    courseName: 'Cours 12 : Espagnoles',
+    courseName: ' 12 : Espagnoles',
     courseOrder: 57,
     movementName: 'Espagnole Jeu de regard V2',
     hasGif: true,
@@ -1394,7 +1394,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_58',
-    courseName: 'Cours 12 : Espagnoles',
+    courseName: ' 12 : Espagnoles',
     courseOrder: 58,
     movementName: 'Espagnole garçon, Spaghetti inversé',
     hasGif: true,
@@ -1418,7 +1418,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_59',
-    courseName: 'Cours 12 : Espagnoles',
+    courseName: ' 12 : Espagnoles',
     courseOrder: 59,
     movementName: 'Espagnole inversée garçon, spaghetti',
     hasGif: true,
@@ -1442,7 +1442,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_60',
-    courseName: 'Cours 13 : Satellites et Fenêtre',
+    courseName: ' 13 : Satellites et Fenêtre',
     courseOrder: 60,
     movementName: 'Satellite',
     hasGif: true,
@@ -1466,7 +1466,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_61',
-    courseName: 'Cours 13 : Satellites et Fenêtre',
+    courseName: ' 13 : Satellites et Fenêtre',
     courseOrder: 61,
     movementName: 'Satellite tombé à droite',
     hasGif: true,
@@ -1490,7 +1490,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_62',
-    courseName: 'Cours 13 : Satellites et Fenêtre',
+    courseName: ' 13 : Satellites et Fenêtre',
     courseOrder: 62,
     movementName: 'Satellite inversé',
     hasGif: true,
@@ -1514,7 +1514,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_63',
-    courseName: 'Cours 13 : Satellites et Fenêtre',
+    courseName: ' 13 : Satellites et Fenêtre',
     courseOrder: 63,
     movementName: 'Fenêtre',
     hasGif: true,
@@ -1538,7 +1538,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_64',
-    courseName: 'Cours 14 : Catapultes',
+    courseName: ' 14 : Catapultes',
     courseOrder: 64,
     movementName: 'Catapulte simple',
     hasGif: true,
@@ -1562,7 +1562,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_65',
-    courseName: 'Cours 14 : Catapultes',
+    courseName: ' 14 : Catapultes',
     courseOrder: 65,
     movementName: 'Catapulte tour lâché',
     hasGif: true,
@@ -1586,7 +1586,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_66',
-    courseName: 'Cours 14 : Catapultes',
+    courseName: ' 14 : Catapultes',
     courseOrder: 66,
     movementName: 'Catapulte demi-cage',
     hasGif: true,
@@ -1610,7 +1610,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_67',
-    courseName: 'Cours 14 : Catapultes',
+    courseName: ' 14 : Catapultes',
     courseOrder: 67,
     movementName: 'Catapulte demi-cage traversée',
     hasGif: true,
@@ -1634,7 +1634,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_68',
-    courseName: 'Cours 14 : Catapultes',
+    courseName: ' 14 : Catapultes',
     courseOrder: 68,
     movementName: 'Catapulte cage',
     hasGif: true,
@@ -1658,7 +1658,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_69',
-    courseName: 'Cours 15 : Amené à l\'épaule',
+    courseName: ' 15 : Amené à l\'épaule',
     courseOrder: 69,
     movementName: 'First Move',
     hasGif: true,
@@ -1682,7 +1682,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_70',
-    courseName: 'Cours 15 : Amené à l\'épaule',
+    courseName: ' 15 : Amené à l\'épaule',
     courseOrder: 70,
     movementName: 'First move MG MD dos',
     hasGif: true,
@@ -1706,7 +1706,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_71',
-    courseName: 'Cours 15 : Amené à l\'épaule',
+    courseName: ' 15 : Amené à l\'épaule',
     courseOrder: 71,
     movementName: 'First Move MG MD épaule',
     hasGif: true,
@@ -1730,7 +1730,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_72',
-    courseName: 'Cours 15 : Amené à l\'épaule',
+    courseName: ' 15 : Amené à l\'épaule',
     courseOrder: 72,
     movementName: 'First Move MG MD en amont',
     hasGif: true,
@@ -1754,7 +1754,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_73',
-    courseName: 'Cours 15 : Amené à l\'épaule',
+    courseName: ' 15 : Amené à l\'épaule',
     courseOrder: 73,
     movementName: 'First Move main droite',
     hasGif: true,
@@ -1778,7 +1778,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_74',
-    courseName: 'Cours 16 : Coups de fouet',
+    courseName: ' 16 : Coups de fouet',
     courseOrder: 74,
     movementName: 'Coup de fouet MD',
     hasGif: true,
@@ -1802,7 +1802,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_75',
-    courseName: 'Cours 16 : Coups de fouet',
+    courseName: ' 16 : Coups de fouet',
     courseOrder: 75,
     movementName: 'Coup de fouet MG en haut',
     hasGif: true,
@@ -1826,7 +1826,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_76',
-    courseName: 'Cours 16 : Coups de fouet',
+    courseName: ' 16 : Coups de fouet',
     courseOrder: 76,
     movementName: 'Coup de fouet MG en bas',
     hasGif: true,
@@ -1850,7 +1850,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_77',
-    courseName: 'Cours 17 : Variantes des bases',
+    courseName: ' 17 : Variantes des bases',
     courseOrder: 77,
     movementName: 'Tour extérieur tenu',
     hasGif: true,
@@ -1874,7 +1874,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_78',
-    courseName: 'Cours 17 : Variantes des bases',
+    courseName: ' 17 : Variantes des bases',
     courseOrder: 78,
     movementName: 'Tour extérieur lâché',
     hasGif: true,
@@ -1898,7 +1898,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_79',
-    courseName: 'Cours 17 : Variantes des bases',
+    courseName: ' 17 : Variantes des bases',
     courseOrder: 79,
     movementName: 'Traversée à gauche tour intérieur',
     hasGif: true,
@@ -1922,7 +1922,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_80',
-    courseName: 'Cours 17 : Variantes des bases',
+    courseName: ' 17 : Variantes des bases',
     courseOrder: 80,
     movementName: 'Traversée à gauche tour extérieur',
     hasGif: true,
@@ -1946,7 +1946,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_81',
-    courseName: 'Cours 17 : Variantes des bases',
+    courseName: ' 17 : Variantes des bases',
     courseOrder: 81,
     movementName: 'Traversée à gauche 2 tours extérieurs',
     hasGif: true,
@@ -1970,7 +1970,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_83',
-    courseName: 'Cours 17 : Variantes des bases',
+    courseName: ' 17 : Variantes des bases',
     courseOrder: 83,
     movementName: 'Dos à dos MG MD',
     hasGif: true,
@@ -1994,7 +1994,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_84',
-    courseName: 'Cours 17 : Variantes des bases',
+    courseName: ' 17 : Variantes des bases',
     courseOrder: 84,
     movementName: 'Dos à dos MD MD',
     hasGif: true,
@@ -2018,7 +2018,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_87',
-    courseName: 'Cours 17 : Variantes des bases',
+    courseName: ' 17 : Variantes des bases',
     courseOrder: 87,
     movementName: 'Dos à dos MD MD 2 tours chgt main',
     hasGif: true,
@@ -2042,7 +2042,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_88',
-    courseName: 'Cours 18 : Tapes',
+    courseName: ' 18 : Tapes',
     courseOrder: 88,
     movementName: 'Tope-là enroulé',
     hasGif: true,
@@ -2066,7 +2066,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_89',
-    courseName: 'Cours 18 : Tapes',
+    courseName: ' 18 : Tapes',
     courseOrder: 89,
     movementName: 'Tope-là enroulé V2',
     hasGif: true,
@@ -2090,7 +2090,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_90',
-    courseName: 'Cours 18 : Tapes',
+    courseName: ' 18 : Tapes',
     courseOrder: 90,
     movementName: 'Tope-là tenu, arrivée espagnole inversée',
     hasGif: true,
@@ -2114,7 +2114,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_91',
-    courseName: 'Cours 18 : Tapes',
+    courseName: ' 18 : Tapes',
     courseOrder: 91,
     movementName: 'Tope-là assis',
     hasGif: true,
@@ -2138,7 +2138,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_92',
-    courseName: 'Cours 18 : Tapes',
+    courseName: ' 18 : Tapes',
     courseOrder: 92,
     movementName: 'Mains coudes',
     hasGif: true,
@@ -2162,7 +2162,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_93',
-    courseName: 'Cours 18 : Tapes',
+    courseName: ' 18 : Tapes',
     courseOrder: 93,
     movementName: 'Mains 2 coudes',
     hasGif: true,
@@ -2186,7 +2186,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_94',
-    courseName: 'Cours 19 : Balades',
+    courseName: ' 19 : Balades',
     courseOrder: 94,
     movementName: 'Guidage à la taille 2 mains',
     hasGif: true,
@@ -2210,7 +2210,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_95',
-    courseName: 'Cours 19 : Balades',
+    courseName: ' 19 : Balades',
     courseOrder: 95,
     movementName: 'Guidage aux coudes',
     hasGif: true,
@@ -2234,7 +2234,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_96',
-    courseName: 'Cours 19 : Balades',
+    courseName: ' 19 : Balades',
     courseOrder: 96,
     movementName: 'Guidage à la taille MD',
     hasGif: true,
@@ -2258,7 +2258,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_97',
-    courseName: 'Cours 19 : Balades',
+    courseName: ' 19 : Balades',
     courseOrder: 97,
     movementName: 'Guidage à la taille MG',
     hasGif: true,
@@ -2282,7 +2282,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_98',
-    courseName: 'Cours 19 : Balades',
+    courseName: ' 19 : Balades',
     courseOrder: 98,
     movementName: 'Guidage à la taille 2 mains avec tombé',
     hasGif: true,
@@ -2306,7 +2306,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_99',
-    courseName: 'Cours 20 : Jeux de regards',
+    courseName: ' 20 : Jeux de regards',
     courseOrder: 99,
     movementName: 'Panier inversé',
     hasGif: true,
@@ -2330,7 +2330,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_100',
-    courseName: 'Cours 20 : Jeux de regards',
+    courseName: ' 20 : Jeux de regards',
     courseOrder: 100,
     movementName: 'Berceau inversé',
     hasGif: true,
@@ -2354,7 +2354,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_101',
-    courseName: 'Cours 20 : Jeux de regards',
+    courseName: ' 20 : Jeux de regards',
     courseOrder: 101,
     movementName: 'Corbeille inversée',
     hasGif: true,
@@ -2378,7 +2378,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_102',
-    courseName: 'Cours 20 : Jeux de regards',
+    courseName: ' 20 : Jeux de regards',
     courseOrder: 102,
     movementName: 'Tire-Bouchon',
     hasGif: true,
@@ -2402,7 +2402,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_103',
-    courseName: 'Cours 21 : Changements de mains',
+    courseName: ' 21 : Changements de mains',
     courseOrder: 103,
     movementName: 'Genuflexion',
     hasGif: true,
@@ -2426,7 +2426,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_104',
-    courseName: 'Cours 21 : Changements de mains',
+    courseName: ' 21 : Changements de mains',
     courseOrder: 104,
     movementName: 'Genuflexion retour',
     hasGif: true,
@@ -2450,7 +2450,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_105',
-    courseName: 'Cours 21 : Changements de mains',
+    courseName: ' 21 : Changements de mains',
     courseOrder: 105,
     movementName: 'Glissé nuque MG MD',
     hasGif: true,
@@ -2474,7 +2474,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_106',
-    courseName: 'Cours 21 : Changements de mains',
+    courseName: ' 21 : Changements de mains',
     courseOrder: 106,
     movementName: 'Glissé nuque MD MG',
     hasGif: true,
@@ -2498,7 +2498,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_107',
-    courseName: 'Cours 21 : Changements de mains',
+    courseName: ' 21 : Changements de mains',
     courseOrder: 107,
     movementName: 'Chgt main 4 tours extérieurs',
     hasGif: true,
@@ -2522,7 +2522,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_108',
-    courseName: 'Cours 21 : Changements de mains',
+    courseName: ' 21 : Changements de mains',
     courseOrder: 108,
     movementName: 'Chgt main dans le dos infini',
     hasGif: true,
@@ -2546,7 +2546,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_109',
-    courseName: 'Cours 21 : Changements de mains',
+    courseName: ' 21 : Changements de mains',
     courseOrder: 109,
     movementName: 'Tour libre dans le dos MD MG =_ MG MD',
     hasGif: true,
@@ -2570,7 +2570,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_110',
-    courseName: 'Cours 22 : Diverses passes',
+    courseName: ' 22 : Diverses passes',
     courseOrder: 110,
     movementName: 'Enroulés infinis V2',
     hasGif: true,
@@ -2594,7 +2594,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_111',
-    courseName: 'Cours 22 : Diverses passes',
+    courseName: ' 22 : Diverses passes',
     courseOrder: 111,
     movementName: 'Enroulés infinis V3',
     hasGif: true,
@@ -2618,7 +2618,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_112',
-    courseName: 'Cours 22 : Diverses passes',
+    courseName: ' 22 : Diverses passes',
     courseOrder: 112,
     movementName: 'Preux Chevalier (théière)',
     hasGif: true,
@@ -2642,7 +2642,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_113',
-    courseName: 'Cours 22 : Diverses passes',
+    courseName: ' 22 : Diverses passes',
     courseOrder: 113,
     movementName: 'Tapes successives en face',
     hasGif: true,
@@ -2666,7 +2666,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_114',
-    courseName: 'Cours 23 : Tombés',
+    courseName: ' 23 : Tombés',
     courseOrder: 114,
     movementName: 'Tombé à droite bras droit',
     hasGif: true,
@@ -2690,7 +2690,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_115',
-    courseName: 'Cours 23 : Tombés',
+    courseName: ' 23 : Tombés',
     courseOrder: 115,
     movementName: 'Tombé à droite bras gauche',
     hasGif: true,
@@ -2714,7 +2714,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_116',
-    courseName: 'Cours 23 : Tombés',
+    courseName: ' 23 : Tombés',
     courseOrder: 116,
     movementName: 'Tombé à gauche bras droit',
     hasGif: true,
@@ -2738,7 +2738,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_117',
-    courseName: 'Cours 23 : Tombés',
+    courseName: ' 23 : Tombés',
     courseOrder: 117,
     movementName: 'Tombé à gauche bras gauche',
     hasGif: true,
@@ -2762,7 +2762,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_118',
-    courseName: 'Cours 23 : Tombés',
+    courseName: ' 23 : Tombés',
     courseOrder: 118,
     movementName: 'Tombé berceau ligne fille',
     hasGif: true,
@@ -2786,7 +2786,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_119',
-    courseName: 'Cours 23 : Tombés',
+    courseName: ' 23 : Tombés',
     courseOrder: 119,
     movementName: 'Tombé berceau ligne garçon',
     hasGif: true,
@@ -2810,7 +2810,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_120',
-    courseName: 'Cours 23 : Tombés',
+    courseName: ' 23 : Tombés',
     courseOrder: 120,
     movementName: 'Tombé sous les bras',
     hasGif: true,
@@ -2834,7 +2834,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_121',
-    courseName: 'Cours 23 : Tombés',
+    courseName: ' 23 : Tombés',
     courseOrder: 121,
     movementName: 'Tombé par-dessus la tête',
     hasGif: true,
@@ -2858,7 +2858,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_122',
-    courseName: 'Cours 23 : Tombés',
+    courseName: ' 23 : Tombés',
     courseOrder: 122,
     movementName: 'Tombé sortie épaule épaule',
     hasGif: true,
@@ -2882,7 +2882,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_123',
-    courseName: 'Cours 23 : Tombés',
+    courseName: ' 23 : Tombés',
     courseOrder: 123,
     movementName: 'Tombé bras dessus, bras dessous',
     hasGif: true,
@@ -2906,7 +2906,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_124',
-    courseName: 'Cours 23 : Tombés',
+    courseName: ' 23 : Tombés',
     courseOrder: 124,
     movementName: 'Sortie de terre',
     hasGif: true,
@@ -2930,7 +2930,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_125',
-    courseName: 'Cours 24 : Portés',
+    courseName: ' 24 : Portés',
     courseOrder: 125,
     movementName: 'Chandelle',
     hasGif: true,
@@ -2954,7 +2954,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_126',
-    courseName: 'Cours 24 : Portés',
+    courseName: ' 24 : Portés',
     courseOrder: 126,
     movementName: 'Porté tibia en avant',
     hasGif: true,
@@ -2978,7 +2978,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_127',
-    courseName: 'Cours 24 : Portés',
+    courseName: ' 24 : Portés',
     courseOrder: 127,
     movementName: 'Porté mariée',
     hasGif: true,
@@ -3002,7 +3002,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_128',
-    courseName: 'Cours 24 : Portés',
+    courseName: ' 24 : Portés',
     courseOrder: 128,
     movementName: 'Balançoire',
     hasGif: true,
