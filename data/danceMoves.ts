@@ -2666,7 +2666,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_114',
-    courseName: 'Cours 23 : Tombés V3',
+    courseName: 'Cours 23 : Tombés',
     courseOrder: 114,
     movementName: 'Tombé à droite bras droit',
     hasGif: true,
@@ -2690,7 +2690,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_115',
-    courseName: 'Cours 23 : Tombés V4',
+    courseName: 'Cours 23 : Tombés',
     courseOrder: 115,
     movementName: 'Tombé à droite bras gauche',
     hasGif: true,
@@ -2714,7 +2714,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_116',
-    courseName: 'Cours 23 : Tombés V5',
+    courseName: 'Cours 23 : Tombés',
     courseOrder: 116,
     movementName: 'Tombé à gauche bras droit',
     hasGif: true,
@@ -2738,7 +2738,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_117',
-    courseName: 'Cours 23 : Tombés V6',
+    courseName: 'Cours 23 : Tombés',
     courseOrder: 117,
     movementName: 'Tombé à gauche bras gauche',
     hasGif: true,
@@ -2762,7 +2762,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_118',
-    courseName: 'Cours 23 : Tombés V7',
+    courseName: 'Cours 23 : Tombés',
     courseOrder: 118,
     movementName: 'Tombé berceau ligne fille',
     hasGif: true,
@@ -2786,7 +2786,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_119',
-    courseName: 'Cours 23 : Tombés V8',
+    courseName: 'Cours 23 : Tombés',
     courseOrder: 119,
     movementName: 'Tombé berceau ligne garçon',
     hasGif: true,
@@ -2810,7 +2810,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_120',
-    courseName: 'Cours 23 : Tombés V9',
+    courseName: 'Cours 23 : Tombés',
     courseOrder: 120,
     movementName: 'Tombé sous les bras',
     hasGif: true,
@@ -2834,7 +2834,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_121',
-    courseName: 'Cours 23 : Tombés V10',
+    courseName: 'Cours 23 : Tombés',
     courseOrder: 121,
     movementName: 'Tombé par-dessus la tête',
     hasGif: true,
@@ -2858,7 +2858,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_122',
-    courseName: 'Cours 23 : Tombés V11',
+    courseName: 'Cours 23 : Tombés',
     courseOrder: 122,
     movementName: 'Tombé sortie épaule épaule',
     hasGif: true,
@@ -2882,7 +2882,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_123',
-    courseName: 'Cours 23 : Tombés V12',
+    courseName: 'Cours 23 : Tombés',
     courseOrder: 123,
     movementName: 'Tombé bras dessus, bras dessous',
     hasGif: true,
@@ -2906,7 +2906,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_124',
-    courseName: 'Cours 23 : Tombés V13',
+    courseName: 'Cours 23 : Tombés',
     courseOrder: 124,
     movementName: 'Sortie de terre',
     hasGif: true,
@@ -2930,7 +2930,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_125',
-    courseName: 'Cours 24 : Portés V2',
+    courseName: 'Cours 24 : Portés',
     courseOrder: 125,
     movementName: 'Chandelle',
     hasGif: true,
@@ -2954,7 +2954,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_126',
-    courseName: 'Cours 24 : Portés V3',
+    courseName: 'Cours 24 : Portés',
     courseOrder: 126,
     movementName: 'Porté tibia en avant',
     hasGif: true,
@@ -2978,7 +2978,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_127',
-    courseName: 'Cours 24 : Portés V4',
+    courseName: 'Cours 24 : Portés',
     courseOrder: 127,
     movementName: 'Porté mariée',
     hasGif: true,
@@ -3002,7 +3002,7 @@ export const danceMoves: DanceMove[] = [
   },
   {
     id: 'move_128',
-    courseName: 'Cours 24 : Portés V5',
+    courseName: 'Cours 24 : Portés',
     courseOrder: 128,
     movementName: 'Balançoire',
     hasGif: true,
