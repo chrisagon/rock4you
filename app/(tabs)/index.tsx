@@ -119,6 +119,7 @@ export default function HomeScreen() {
               </View>
               
               <Text style={styles.courseName}>Cours: {move.courseName}</Text>
+              <Text style={styles.courseName}>{move.courseName}</Text>
               <Text style={styles.family}>Famille: {move.family}</Text>
               
               {move.remarks && (
