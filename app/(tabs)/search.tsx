@@ -203,7 +203,6 @@ export default function SearchScreen() {
                 </View>
               )}
             </View>
-            
             <View style={styles.moveContent}>
               <View style={styles.moveHeader}>
                 <Text style={styles.moveName}>{move.movementName}</Text>

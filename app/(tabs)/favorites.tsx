@@ -156,7 +156,6 @@ export default function FavoritesScreen() {
                   )}
                 </TouchableOpacity>
               </View>
-              
               <View style={styles.moveContent}>
                 <Text style={styles.courseName}>{move.courseName}</Text>
                 <View style={styles.moveHeader}>
