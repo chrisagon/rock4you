@@ -82,95 +82,97 @@ export default function SearchScreen() {
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersContainer}>
-        <View style={styles.filterSection}>
-          <Text style={styles.filterTitle}>Niveau:</Text>
-          <View style={styles.filterOptions}>
-            {levels.map(level => (
-              <TouchableOpacity
-                key={level}
-                style={[
-                  styles.filterButton,
-                  selectedLevel === level && styles.filterButtonActive
-                ]}
-                onPress={() => setSelectedLevel(selectedLevel === level ? null : level)}
-              >
-                <Text style={[
-                  styles.filterButtonText,
-                  selectedLevel === level && styles.filterButtonTextActive
-                ]}>
-                  {level}
-                </Text>
-              </TouchableOpacity>
-            ))}
+        <View style={styles.filtersRow}>
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Niveau:</Text>
+            <View style={styles.filterOptions}>
+              {levels.map(level => (
+                <TouchableOpacity
+                  key={level}
+                  style={[
+                    styles.filterButton,
+                    selectedLevel === level && styles.filterButtonActive
+                  ]}
+                  onPress={() => setSelectedLevel(selectedLevel === level ? null : level)}
+                >
+                  <Text style={[
+                    styles.filterButtonText,
+                    selectedLevel === level && styles.filterButtonTextActive
+                  ]}>
+                    {level}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-        </View>
 
-        <View style={styles.filterSection}>
-          <Text style={styles.filterTitle}>Famille:</Text>
-          <View style={styles.filterOptions}>
-            {getAllFamilies().map(family => (
-              <TouchableOpacity
-                key={family}
-                style={[
-                  styles.filterButton,
-                  selectedFamily === family && styles.filterButtonActive
-                ]}
-                onPress={() => setSelectedFamily(selectedFamily === family ? null : family)}
-              >
-                <Text style={[
-                  styles.filterButtonText,
-                  selectedFamily === family && styles.filterButtonTextActive
-                ]}>
-                  {family}
-                </Text>
-              </TouchableOpacity>
-            ))}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Cours:</Text>
+            <View style={styles.filterOptions}>
+              {getAllCourses().map(course => (
+                <TouchableOpacity
+                  key={course}
+                  style={[
+                    styles.filterButton,
+                    selectedCourse === course && styles.filterButtonActive
+                  ]}
+                  onPress={() => setSelectedCourse(selectedCourse === course ? null : course)}
+                >
+                  <Text style={[
+                    styles.filterButtonText,
+                    selectedCourse === course && styles.filterButtonTextActive
+                  ]}>
+                    {course}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-        </View>
 
-        <View style={styles.filterSection}>
-          <Text style={styles.filterTitle}>Cours:</Text>
-          <View style={styles.filterOptions}>
-            {getAllCourses().map(course => (
-              <TouchableOpacity
-                key={course}
-                style={[
-                  styles.filterButton,
-                  selectedCourse === course && styles.filterButtonActive
-                ]}
-                onPress={() => setSelectedCourse(selectedCourse === course ? null : course)}
-              >
-                <Text style={[
-                  styles.filterButtonText,
-                  selectedCourse === course && styles.filterButtonTextActive
-                ]}>
-                  {course}
-                </Text>
-              </TouchableOpacity>
-            ))}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Difficulté:</Text>
+            <View style={styles.filterOptions}>
+              {[1, 2, 3, 4, 5].map(difficulty => (
+                <TouchableOpacity
+                  key={difficulty}
+                  style={[
+                    styles.filterButton,
+                    selectedDifficulty === difficulty && styles.filterButtonActive
+                  ]}
+                  onPress={() => setSelectedDifficulty(selectedDifficulty === difficulty ? null : difficulty)}
+                >
+                  <Text style={[
+                    styles.filterButtonText,
+                    selectedDifficulty === difficulty && styles.filterButtonTextActive
+                  ]}>
+                    Niv.{difficulty}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-        </View>
 
-        <View style={styles.filterSection}>
-          <Text style={styles.filterTitle}>Difficulté:</Text>
-          <View style={styles.filterOptions}>
-            {[1, 2, 3, 4, 5].map(difficulty => (
-              <TouchableOpacity
-                key={difficulty}
-                style={[
-                  styles.filterButton,
-                  selectedDifficulty === difficulty && styles.filterButtonActive
-                ]}
-                onPress={() => setSelectedDifficulty(selectedDifficulty === difficulty ? null : difficulty)}
-              >
-                <Text style={[
-                  styles.filterButtonText,
-                  selectedDifficulty === difficulty && styles.filterButtonTextActive
-                ]}>
-                  Niv.{difficulty}
-                </Text>
-              </TouchableOpacity>
-            ))}
+          <View style={styles.filterSection}>
+            <Text style={styles.filterTitle}>Famille:</Text>
+            <View style={styles.filterOptions}>
+              {getAllFamilies().map(family => (
+                <TouchableOpacity
+                  key={family}
+                  style={[
+                    styles.filterButton,
+                    selectedFamily === family && styles.filterButtonActive
+                  ]}
+                  onPress={() => setSelectedFamily(selectedFamily === family ? null : family)}
+                >
+                  <Text style={[
+                    styles.filterButtonText,
+                    selectedFamily === family && styles.filterButtonTextActive
+                  ]}>
+                    {family}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -283,6 +285,9 @@ const styles = StyleSheet.create({
   filtersContainer: {
     paddingHorizontal: 20,
     marginBottom: 20,
+  },
+  filtersRow: {
+    flexDirection: 'row',
   },
   filterSection: {
     marginRight: 20,
