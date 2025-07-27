@@ -1,233 +1,277 @@
-# Rock4you
+# 🎵 Rock4you - Système d'Authentification et Favoris
 
-Application mobile d'apprentissage des passes de danse rock pour adultes.
+Un système complet d'authentification et de gestion des favoris musicaux, construit avec React Native/Expo et Cloudflare Workers.
 
-## 📱 Fonctionnalités
+## 🚀 Aperçu
 
-- **Bibliothèque de passes** : Accès à toutes les passes de danse rock avec GIFs animés
-- **Recherche avancée** : Filtrage par niveau, catégorie et recherche textuelle
-- **Gestion de compte** : Inscription, connexion et profil utilisateur
-- **Listes personnalisées** : Création de listes de passes favorites et à réviser
-- **Interface mobile-first** : Optimisée pour Android et iPhone
+Rock4you est une application mobile qui permet aux utilisateurs de :
+- ✅ S'inscrire et se connecter de manière sécurisée
+- ✅ Gérer leurs morceaux favoris
+- ✅ Synchroniser leurs données en temps réel
+- ✅ Profiter d'une interface moderne et intuitive
 
-## 🎨 Design
+## 🏗️ Architecture
 
-- **Palette de couleurs** : Noir (#000), Orange (#FF6B35), Blanc (#FFF)
-- **Interface moderne** : Cards élégantes, animations fluides
-- **Navigation intuitive** : Onglets avec icônes Lucide
+### Frontend
+- **Framework** : React Native avec Expo Router
+- **Navigation** : Expo Router avec onglets protégés
+- **État global** : React Context API
+- **Styling** : React Native StyleSheet
+- **TypeScript** : Support complet
 
-## 📊 Sources de données
+### Backend
+- **Runtime** : Cloudflare Workers
+- **Framework** : Hono.js
+- **Base de données** : Cloudflare D1 (SQLite)
+- **Authentification** : JWT avec cookies HttpOnly
+- **Sécurité** : PBKDF2 pour les mots de passe, CORS configuré
 
-### Stockage des GIFs
-Les GIFs sont maintenant hébergés sur **Cloudflare R2** pour des performances optimales :
-- **URLs directes** : Accès rapide aux GIFs via CDN Cloudflare
-- **Gestion des fallbacks** : Affichage de placeholder pour les passes sans GIF
-- **Configuration flexible** : Support des domaines personnalisés
+## 📦 Installation
 
-### 🔄 Comment mettre à jour les données
+### Prérequis
+- Node.js 18+
+- npm ou yarn
+- Compte Cloudflare
+- Wrangler CLI
 
-✅ **TERMINÉ** - Les données ont été migrées vers Cloudflare R2
-
-Pour les futures mises à jour :
-1. **Utilisez le script d'extraction** dans [`scripts/extractGoogleData.js`](scripts/extractGoogleData.js)
-2. **Suivez les instructions** dans [`INSTRUCTIONS_INTEGRATION.md`](INSTRUCTIONS_INTEGRATION.md)
-3. **Remplacez le contenu** de [`data/danceMoves.ts`](data/danceMoves.ts)
-4. **Configurez Cloudflare R2** via [`config/cloudflare.ts`](config/cloudflare.ts)
-
-### ✅ Architecture de données
-
-Les données sont structurées avec :
-- **Interface TypeScript** : Type safety pour toutes les passes
-- **URLs Cloudflare R2** : Liens directs vers les GIFs hébergés
-- **Métadonnées complètes** : Difficulté, famille, positions, remarques
-- **Système de catégories** : Classification automatique des passes
-
-### Structure des données (colonnes sources)
-- **A** : Cours - nom du cours
-- **B** : Ordre cours - numéro de séquence
-- **C** : Nom du mouvement - titre de la passe
-- **D** : GIF - "X" ou "XX" si GIF présent
-- **E** : Difficulté - niveau numérique (1-5)
-- **F** : Famille - famille de mouvement
-- **G-J** : Type 1-4 - différents types de passe
-- **K** : Position départ - position des mains au début
-- **L** : Position arrivée - position des mains à la fin
-- **M** : Nombre de temps - durée de la passe
-- **N** : Déplacement - type de déplacement
-- **O** : Remarques - commentaires du professeur
-- **P** : Timmy - COLONNE IGNORÉE
-- **Q** : Fichier GIF - nom du fichier GIF
-- **R** : Lien source - lien original (maintenant migré vers Cloudflare)
-
-## 🏗️ Architecture technique
-
-### Technologies utilisées
-- **React Native** avec Expo SDK 53
-- **TypeScript** pour la sécurité des types
-- **Expo Router** pour la navigation
-- **Lucide React Native** pour les icônes
-- **Cloudflare R2** pour le stockage des GIFs
-- **React Native WebView** pour l'affichage des GIFs
-- **Expo Blur** pour les effets visuels
-
-### Structure du projet
-```
-app/
-├── (tabs)/
-│   ├── index.tsx      # Écran d'accueil - liste des passes
-│   ├── search.tsx     # Recherche et filtres avancés
-│   ├── favorites.tsx  # Favoris et listes personnalisées
-│   └── profile.tsx    # Profil utilisateur et paramètres
-├── _layout.tsx        # Layout racine avec navigation
-└── +not-found.tsx     # Page 404
-
-components/
-├── Wrapper.tsx        # Composant wrapper principal
-└── documentation/
-    └── AppDocumentation.tsx  # Documentation intégrée
-
-config/
-└── cloudflare.ts      # Configuration Cloudflare R2
-
-data/
-├── danceMoves.ts      # Données des passes (128+ passes)
-└── sampleDanceMoves.ts # Exemples pour développement
-
-hooks/
-└── useFrameworkReady.ts # Hook pour l'initialisation
-
-scripts/
-├── extractGoogleData.js    # Script d'extraction des données
-├── simpleExtractor.js      # Extracteur simplifié
-└── howToUseScript.md      # Instructions d'utilisation
-
-types/
-└── env.d.ts          # Types pour les variables d'environnement
-
-utils/
-└── googleSheetsImporter.ts # Utilitaires d'import de données
-```
-
-## 🚀 Installation et démarrage
-
+### Installation rapide
 ```bash
-# Installation des dépendances
+# Cloner le projet
+git clone <votre-repo>
+cd rock4you
+
+# Installer les dépendances
+npm install
+cd worker && npm install && cd ..
+
+# Configuration
+cp .env.example .env.local
+# Éditer .env.local avec vos paramètres
+
+# Déploiement automatisé
+npm run deploy
+```
+
+## 🛠️ Scripts Disponibles
+
+### Développement
+```bash
+npm run dev                 # Démarrer l'app Expo
+npm run migrate:local       # Migrer la DB locale
+npm run test               # Tests frontend
+npm run test:backend       # Tests backend local
+```
+
+### Déploiement
+```bash
+npm run deploy             # Déploiement staging complet
+npm run deploy:prod        # Déploiement production
+npm run deploy:quick       # Déploiement rapide sans tests
+```
+
+### Base de données
+```bash
+npm run migrate            # Migration production
+npm run migrate:local      # Migration locale
+npm run migrate:reset      # Reset DB locale
+```
+
+## 🔧 Configuration
+
+### Variables d'environnement
+
+Créez un fichier `.env.local` :
+```env
+EXPO_PUBLIC_API_URL=https://votre-api.workers.dev
+```
+
+### Configuration Cloudflare
+
+Dans [`worker/wrangler.toml`](worker/wrangler.toml) :
+```toml
+[vars]
+JWT_SECRET = "votre-secret-jwt-securise"
+CORS_ORIGIN = "https://votre-domaine.com"
+DEFAULT_FAVORITES_LIST_NAME = "Mes Favoris"
+```
+
+## 🧪 Tests
+
+### Tests automatisés
+```bash
+# Tests complets
+npm run deploy
+
+# Tests individuels
+npm run test                    # Frontend
+npm run test:backend           # Backend local
+npm run test:api              # API déployée
+```
+
+### Tests manuels
+1. **Inscription** : Créer un nouveau compte
+2. **Connexion** : Se connecter avec les identifiants
+3. **Favoris** : Ajouter, voir, supprimer des favoris
+4. **Profil** : Voir les informations utilisateur
+5. **Déconnexion** : Se déconnecter proprement
+
+## 📱 Utilisation
+
+### Interface utilisateur
+
+1. **Écran de connexion** : Point d'entrée de l'application
+2. **Onglet Favoris** : Gestion des morceaux favoris
+3. **Onglet Profil** : Informations utilisateur et déconnexion
+
+### Fonctionnalités
+
+- **Authentification sécurisée** avec JWT
+- **Gestion des favoris** en temps réel
+- **Interface responsive** et moderne
+- **Synchronisation automatique** des données
+- **Mode hors ligne** pour la consultation
+
+## 🔐 Sécurité
+
+### Authentification
+- Mots de passe chiffrés avec PBKDF2 + salt
+- Tokens JWT signés avec HMAC-SHA256
+- Cookies HttpOnly et Secure
+- Protection CORS configurée
+
+### Base de données
+- Requêtes préparées (protection SQL injection)
+- Validation des entrées avec Zod
+- Gestion des erreurs sécurisée
+
+## 📊 API Endpoints
+
+### Authentification
+- `POST /api/auth/register` - Inscription
+- `POST /api/auth/login` - Connexion
+- `POST /api/auth/logout` - Déconnexion
+
+### Favoris
+- `GET /api/favorites` - Liste des favoris
+- `POST /api/favorites` - Ajouter un favori
+- `DELETE /api/favorites/:id` - Supprimer un favori
+
+### Utilitaires
+- `GET /health` - Vérification de l'état de l'API
+
+## 🗄️ Base de Données
+
+### Tables principales
+- **Utilisateurs** : Informations des utilisateurs
+- **ListesFavorites** : Listes de favoris par utilisateur
+- **PassesSauvegardes** : Morceaux sauvegardés
+
+### Migrations
+Les migrations sont dans [`worker/migrations/`](worker/migrations/) et s'exécutent automatiquement.
+
+## 🚀 Déploiement
+
+### Déploiement automatisé
+```bash
+# Staging avec tests complets
+npm run deploy
+
+# Production
+npm run deploy:prod
+
+# Rapide sans tests
+npm run deploy:quick
+```
+
+### Déploiement manuel
+```bash
+# 1. Migrer la base de données
+npm run migrate
+
+# 2. Déployer le Worker
+cd worker && wrangler deploy
+
+# 3. Configurer le frontend
+echo "EXPO_PUBLIC_API_URL=https://votre-api.workers.dev" > .env.local
+
+# 4. Tester
+npm run test:api
+```
+
+## 📚 Documentation
+
+- **[Guide de Déploiement](DEPLOYMENT_GUIDE.md)** : Instructions détaillées de déploiement
+- **[Guide d'Utilisation](USAGE_GUIDE.md)** : Manuel utilisateur complet
+- **[Documentation API](worker/README.md)** : Référence de l'API backend
+
+## 🐛 Dépannage
+
+### Problèmes courants
+
+**Erreur de connexion à l'API**
+```bash
+# Vérifier l'état du Worker
+cd worker && wrangler tail
+
+# Tester l'API
+npm run test:backend
+```
+
+**Problèmes de build**
+```bash
+# Nettoyer et réinstaller
+rm -rf node_modules package-lock.json
 npm install
 
-# Démarrage du serveur de développement
-npm run dev
-
-# Alternative avec Expo CLI
-npx expo start
+# Vérifier TypeScript
+npx tsc --noEmit
 ```
 
-### Variables d'environnement (optionnel)
-Pour configurer Cloudflare R2 avec un domaine personnalisé :
-```env
-EXPO_PUBLIC_CLOUDFLARE_R2_BUCKET_NAME=your-bucket-name
-EXPO_PUBLIC_CLOUDFLARE_R2_ACCOUNT_ID=your-account-id
-EXPO_PUBLIC_CLOUDFLARE_R2_CUSTOM_DOMAIN=your-custom-domain.com
+**Base de données corrompue**
+```bash
+# Reset en local
+npm run migrate:reset
+
+# Vérifier les données
+cd worker && wrangler d1 execute rock4you-db --command "SELECT COUNT(*) FROM Utilisateurs"
 ```
-
-## 📱 Écrans principaux
-
-### 1. Accueil
-- Affichage de toutes les passes disponibles (128+ passes)
-- Recherche rapide par nom
-- Ajout aux favoris en un clic
-- Visualisation des GIFs haute qualité
-
-### 2. Recherche
-- Filtres par niveau (Débutant, Intermédiaire, Avancé)
-- Filtres par catégorie (Base, Tours, Déplacements, Figures, etc.)
-- Recherche textuelle dans noms, cours, familles et remarques
-- Résultats en temps réel avec highlighting
-
-### 3. Favoris
-- Gestion des passes favorites
-- Création de listes personnalisées par thème
-- Organisation par couleurs et catégories
-- Export et partage de listes
-
-### 4. Profil
-- Authentification utilisateur
-- Statistiques d'utilisation et progression
-- Paramètres de l'application
-- Documentation intégrée
-
-## 🎯 Passes de danse intégrées
-
-L'application contient **128+ passes** organisées en **24 cours** :
-- **Filtrage intelligent** : Ignore automatiquement les lignes de cours
-- **Niveaux de difficulté** : Conversion automatique (1-2: Débutant, 3-4: Intermédiaire, 5: Avancé)
-- **Gestion des GIFs** : Affichage conditionnel avec fallbacks élégants
-- **URLs optimisées** : Cloudflare R2 pour des temps de chargement rapides
-- **Recherche avancée** : Par nom, cours, famille, remarques, types
-- **Filtres multiples** : Niveau, famille, cours, difficulté, position
-
-### Catégories disponibles
-- Base, Balade, Barrage, 3 tapes
-- Spaghetti, Enroulés, Changements de mains
-- Jeux de regards, Penchés, Tombés, Bossus
-- Espagnoles, Satellites, Fenêtre, Catapultes
-- Amené à l'épaule, Coups de fouet
-- Variantes des bases, Tapes, Diverses passes
-- Portés, Acrobatiques
-
-## 🔮 Évolutions futures
-
-- [x] Import automatique des nouvelles passes
-- [x] Filtrage avancé par types de passes (Type 1-4)
-- [x] Migration vers Cloudflare R2 pour les performances
-- [ ] Synchronisation automatique avec sources de données
-- [ ] Recherche par position de départ/arrivée
-- [ ] Système de notation et commentaires utilisateurs
-- [ ] Mode hors ligne avec cache intelligent
-- [ ] Partage de listes entre utilisateurs
-- [ ] Notifications de rappel d'entraînement
-- [ ] Lecteur vidéo intégré avec contrôles avancés
-- [ ] Statistiques de progression par cours
-- [ ] Système de badges et récompenses
-- [ ] Export de listes personnalisées (PDF, JSON)
-- [ ] Historique des passes pratiquées
-- [ ] Mode entraîneur avec séquences personnalisées
-
-## 🛠️ Développement
-
-### Scripts disponibles
-- `npm run dev` : Démarrage en mode développement
-- `npm run build:web` : Build pour le web
-- `npm run lint` : Vérification du code
-
-### Configuration Cloudflare R2
-Voir [`config/cloudflare.ts`](config/cloudflare.ts) pour :
-- Configuration des URLs de base
-- Gestion des domaines personnalisés
-- Fonctions utilitaires pour les GIFs
-- Tests de connectivité
-
-### Mise à jour des données
-Utilisez [`utils/googleSheetsImporter.ts`](utils/googleSheetsImporter.ts) pour :
-- Convertir les données sources
-- Valider la structure
-- Générer les URLs Cloudflare
-- Tester l'accessibilité des GIFs
-
-## 📄 Documentation
-
-La documentation complète est disponible :
-- **Dans l'application** : Onglet Profil > Documentation
-- **Fichier source** : [`components/documentation/AppDocumentation.tsx`](components/documentation/AppDocumentation.tsx)
-- **Instructions d'intégration** : [`INSTRUCTIONS_INTEGRATION.md`](INSTRUCTIONS_INTEGRATION.md)
 
 ## 🤝 Contribution
 
-Pour contribuer au projet :
-1. Fork le repository
-2. Créez une branche pour votre fonctionnalité
-3. Testez vos modifications
-4. Soumettez une Pull Request
+### Développement local
+```bash
+# Setup complet
+git clone <repo>
+cd rock4you
+npm install
+cd worker && npm install && cd ..
 
-## 📝 Licence
+# Environnement de dev
+npm run migrate:local
+cd worker && npm run dev &
+npm run dev
+```
 
-Ce projet est destiné à l'apprentissage de la danse rock. Tous droits réservés pour les contenus pédagogiques.
+### Tests avant commit
+```bash
+npm run test
+npm run test:backend
+npm run lint
+```
+
+## 📄 Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+## 🔗 Liens Utiles
+
+- **[Cloudflare Workers](https://workers.cloudflare.com/)** - Documentation officielle
+- **[Expo](https://expo.dev/)** - Framework React Native
+- **[Hono.js](https://hono.dev/)** - Framework web pour Workers
+- **[Cloudflare D1](https://developers.cloudflare.com/d1/)** - Base de données SQLite
+
+---
+
+**Version** : 1.0.0  
+**Auteur** : Équipe Rock4you  
+**Support** : [Issues GitHub](https://github.com/votre-repo/issues)

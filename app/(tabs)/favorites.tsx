@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, TextInput, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Heart, Plus, CreditCard as Edit, Trash2, X, Play, Pause } from 'lucide-react-native';
+import { Heart, Plus, CreditCard as Edit, Trash2, X, Play, Pause, LogOut } from 'lucide-react-native';
 import { DanceMove, danceMoves, getGifUrl } from '@/data/danceMoves';
 import FullScreenImageModal from '@/components/FullScreenImageModal';
+import { useAuth } from '@/contexts/AuthContext';
+import { apiService, Favorite } from '@/services/api';
+import { router } from 'expo-router';
 
 interface PlayList {
   id: string;
@@ -33,7 +36,9 @@ const initialPlaylists: PlayList[] = [
 ];
 
 export default function FavoritesScreen() {
+  const { user, logout } = useAuth();
   const [favorites, setFavorites] = useState<DanceMove[]>(favoriteMoves);
+  const [apiFavorites, setApiFavorites] = useState<Favorite[]>([]);
   const [playlists, setPlaylists] = useState<PlayList[]>(initialPlaylists);
   const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState('');
@@ -42,8 +47,80 @@ export default function FavoritesScreen() {
   const [failedGifs, setFailedGifs] = useState<Set<string>>(new Set());
   const [fullScreenVisible, setFullScreenVisible] = useState(false);
   const [selectedMove, setSelectedMove] = useState<DanceMove | null>(null);
+  const [isLoadingFavorites, setIsLoadingFavorites] = useState(false);
 
   const colors = ['#FF6B35', '#4CAF50', '#2196F3', '#9C27B0', '#F44336', '#FF9800'];
+
+  // Charger les favoris depuis l'API
+  const loadApiFavorites = async () => {
+    try {
+      setIsLoadingFavorites(true);
+      const response = await apiService.getFavorites();
+      if (response.success && response.data) {
+        setApiFavorites(response.data);
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des favoris:', error);
+    } finally {
+      setIsLoadingFavorites(false);
+    }
+  };
+
+  // Ajouter un favori via l'API
+  const addToApiFavorites = async (itemId: string) => {
+    try {
+      const response = await apiService.addFavorite(itemId);
+      if (response.success && response.data) {
+        setApiFavorites(prev => [...prev, response.data!]);
+        Alert.alert('Succès', 'Ajouté aux favoris');
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout:', error);
+      Alert.alert('Erreur', 'Impossible d\'ajouter aux favoris');
+    }
+  };
+
+  // Supprimer un favori via l'API
+  const removeFromApiFavorites = async (favoriteId: number) => {
+    try {
+      const response = await apiService.removeFavorite(favoriteId);
+      if (response.success) {
+        setApiFavorites(prev => prev.filter(fav => fav.id !== favoriteId));
+        Alert.alert('Succès', 'Supprimé des favoris');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
+      Alert.alert('Erreur', 'Impossible de supprimer le favori');
+    }
+  };
+
+  // Gérer la déconnexion
+  const handleLogout = async () => {
+    Alert.alert(
+      'Déconnexion',
+      'Êtes-vous sûr de vouloir vous déconnecter ?',
+      [
+        { text: 'Annuler', style: 'cancel' },
+        {
+          text: 'Déconnexion',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await logout();
+              router.replace('../(auth)/login');
+            } catch (error) {
+              console.error('Erreur lors de la déconnexion:', error);
+            }
+          }
+        }
+      ]
+    );
+  };
+
+  // Charger les favoris au montage du composant
+  useEffect(() => {
+    loadApiFavorites();
+  }, []);
 
   const createPlaylist = () => {
     if (newPlaylistName.trim()) {
@@ -126,8 +203,17 @@ export default function FavoritesScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Mes Favoris</Text>
-        <Text style={styles.subtitle}>Vos passes et listes personnalisées</Text>
+        <View style={styles.headerTop}>
+          <View>
+            <Text style={styles.title}>Mes Favoris</Text>
+            <Text style={styles.subtitle}>
+              Bienvenue {user?.username} ! Vos passes et listes personnalisées
+            </Text>
+          </View>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <LogOut size={20} color="#FF6B35" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -566,5 +652,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    width: '100%',
+  },
+  logoutButton: {
+    padding: 8,
+    backgroundColor: 'rgba(255, 107, 53, 0.1)',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FF6B35',
   },
 });

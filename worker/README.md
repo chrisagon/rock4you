@@ -181,7 +181,7 @@ worker/
 curl -X POST http://localhost:8787/auth/register \
   -H "Content-Type: application/json" \
   -d '{
-    "username": "johndoe",
+    "username": "chrisagon",
     "email": "john@example.com",
     "password": "SecurePass123!"
   }'

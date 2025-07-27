@@ -2,128 +2,51 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Modal, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { User, Settings, Heart, BookOpen, Trophy, Mail, Lock, LogOut, CreditCard as Edit, X } from 'lucide-react-native';
-
-interface UserProfile {
-  name: string;
-  email: string;
-  level: string;
-  joinDate: string;
-  favoritesCount: number;
-  playlistsCount: number;
-  studyTime: string;
-}
+import { useAuth } from '@/contexts/AuthContext';
+import { router } from 'expo-router';
 
 export default function ProfileScreen() {
-  const [user, setUser] = useState<UserProfile>({
-    name: 'Marie Dubois',
-    email: 'marie.dubois@email.com',
-    level: 'Intermédiaire',
-    joinDate: 'Mars 2024',
-    favoritesCount: 12,
-    playlistsCount: 4,
-    studyTime: '2h 30min'
-  });
-
+  const { user, logout } = useAuth();
   const [showEditProfile, setShowEditProfile] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [editName, setEditName] = useState(user.name);
-  const [editEmail, setEditEmail] = useState(user.email);
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [isRegistering, setIsRegistering] = useState(false);
+  const [editName, setEditName] = useState(user?.username || '');
+  const [editEmail, setEditEmail] = useState(user?.email || '');
 
-  const handleLogin = () => {
-    if (loginEmail && loginPassword) {
-      setIsLoggedIn(true);
-      setShowLogin(false);
-      setLoginEmail('');
-      setLoginPassword('');
-    }
-  };
-
-  const handleLogout = () => {
+  const handleLogout = async () => {
     Alert.alert(
       'Déconnexion',
       'Êtes-vous sûr de vouloir vous déconnecter ?',
       [
         { text: 'Annuler', style: 'cancel' },
-        { text: 'Déconnexion', onPress: () => setIsLoggedIn(false) }
+        {
+          text: 'Déconnexion',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await logout();
+              router.replace('../(auth)/login');
+            } catch (error) {
+              console.error('Erreur lors de la déconnexion:', error);
+            }
+          }
+        }
       ]
     );
   };
 
   const handleSaveProfile = () => {
-    setUser({
-      ...user,
-      name: editName,
-      email: editEmail
-    });
+    // TODO: Implémenter la mise à jour du profil via l'API
+    Alert.alert('Info', 'La modification du profil sera implémentée prochainement');
     setShowEditProfile(false);
   };
 
   const stats = [
-    { icon: Heart, label: 'Favoris', value: user.favoritesCount.toString(), color: '#FF6B35' },
-    { icon: BookOpen, label: 'Listes', value: user.playlistsCount.toString(), color: '#4CAF50' },
-    { icon: Trophy, label: 'Temps d\'étude', value: user.studyTime, color: '#2196F3' },
+    { icon: Heart, label: 'Favoris', value: '0', color: '#FF6B35' },
+    { icon: BookOpen, label: 'Listes', value: '0', color: '#4CAF50' },
+    { icon: Trophy, label: 'Temps d\'étude', value: '0h', color: '#2196F3' },
   ];
 
-  if (!isLoggedIn) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loginContainer}>
-          <View style={styles.loginHeader}>
-            <Text style={styles.loginTitle}>Rock4you.mobile</Text>
-            <Text style={styles.loginSubtitle}>
-              {isRegistering ? 'Créer un compte' : 'Connectez-vous à votre compte'}
-            </Text>
-          </View>
-
-          <View style={styles.loginForm}>
-            <TextInput
-              style={styles.loginInput}
-              placeholder="Email"
-              placeholderTextColor="#666"
-              value={loginEmail}
-              onChangeText={setLoginEmail}
-              keyboardType="email-address"
-            />
-            <TextInput
-              style={styles.loginInput}
-              placeholder="Mot de passe"
-              placeholderTextColor="#666"
-              value={loginPassword}
-              onChangeText={setLoginPassword}
-              secureTextEntry
-            />
-            {isRegistering && (
-              <TextInput
-                style={styles.loginInput}
-                placeholder="Nom complet"
-                placeholderTextColor="#666"
-              />
-            )}
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-              <Text style={styles.loginButtonText}>
-                {isRegistering ? 'Créer le compte' : 'Se connecter'}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setIsRegistering(!isRegistering)}>
-              <Text style={styles.switchText}>
-                {isRegistering 
-                  ? 'Déjà un compte ? Se connecter' 
-                  : 'Pas de compte ? S\'inscrire'}
-              </Text>
-            </TouchableOpacity>
-            {!isRegistering && (
-              <TouchableOpacity>
-                <Text style={styles.forgotPassword}>Mot de passe oublié ?</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-      </SafeAreaView>
-    );
+  if (!user) {
+    return null; // Le layout des tabs gère déjà la redirection
   }
 
   return (
@@ -143,12 +66,17 @@ export default function ProfileScreen() {
               <User size={40} color="#FF6B35" />
             </View>
           </View>
-          <Text style={styles.userName}>{user.name}</Text>
+          <Text style={styles.userName}>{user.username}</Text>
           <Text style={styles.userEmail}>{user.email}</Text>
           <View style={styles.userLevel}>
-            <Text style={styles.userLevelText}>Niveau {user.level}</Text>
+            <Text style={styles.userLevelText}>Rôle: {user.role}</Text>
           </View>
-          <Text style={styles.joinDate}>Membre depuis {user.joinDate}</Text>
+          <Text style={styles.joinDate}>
+            Membre depuis {new Date(user.created_at).toLocaleDateString('fr-FR', {
+              year: 'numeric',
+              month: 'long'
+            })}
+          </Text>
         </View>
 
         {/* Stats */}

@@ -104,6 +104,21 @@ authRoutes.post('/register', zValidator('json', registerSchema), async (c) => {
     const accessToken = await generateAccessToken(newUser, c.env.JWT_SECRET);
     const refreshToken = await generateRefreshToken(newUser, c.env.JWT_SECRET);
 
+    // Définir le cookie d'authentification
+    const isProduction = c.env.CORS_ORIGIN !== '*';
+    const cookieOptions = [
+      'HttpOnly',
+      'Path=/',
+      'Max-Age=3600', // 1 heure
+      'SameSite=Strict'
+    ];
+    
+    if (isProduction) {
+      cookieOptions.push('Secure');
+    }
+
+    c.header('Set-Cookie', `auth_token=${accessToken}; ${cookieOptions.join('; ')}`);
+
     const response: AuthTokens = {
       access_token: accessToken,
       refresh_token: refreshToken,
@@ -163,18 +178,31 @@ authRoutes.post('/login', zValidator('json', loginSchema), async (c) => {
     // Préparer les données utilisateur (sans le hash du mot de passe)
     const userWithoutPassword: User = {
       id: user.id,
-      nom: user.nom,
-      prenom: user.prenom,
+      username: user.username,
       email: user.email,
       role: user.role,
-      date_creation: user.date_creation,
-      derniere_connexion: new Date().toISOString(),
-      est_actif: true
+      created_at: user.created_at,
+      last_login_at: new Date().toISOString()
     };
 
     // Générer les tokens
     const accessToken = await generateAccessToken(userWithoutPassword, c.env.JWT_SECRET);
     const refreshToken = await generateRefreshToken(userWithoutPassword, c.env.JWT_SECRET);
+
+    // Définir le cookie d'authentification
+    const isProduction = c.env.CORS_ORIGIN !== '*';
+    const cookieOptions = [
+      'HttpOnly',
+      'Path=/',
+      'Max-Age=3600', // 1 heure
+      'SameSite=Strict'
+    ];
+    
+    if (isProduction) {
+      cookieOptions.push('Secure');
+    }
+
+    c.header('Set-Cookie', `auth_token=${accessToken}; ${cookieOptions.join('; ')}`);
 
     const response: AuthTokens = {
       access_token: accessToken,
@@ -258,8 +286,8 @@ authRoutes.post('/refresh', zValidator('json', refreshSchema), async (c) => {
  * POST /auth/logout - Déconnexion (optionnel - côté client principalement)
  */
 authRoutes.post('/logout', async (c) => {
-  // En JWT stateless, la déconnexion se fait principalement côté client
-  // Ici on pourrait ajouter le token à une blacklist si nécessaire
+  // Effacer le cookie d'authentification
+  c.header('Set-Cookie', 'auth_token=; HttpOnly; Path=/; Max-Age=0; SameSite=Strict');
   
   return c.json({
     success: true,

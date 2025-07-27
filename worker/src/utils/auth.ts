@@ -108,8 +108,7 @@ export async function generateAccessToken(user: User, secret: string): Promise<s
   const now = Math.floor(Date.now() / 1000);
   const payload: JWTPayload = {
     user_id: user.id,
-    nom: user.nom,
-    prenom: user.prenom,
+    username: user.username,
     email: user.email,
     role: user.role,
     iat: now,

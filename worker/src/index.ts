@@ -7,12 +7,14 @@ import { listsRoutes } from './routes/lists';
 import { usersRoutes } from './routes/users';
 import { healthRoutes } from './routes/health';
 import { movesRoutes } from './routes/moves';
+import { favoritesRoutes } from './routes/favorites';
 import { authMiddleware, authLogger } from './middleware/auth';
 
 export interface Env {
   DB: D1Database;
   JWT_SECRET: string;
   CORS_ORIGIN: string;
+  DEFAULT_FAVORITES_LIST_NAME?: string;
 }
 
 const app = new Hono<{ Bindings: Env }>();
@@ -38,13 +40,17 @@ app.use('/api/*', authLogger);
 
 // Routes publiques
 app.route('/health', healthRoutes);
-app.route('/auth', authRoutes);
+app.route('/api/auth', authRoutes);
 
 // Routes protégées (nécessitent une authentification)
-app.use('/api/*', authMiddleware);
+app.use('/api/users/*', authMiddleware);
+app.use('/api/lists/*', authMiddleware);
+app.use('/api/favorites/*', authMiddleware);
+
 app.route('/api/users', usersRoutes);
 app.route('/api/lists', listsRoutes);
 app.route('/api/lists', movesRoutes); // Routes pour les passes dans les listes
+app.route('/api/favorites', favoritesRoutes);
 
 // Route par défaut avec documentation de l'API
 app.get('/', (c) => {

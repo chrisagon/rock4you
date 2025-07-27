@@ -1,7 +1,30 @@
-import { Tabs } from 'expo-router';
+import { Tabs, router } from 'expo-router';
 import { Chrome as Home, Search, Heart, User } from 'lucide-react-native';
+import { useAuth } from '@/contexts/AuthContext';
+import { useEffect } from 'react';
+import { View, ActivityIndicator } from 'react-native';
 
 export default function TabLayout() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace('../(auth)/login');
+    }
+  }, [isAuthenticated, isLoading]);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+        <ActivityIndicator size="large" color="#FF6B35" />
+      </View>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <Tabs
       screenOptions={{

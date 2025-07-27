@@ -61,7 +61,7 @@ export const generateGifUrl = (fileName: string): string => {
  * Valide qu'un nom de fichier GIF est valide
  */
 export const isValidGifFileName = (fileName: string): boolean => {
-  return fileName && fileName.toLowerCase().endsWith('.gif');
+  return Boolean(fileName && fileName.toLowerCase().endsWith('.gif'));
 };
 
 /**

@@ -1,12 +1,25 @@
 {
-  "name": "bolt-expo-starter",
+  "name": "rock4you-auth-app",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "EXPO_NO_TELEMETRY=1 expo start",
     "build:web": "expo export --platform web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "test": "node scripts/test-frontend.js",
+    "test:backend": "cd worker && node scripts/test-api.js --local",
+    "test:api": "cd worker && node scripts/test-api.js",
+    "test:integration": "node scripts/test-integration.js",
+    "test:all": "npm run test:backend && npm run test && npm run test:integration",
+    "deploy": "node scripts/deploy.js",
+    "deploy:simple": "node scripts/deploy-simple.js",
+    "deploy:prod": "node scripts/deploy.js --env=production",
+    "deploy:prod-simple": "node scripts/deploy-simple.js --env=production",
+    "deploy:quick": "node scripts/deploy.js --skip-tests -y",
+    "migrate": "cd worker && node scripts/migrate.js",
+    "migrate:local": "cd worker && node scripts/migrate.js --local",
+    "migrate:reset": "cd worker && node scripts/migrate.js --local --reset"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",

@@ -12,11 +12,12 @@ name = "rock4you-api-staging"
 [[d1_databases]]
 binding = "DB"
 database_name = "rock4you-db"
-database_id = "your-database-id-here"
+database_id = "a6dce45e-0f5f-40c6-87b5-d9845a9ffe74"
 
 [vars]
-JWT_SECRET = "your-jwt-secret-here"
-CORS_ORIGIN = "https://your-app-domain.com"
+JWT_SECRET = "DNbcvUCejZ56S4TVC1PEVeUWySbp9OBxBZyG85dgP2M="
+CORS_ORIGIN = "*"
+DEFAULT_FAVORITES_LIST_NAME = "Mes Favoris"
 
 # Variables d'environnement pour le développement local
 [env.development]

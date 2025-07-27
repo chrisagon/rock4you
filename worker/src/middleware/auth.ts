@@ -10,11 +10,17 @@ import { User, JWTPayload, ApiError, Env } from '../types';
 export async function authMiddleware(c: Context<{ Bindings: Env; Variables: { user: User; token_payload: JWTPayload } }>, next: Next) {
   try {
     const authHeader = c.req.header('Authorization');
-    const token = extractBearerToken(authHeader);
+    let token = extractBearerToken(authHeader);
+
+    // Si pas de token dans l'en-tête, chercher dans les cookies
+    if (!token) {
+      const cookieHeader = c.req.header('Cookie');
+      token = extractTokenFromCookie(cookieHeader);
+    }
 
     if (!token) {
-      return c.json({ 
-        success: false, 
+      return c.json({
+        success: false,
         error: 'Token d\'authentification requis',
         code: 'MISSING_TOKEN'
       }, 401);
@@ -26,7 +32,7 @@ export async function authMiddleware(c: Context<{ Bindings: Env; Variables: { us
     // Charger l'utilisateur depuis la base de données
     const user = await selectFirst<User>(
       c.env.DB,
-      'SELECT id, nom, prenom, email, role, date_creation, derniere_connexion, est_actif FROM Utilisateurs WHERE id = ? AND est_actif = 1',
+      'SELECT id, username, email, role, created_at, last_login_at FROM Utilisateurs WHERE id = ?',
       [payload.user_id]
     );
 
@@ -144,7 +150,7 @@ export async function optionalAuth(c: Context<{ Bindings: Env; Variables: { user
         const payload = await verifyToken(token, c.env.JWT_SECRET);
         const user = await selectFirst<User>(
           c.env.DB,
-          'SELECT id, nom, prenom, email, role, date_creation, derniere_connexion, est_actif FROM Utilisateurs WHERE id = ?',
+          'SELECT id, username, email, role, created_at, last_login_at FROM Utilisateurs WHERE id = ?',
           [payload.user_id]
         );
 
@@ -196,7 +202,7 @@ export async function authLogger(c: Context<{ Bindings: Env }>, next: Next) {
   const path = c.req.path;
   const ip = c.req.header('CF-Connecting-IP') || c.req.header('X-Forwarded-For') || 'unknown';
 
-  console.log(`[${new Date().toISOString()}] ${method} ${path} - User: ${user ? `${user.prenom} ${user.nom} (${user.role})` : 'anonymous'} - IP: ${ip}`);
+  console.log(`[${new Date().toISOString()}] ${method} ${path} - User: ${user ? `${user.username} (${user.role})` : 'anonymous'} - IP: ${ip}`);
 
   await next();
 }
@@ -213,6 +219,24 @@ function extractBearerToken(authHeader: string | undefined): string | null {
   }
   
   return parts[1];
+}
+
+/**
+ * Extrait le token d'authentification depuis les cookies
+ */
+function extractTokenFromCookie(cookieHeader: string | undefined): string | null {
+  if (!cookieHeader) return null;
+  
+  const cookies = cookieHeader.split(';').map(cookie => cookie.trim());
+  
+  for (const cookie of cookies) {
+    const [name, value] = cookie.split('=');
+    if (name === 'auth_token') {
+      return decodeURIComponent(value);
+    }
+  }
+  
+  return null;
 }
 
 /**
