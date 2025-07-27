@@ -103,13 +103,11 @@ export default function ProfileScreen() {
                 placeholderTextColor="#666"
               />
             )}
-
             <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
               <Text style={styles.loginButtonText}>
                 {isRegistering ? 'Créer le compte' : 'Se connecter'}
               </Text>
             </TouchableOpacity>
-
             <TouchableOpacity onPress={() => setIsRegistering(!isRegistering)}>
               <Text style={styles.switchText}>
                 {isRegistering 
@@ -117,7 +115,6 @@ export default function ProfileScreen() {
                   : 'Pas de compte ? S\'inscrire'}
               </Text>
             </TouchableOpacity>
-
             {!isRegistering && (
               <TouchableOpacity>
                 <Text style={styles.forgotPassword}>Mot de passe oublié ?</Text>
