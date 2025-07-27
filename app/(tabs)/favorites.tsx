@@ -121,7 +121,7 @@ export default function FavoritesScreen() {
               <View style={styles.playlistContent}>
                 <Text style={styles.playlistName}>{playlist.name}</Text>
                 <Text style={styles.playlistCount}>
-                  {playlist.moves.length} passe{playlist.moves.length > 1 ? 's' : ''}
+                  {playlist.moves.length} {playlist.moves.length > 1 ? 'passes' : 'passe'}
                 </Text>
               </View>
               <TouchableOpacity 
