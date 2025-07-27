@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, Tex
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Heart, Plus, CreditCard as Edit, Trash2, X, Play, Pause } from 'lucide-react-native';
 import { DanceMove, danceMoves, getGifUrl } from '@/data/danceMoves';
+import FullScreenImageModal from '@/components/FullScreenImageModal';
 
 interface PlayList {
   id: string;
@@ -39,6 +40,8 @@ export default function FavoritesScreen() {
   const [selectedColor, setSelectedColor] = useState('#FF6B35');
   const [playingGifs, setPlayingGifs] = useState<Set<string>>(new Set());
   const [failedGifs, setFailedGifs] = useState<Set<string>>(new Set());
+  const [fullScreenVisible, setFullScreenVisible] = useState(false);
+  const [selectedMove, setSelectedMove] = useState<DanceMove | null>(null);
 
   const colors = ['#FF6B35', '#4CAF50', '#2196F3', '#9C27B0', '#F44336', '#FF9800'];
 
@@ -70,6 +73,16 @@ export default function FavoritesScreen() {
       }
       return newSet;
     });
+  };
+
+  const openFullScreen = (move: DanceMove) => {
+    setSelectedMove(move);
+    setFullScreenVisible(true);
+  };
+
+  const closeFullScreen = () => {
+    setFullScreenVisible(false);
+    setSelectedMove(null);
   };
 
   const handleImageError = (moveId: string) => {
@@ -118,7 +131,6 @@ export default function FavoritesScreen() {
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Mes listes personnalisées */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Mes listes</Text>
@@ -150,7 +162,6 @@ export default function FavoritesScreen() {
           ))}
         </View>
 
-        {/* Passes favorites */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Passes favorites</Text>
@@ -159,7 +170,10 @@ export default function FavoritesScreen() {
 
           {favorites.map((move) => (
             <TouchableOpacity key={move.id} style={styles.moveCard}>
-              <View style={styles.imageContainer}>
+              <TouchableOpacity 
+                style={styles.imageContainer}
+                onPress={() => openFullScreen(move)}
+              >
                 <Image
                   source={getImageSource(move)}
                   style={styles.moveImage}
@@ -180,7 +194,7 @@ export default function FavoritesScreen() {
                     <Play size={16} color="#FFF" />
                   )}
                 </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
               <View style={styles.moveContent}>
                 <Text style={styles.courseName}>{move.courseName}</Text>
                 <View style={styles.moveHeader}>
@@ -223,7 +237,6 @@ export default function FavoritesScreen() {
         </View>
       </ScrollView>
 
-      {/* Modal de création de playlist */}
       <Modal
         visible={showCreatePlaylist}
         transparent={true}
@@ -268,6 +281,13 @@ export default function FavoritesScreen() {
           </View>
         </View>
       </Modal>
+
+      <FullScreenImageModal
+        visible={fullScreenVisible}
+        move={selectedMove}
+        isPlaying={selectedMove ? playingGifs.has(selectedMove.id) : false}
+        onClose={closeFullScreen}
+      />
     </SafeAreaView>
   );
 }
@@ -376,7 +396,8 @@ const styles = StyleSheet.create({
   moveImage: {
     width: 100,
     height: 100,
-    resizeMode: 'cover',
+    resizeMode: 'contain',
+    backgroundColor: '#000',
   },
   playButton: {
     position: 'absolute',

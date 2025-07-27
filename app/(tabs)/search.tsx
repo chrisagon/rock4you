@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, Image 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Search, Filter, Heart, Play, Pause } from 'lucide-react-native';
 import { danceMoves, DanceMove, categories, levels, getGifUrl, getAllFamilies, getAllCourses } from '@/data/danceMoves';
+import FullScreenImageModal from '@/components/FullScreenImageModal';
 
 export default function SearchScreen() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,6 +13,8 @@ export default function SearchScreen() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<number | null>(null);
   const [moves, setMoves] = useState<DanceMove[]>(danceMoves);
   const [playingGifs, setPlayingGifs] = useState<Set<string>>(new Set());
+  const [fullScreenVisible, setFullScreenVisible] = useState(false);
+  const [selectedMove, setSelectedMove] = useState<DanceMove | null>(null);
 
   const filteredMoves = moves.filter(move => {
     const matchesSearch = move.movementName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -36,6 +39,16 @@ export default function SearchScreen() {
       }
       return newSet;
     });
+  };
+
+  const openFullScreen = (move: DanceMove) => {
+    setSelectedMove(move);
+    setFullScreenVisible(true);
+  };
+
+  const closeFullScreen = () => {
+    setFullScreenVisible(false);
+    setSelectedMove(null);
   };
 
   const getImageSource = (move: DanceMove) => {
@@ -185,7 +198,10 @@ export default function SearchScreen() {
 
         {filteredMoves.map((move) => (
           <TouchableOpacity key={move.id} style={styles.moveCard}>
-            <View style={styles.moveImageContainer}>
+            <TouchableOpacity
+              style={styles.moveImageContainer}
+              onPress={() => openFullScreen(move)}
+            >
               <Image source={getImageSource(move)} style={styles.moveImage} />
               <TouchableOpacity 
                 style={styles.playButton}
@@ -202,7 +218,7 @@ export default function SearchScreen() {
                   <Text style={styles.noGifText}>Pas de GIF</Text>
                 </View>
               )}
-            </View>
+            </TouchableOpacity>
             <View style={styles.moveContent}>
               <View style={styles.moveHeader}>
                 <Text style={styles.moveName}>{move.movementName}</Text>
@@ -255,6 +271,13 @@ export default function SearchScreen() {
           </View>
         )}
       </ScrollView>
+
+      <FullScreenImageModal
+        visible={fullScreenVisible}
+        move={selectedMove}
+        isPlaying={selectedMove ? playingGifs.has(selectedMove.id) : false}
+        onClose={closeFullScreen}
+      />
     </SafeAreaView>
   );
 }
@@ -374,7 +397,8 @@ const styles = StyleSheet.create({
   moveImage: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'contain',
+    backgroundColor: '#000',
   },
   playButton: {
     position: 'absolute',
