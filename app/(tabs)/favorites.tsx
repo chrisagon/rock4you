@@ -38,6 +38,7 @@ export default function FavoritesScreen() {
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [selectedColor, setSelectedColor] = useState('#FF6B35');
   const [playingGifs, setPlayingGifs] = useState<Set<string>>(new Set());
+  const [failedGifs, setFailedGifs] = useState<Set<string>>(new Set());
 
   const colors = ['#FF6B35', '#4CAF50', '#2196F3', '#9C27B0', '#F44336', '#FF9800'];
 
@@ -71,11 +72,26 @@ export default function FavoritesScreen() {
     });
   };
 
+  const handleImageError = (moveId: string) => {
+    setFailedGifs(prev => new Set(prev).add(moveId));
+    setPlayingGifs(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(moveId);
+      return newSet;
+    });
+  };
+
   const getImageSource = (move: DanceMove) => {
+    // Si le gif a échoué à charger, afficher le logo avec un indicateur d'erreur
+    if (failedGifs.has(move.id)) {
+      return require('@/assets/images/logoRock4you.png');
+    }
+    
     if (playingGifs.has(move.id) && move.hasGif) {
       return { uri: getGifUrl(move) };
     }
-    // Image statique par défaut
+    
+    // Image statique par défaut (logo Rock4you)
     return require('@/assets/images/logoRock4you.png');
   };
 
@@ -144,7 +160,16 @@ export default function FavoritesScreen() {
           {favorites.map((move) => (
             <TouchableOpacity key={move.id} style={styles.moveCard}>
               <View style={styles.imageContainer}>
-                <Image source={getImageSource(move)} style={styles.moveImage} />
+                <Image
+                  source={getImageSource(move)}
+                  style={styles.moveImage}
+                  onError={() => handleImageError(move.id)}
+                />
+                {failedGifs.has(move.id) && (
+                  <View style={styles.errorOverlay}>
+                    <Text style={styles.errorText}>Gif indisponible</Text>
+                  </View>
+                )}
                 <TouchableOpacity 
                   style={styles.playButton}
                   onPress={() => toggleGifPlayback(move.id)}
@@ -504,5 +529,21 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  errorOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    color: '#FF6B35',
+    fontSize: 12,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
