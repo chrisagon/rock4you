@@ -16,7 +16,7 @@ export default function TabLayout() {
           height: 60,
         },
       }}>
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="index"
         options={{
           title: 'Accueil',
@@ -24,8 +24,8 @@ export default function TabLayout() {
             <Home size={size} color={color} />
           ),
         }}
-      />
-      {/* <Tabs.Screen
+      /> */}
+      <Tabs.Screen
         name="search"
         options={{
           title: 'Recherche',
@@ -33,7 +33,7 @@ export default function TabLayout() {
             <Search size={size} color={color} />
           ),
         }}
-      /> */}
+      />
       <Tabs.Screen
         name="favorites"
         options={{
