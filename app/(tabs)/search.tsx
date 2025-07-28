@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Search, Filter, Heart, Play, Pause } from 'lucide-react-native';
 import { danceMoves, DanceMove, categories, levels, getGifUrl, getAllFamilies, getAllCourses } from '@/data/danceMoves';
 import FullScreenImageModal from '@/components/FullScreenImageModal';
+import { useFavorites } from '@/contexts/FavoritesContext';
 
 export default function SearchScreen() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,12 +12,12 @@ export default function SearchScreen() {
   const [selectedFamily, setSelectedFamily] = useState<string | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<number | null>(null);
-  const [moves, setMoves] = useState<DanceMove[]>(danceMoves);
   const [playingGifs, setPlayingGifs] = useState<Set<string>>(new Set());
   const [fullScreenVisible, setFullScreenVisible] = useState(false);
   const [selectedMove, setSelectedMove] = useState<DanceMove | null>(null);
+  const { addFavorite, removeFavorite, isFavorite, favorites } = useFavorites();
 
-  const filteredMoves = moves.filter(move => {
+  const filteredMoves = danceMoves.filter(move => {
     const matchesSearch = move.movementName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          move.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          move.family.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -59,10 +60,29 @@ export default function SearchScreen() {
     return require('@/assets/images/logoRock4you.png');
   };
 
-  const toggleFavorite = (id: string) => {
-    setMoves(moves.map(move => 
-      move.id === id ? { ...move, isFavorite: !move.isFavorite } : move
-    ));
+  const toggleFavorite = async (id: string) => {
+    console.log('🔄 Toggle favori pour:', id);
+    
+    // Trouver le favori existant pour cet item
+    const existingFavorite = favorites.find(fav => fav.itemId === id);
+    
+    if (existingFavorite) {
+      // Supprimer des favoris
+      const success = await removeFavorite(existingFavorite.id);
+      if (success) {
+        Alert.alert('✅ Succès', 'Supprimé des favoris');
+      } else {
+        Alert.alert('❌ Erreur', 'Impossible de supprimer le favori');
+      }
+    } else {
+      // Ajouter aux favoris
+      const success = await addFavorite(id);
+      if (success) {
+        Alert.alert('✅ Succès', 'Ajouté aux favoris');
+      } else {
+        Alert.alert('❌ Erreur', 'Impossible d\'ajouter aux favoris');
+      }
+    }
   };
 
   const getLevelColor = (level: string) => {
@@ -226,10 +246,10 @@ export default function SearchScreen() {
                   <Text style={styles.difficultyText}>Niv.{move.difficulty}</Text>
                 </View>
                 <TouchableOpacity onPress={() => toggleFavorite(move.id)}>
-                  <Heart 
-                    size={20} 
-                    color={move.isFavorite ? '#FF6B35' : '#666'}
-                    fill={move.isFavorite ? '#FF6B35' : 'none'}
+                  <Heart
+                    size={20}
+                    color={isFavorite(move.id) ? '#FF6B35' : '#666'}
+                    fill={isFavorite(move.id) ? '#FF6B35' : 'none'}
                   />
                 </TouchableOpacity>
               </View>

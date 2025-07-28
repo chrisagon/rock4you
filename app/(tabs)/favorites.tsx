@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Heart, Plus, CreditCard as Edit, Trash2, X, Play, Pause, LogOut } from 'lucide-react-native';
-import { DanceMove, danceMoves, getGifUrl } from '@/data/danceMoves';
+import { Heart, Plus, CreditCard as Edit, Trash2, X, LogOut, AlertTriangle } from 'lucide-react-native';
+import { DanceMove, danceMoves } from '@/data/danceMoves';
 import FullScreenImageModal from '@/components/FullScreenImageModal';
+import GifPlayer from '@/components/GifPlayer';
 import { useAuth } from '@/contexts/AuthContext';
-import { apiService, Favorite } from '@/services/api';
+import { useFavorites } from '@/contexts/FavoritesContext';
+import { GifValidator } from '@/utils/gifValidation';
 import { router } from 'expo-router';
 
 interface PlayList {
@@ -15,84 +17,45 @@ interface PlayList {
   color: string;
 }
 
-// Sélectionner quelques passes comme favoris par défaut
-const favoriteMoves: DanceMove[] = danceMoves.filter(move => 
-  ['1', '2', '3'].includes(move.id)
-).map(move => ({ ...move, isFavorite: true }));
-
 const initialPlaylists: PlayList[] = [
   {
     id: '1',
     name: 'À réviser',
-    moves: [favoriteMoves[0]],
+    moves: [],
     color: '#FF6B35'
   },
   {
     id: '2',
     name: 'Cours du lundi',
-    moves: [favoriteMoves[1]],
+    moves: [],
     color: '#4CAF50'
   },
 ];
 
 export default function FavoritesScreen() {
   const { user, logout } = useAuth();
-  const [favorites, setFavorites] = useState<DanceMove[]>(favoriteMoves);
-  const [apiFavorites, setApiFavorites] = useState<Favorite[]>([]);
+  const { favorites, isLoading, removeFavorite } = useFavorites();
   const [playlists, setPlaylists] = useState<PlayList[]>(initialPlaylists);
   const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [selectedColor, setSelectedColor] = useState('#FF6B35');
   const [playingGifs, setPlayingGifs] = useState<Set<string>>(new Set());
-  const [failedGifs, setFailedGifs] = useState<Set<string>>(new Set());
   const [fullScreenVisible, setFullScreenVisible] = useState(false);
   const [selectedMove, setSelectedMove] = useState<DanceMove | null>(null);
-  const [isLoadingFavorites, setIsLoadingFavorites] = useState(false);
+  const [showValidationReport, setShowValidationReport] = useState(false);
+  const [validationReport, setValidationReport] = useState<any>(null);
 
   const colors = ['#FF6B35', '#4CAF50', '#2196F3', '#9C27B0', '#F44336', '#FF9800'];
 
-  // Charger les favoris depuis l'API
-  const loadApiFavorites = async () => {
-    try {
-      setIsLoadingFavorites(true);
-      const response = await apiService.getFavorites();
-      if (response.success && response.data) {
-        setApiFavorites(response.data);
-      }
-    } catch (error) {
-      console.error('Erreur lors du chargement des favoris:', error);
-    } finally {
-      setIsLoadingFavorites(false);
-    }
+  // Convertir les favoris API en DanceMove pour l'affichage
+  const getFavoriteMoves = (): DanceMove[] => {
+    return favorites.map(favorite => {
+      const move = danceMoves.find(m => m.id === favorite.itemId);
+      return move ? { ...move, isFavorite: true } : null;
+    }).filter(Boolean) as DanceMove[];
   };
 
-  // Ajouter un favori via l'API
-  const addToApiFavorites = async (itemId: string) => {
-    try {
-      const response = await apiService.addFavorite(itemId);
-      if (response.success && response.data) {
-        setApiFavorites(prev => [...prev, response.data!]);
-        Alert.alert('Succès', 'Ajouté aux favoris');
-      }
-    } catch (error) {
-      console.error('Erreur lors de l\'ajout:', error);
-      Alert.alert('Erreur', 'Impossible d\'ajouter aux favoris');
-    }
-  };
-
-  // Supprimer un favori via l'API
-  const removeFromApiFavorites = async (favoriteId: number) => {
-    try {
-      const response = await apiService.removeFavorite(favoriteId);
-      if (response.success) {
-        setApiFavorites(prev => prev.filter(fav => fav.id !== favoriteId));
-        Alert.alert('Succès', 'Supprimé des favoris');
-      }
-    } catch (error) {
-      console.error('Erreur lors de la suppression:', error);
-      Alert.alert('Erreur', 'Impossible de supprimer le favori');
-    }
-  };
+  const favoriteMoves = getFavoriteMoves();
 
   // Gérer la déconnexion
   const handleLogout = async () => {
@@ -117,10 +80,6 @@ export default function FavoritesScreen() {
     );
   };
 
-  // Charger les favoris au montage du composant
-  useEffect(() => {
-    loadApiFavorites();
-  }, []);
 
   const createPlaylist = () => {
     if (newPlaylistName.trim()) {
@@ -152,6 +111,13 @@ export default function FavoritesScreen() {
     });
   };
 
+  // Générer un rapport de validation des GIFs
+  const generateValidationReport = () => {
+    const report = GifValidator.validateMovesList(favoriteMoves);
+    setValidationReport(report);
+    setShowValidationReport(true);
+  };
+
   const openFullScreen = (move: DanceMove) => {
     setSelectedMove(move);
     setFullScreenVisible(true);
@@ -162,33 +128,17 @@ export default function FavoritesScreen() {
     setSelectedMove(null);
   };
 
-  const handleImageError = (moveId: string) => {
-    setFailedGifs(prev => new Set(prev).add(moveId));
-    setPlayingGifs(prev => {
-      const newSet = new Set(prev);
-      newSet.delete(moveId);
-      return newSet;
-    });
-  };
 
-  const getImageSource = (move: DanceMove) => {
-    // Si le gif a échoué à charger, afficher le logo avec un indicateur d'erreur
-    if (failedGifs.has(move.id)) {
-      return require('@/assets/images/logoRock4you.png');
+  const handleRemoveFavorite = async (moveId: string) => {
+    const favorite = favorites.find(fav => fav.itemId === moveId);
+    if (favorite) {
+      const success = await removeFavorite(favorite.id);
+      if (success) {
+        Alert.alert('✅ Succès', 'Supprimé des favoris');
+      } else {
+        Alert.alert('❌ Erreur', 'Impossible de supprimer le favori');
+      }
     }
-    
-    if (playingGifs.has(move.id) && move.hasGif) {
-      return { uri: getGifUrl(move) };
-    }
-    
-    // Image statique par défaut (logo Rock4you)
-    return require('@/assets/images/logoRock4you.png');
-  };
-
-  const toggleFavorite = (id: string) => {
-    setFavorites(favorites.map(move => 
-      move.id === id ? { ...move, isFavorite: !move.isFavorite } : move
-    ).filter(move => move.isFavorite));
   };
 
   const getLevelColor = (level: string) => {
@@ -210,9 +160,17 @@ export default function FavoritesScreen() {
               Bienvenue {user?.username} ! Vos passes et listes personnalisées
             </Text>
           </View>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-            <LogOut size={20} color="#FF6B35" />
-          </TouchableOpacity>
+          <View style={styles.headerActions}>
+            <TouchableOpacity
+              style={styles.validationButton}
+              onPress={generateValidationReport}
+            >
+              <AlertTriangle size={16} color="#FF9800" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+              <LogOut size={20} color="#FF6B35" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
@@ -251,36 +209,24 @@ export default function FavoritesScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Passes favorites</Text>
-            <Text style={styles.sectionCount}>{favorites.length} passes</Text>
+            <Text style={styles.sectionCount}>{favoriteMoves.length} passes</Text>
           </View>
 
-          {favorites.map((move) => (
+          {isLoading && (
+            <View style={styles.loadingContainer}>
+              <Text style={styles.loadingText}>Chargement des favoris...</Text>
+            </View>
+          )}
+
+          {favoriteMoves.map((move) => (
             <TouchableOpacity key={move.id} style={styles.moveCard}>
-              <TouchableOpacity 
-                style={styles.imageContainer}
+              <GifPlayer
+                move={move}
+                isPlaying={playingGifs.has(move.id)}
+                onTogglePlay={() => toggleGifPlayback(move.id)}
                 onPress={() => openFullScreen(move)}
-              >
-                <Image
-                  source={getImageSource(move)}
-                  style={styles.moveImage}
-                  onError={() => handleImageError(move.id)}
-                />
-                {failedGifs.has(move.id) && (
-                  <View style={styles.errorOverlay}>
-                    <Text style={styles.errorText}>Gif indisponible</Text>
-                  </View>
-                )}
-                <TouchableOpacity 
-                  style={styles.playButton}
-                  onPress={() => toggleGifPlayback(move.id)}
-                >
-                  {playingGifs.has(move.id) ? (
-                    <Pause size={16} color="#FFF" />
-                  ) : (
-                    <Play size={16} color="#FFF" />
-                  )}
-                </TouchableOpacity>
-              </TouchableOpacity>
+                size="medium"
+              />
               <View style={styles.moveContent}>
                 <Text style={styles.courseName}>{move.courseName}</Text>
                 <View style={styles.moveHeader}>
@@ -288,9 +234,9 @@ export default function FavoritesScreen() {
                   <View style={styles.difficultyBadge}>
                     <Text style={styles.difficultyText}>Niv.{move.difficulty}</Text>
                   </View>
-                  <TouchableOpacity onPress={() => toggleFavorite(move.id)}>
-                    <Heart 
-                      size={20} 
+                  <TouchableOpacity onPress={() => handleRemoveFavorite(move.id)}>
+                    <Heart
+                      size={20}
                       color="#FF6B35"
                       fill="#FF6B35"
                     />
@@ -311,7 +257,7 @@ export default function FavoritesScreen() {
             </TouchableOpacity>
           ))}
 
-          {favorites.length === 0 && (
+          {favoriteMoves.length === 0 && !isLoading && (
             <View style={styles.emptyState}>
               <Heart size={48} color="#333" />
               <Text style={styles.emptyStateText}>Aucune passe favorite</Text>
@@ -364,6 +310,55 @@ export default function FavoritesScreen() {
             <TouchableOpacity style={styles.createButton} onPress={createPlaylist}>
               <Text style={styles.createButtonText}>Créer la liste</Text>
             </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal de rapport de validation */}
+      <Modal
+        visible={showValidationReport}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowValidationReport(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.validationModalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Rapport de validation des GIFs</Text>
+              <TouchableOpacity onPress={() => setShowValidationReport(false)}>
+                <X size={24} color="#666" />
+              </TouchableOpacity>
+            </View>
+
+            {validationReport && (
+              <ScrollView style={styles.reportContent}>
+                <View style={styles.reportSummary}>
+                  <Text style={styles.reportTitle}>Résumé</Text>
+                  <Text style={styles.reportStat}>✅ Valides: {validationReport.valid}</Text>
+                  <Text style={styles.reportStat}>❌ Invalides: {validationReport.invalid}</Text>
+                  <Text style={styles.reportStat}>🔧 Corrigeables: {validationReport.correctable}</Text>
+                </View>
+
+                <Text style={styles.reportTitle}>Détails</Text>
+                {validationReport.details.map((detail: any, index: number) => (
+                  <View key={index} style={styles.reportItem}>
+                    <Text style={styles.reportMoveName}>{detail.moveName}</Text>
+                    <Text style={styles.reportUrl}>URL: {detail.originalUrl}</Text>
+                    <Text style={[
+                      styles.reportStatus,
+                      { color: detail.result.isValid ? '#4CAF50' : '#F44336' }
+                    ]}>
+                      {detail.result.isValid ? '✅ Valide' : '❌ ' + detail.result.error}
+                    </Text>
+                    {detail.result.correctedUrl && (
+                      <Text style={styles.reportCorrected}>
+                        Corrigé: {detail.result.correctedUrl}
+                      </Text>
+                    )}
+                  </View>
+                ))}
+              </ScrollView>
+            )}
           </View>
         </View>
       </Modal>
@@ -665,5 +660,83 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#FF6B35',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#666',
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  validationButton: {
+    padding: 8,
+    backgroundColor: 'rgba(255, 152, 0, 0.1)',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FF9800',
+  },
+  validationModalContent: {
+    backgroundColor: '#1A1A1A',
+    borderRadius: 20,
+    padding: 20,
+    width: '95%',
+    maxWidth: 500,
+    maxHeight: '80%',
+  },
+  reportContent: {
+    maxHeight: 400,
+  },
+  reportSummary: {
+    backgroundColor: '#333',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  reportTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFF',
+    marginBottom: 10,
+  },
+  reportStat: {
+    fontSize: 14,
+    color: '#CCC',
+    marginBottom: 5,
+  },
+  reportItem: {
+    backgroundColor: '#333',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 10,
+    borderLeftWidth: 3,
+    borderLeftColor: '#FF6B35',
+  },
+  reportMoveName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFF',
+    marginBottom: 5,
+  },
+  reportUrl: {
+    fontSize: 12,
+    color: '#999',
+    marginBottom: 5,
+    fontFamily: 'monospace',
+  },
+  reportStatus: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 5,
+  },
+  reportCorrected: {
+    fontSize: 12,
+    color: '#4CAF50',
+    fontFamily: 'monospace',
   },
 });

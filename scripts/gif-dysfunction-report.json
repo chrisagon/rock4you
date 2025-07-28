@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-07-28T20:05:10.312Z",
+  "summary": {
+    "totalTested": 4,
+    "validUrls": 1,
+    "invalidUrls": 3,
+    "unreachableUrls": 0,
+    "details": [
+      {
+        "moveId": "move_18",
+        "movementName": "Balade panier ligne garçon",
+        "originalUrl": "18 Balade panier ligne garçon.gif",
+        "hasGif": true,
+        "issues": [
+          "❌ Format URL invalide: Manque le protocole HTTPS",
+          "🔧 URL corrigée suggérée: https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/18%20Balade%20panier%20ligne%20gar%C3%A7on.gif"
+        ],
+        "correctedUrl": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/18%20Balade%20panier%20ligne%20gar%C3%A7on.gif"
+      },
+      {
+        "moveId": "move_58",
+        "movementName": "Espagnole garçon",
+        "originalUrl": "Spaghetti inversé.gif",
+        "hasGif": false,
+        "issues": [
+          "⚠️ hasGif=false mais driveLink présent",
+          "❌ Format URL invalide: Manque le protocole HTTPS",
+          "🔧 URL corrigée suggérée: https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/Spaghetti%20invers%C3%A9.gif"
+        ],
+        "correctedUrl": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/Spaghetti%20invers%C3%A9.gif"
+      },
+      {
+        "moveId": "move_59",
+        "movementName": "Espagnole inversée garçon",
+        "originalUrl": "spaghetti.gif",
+        "hasGif": false,
+        "issues": [
+          "⚠️ hasGif=false mais driveLink présent",
+          "❌ Format URL invalide: Manque le protocole HTTPS",
+          "🔧 URL corrigée suggérée: https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/spaghetti.gif"
+        ],
+        "correctedUrl": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/spaghetti.gif"
+      },
+      {
+        "moveId": "move_1",
+        "movementName": "Avant arrière mains parallèles",
+        "originalUrl": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/1 Avant arrière mains parallèles.gif",
+        "hasGif": true,
+        "issues": [
+          "✅ URL accessible"
+        ]
+      }
+    ]
+  },
+  "recommendations": [
+    "Corriger les URLs malformées dans danceMoves.ts",
+    "Vérifier la disponibilité des fichiers sur Cloudflare R2",
+    "Implémenter un système de monitoring des GIFs",
+    "Ajouter des tests automatisés de connectivité"
+  ]
+}
