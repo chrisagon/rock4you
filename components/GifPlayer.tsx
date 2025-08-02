@@ -8,7 +8,10 @@ interface GifPlayerProps {
   isPlaying: boolean;
   onTogglePlay: () => void;
   onPress?: () => void;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'responsive';
+  aspectRatio?: number;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
 interface GifState {
@@ -22,7 +25,10 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
   isPlaying,
   onTogglePlay,
   onPress,
-  size = 'medium'
+  size = 'medium',
+  aspectRatio = 1,
+  maxWidth,
+  maxHeight
 }) => {
   const [gifState, setGifState] = useState<GifState>({
     status: 'loading',
@@ -32,10 +38,19 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
   const sizeConfig = {
     small: { width: 80, height: 80 },
     medium: { width: 100, height: 100 },
-    large: { width: 120, height: 120 }
+    large: { width: 150, height: 150 },
+    responsive: null // Géré séparément
   };
 
-  const dimensions = sizeConfig[size];
+  const dimensions = size === 'responsive' ? null : sizeConfig[size];
+  
+  // Styles responsive séparés
+  const responsiveStyles = size === 'responsive' ? {
+    width: '100%' as const,
+    aspectRatio: aspectRatio,
+    maxWidth: maxWidth || 300,
+    maxHeight: maxHeight || 300
+  } : {};
 
   // Validation de l'URL du GIF
   const validateGifUrl = useCallback((url: string): boolean => {
@@ -230,29 +245,49 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
       case 'loaded':
       default:
         return (
-          <TouchableOpacity 
+          <View
             style={[styles.controlButton, styles.playButton]}
-            onPress={onTogglePlay}
           >
             {isPlaying ? (
               <Pause size={16} color="#FFF" />
             ) : (
               <Play size={16} color="#FFF" />
             )}
-          </TouchableOpacity>
+          </View>
         );
     }
   };
 
+  // Gestion du clic sur toute la zone d'affichage
+  const handleContainerPress = () => {
+    // Si le GIF est chargé, déclencher la lecture/pause
+    if (gifState.status === 'loaded') {
+      onTogglePlay();
+    }
+    // Sinon, utiliser l'action de navigation par défaut si fournie
+    else if (onPress) {
+      onPress();
+    }
+  };
+
   return (
-    <TouchableOpacity 
-      style={[styles.container, dimensions]}
-      onPress={onPress}
+    <TouchableOpacity
+      style={[
+        styles.container,
+        dimensions,
+        size === 'responsive' && [styles.responsiveContainer, responsiveStyles]
+      ]}
+      onPress={handleContainerPress}
       disabled={gifState.status === 'loading'}
+      activeOpacity={0.8}
     >
       <Image
         source={getImageSource()}
-        style={[styles.image, dimensions]}
+        style={[
+          styles.image,
+          dimensions,
+          size === 'responsive' && [styles.responsiveImage, responsiveStyles]
+        ]}
         onError={handleImageError}
         resizeMode="contain"
       />
@@ -291,11 +326,30 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
     backgroundColor: '#000',
-    borderRadius: 8,
+    borderRadius: 12,
     overflow: 'hidden',
+    // Amélioration visuelle pour indiquer que la zone est cliquable
+    borderWidth: 1,
+    borderColor: 'rgba(255, 107, 53, 0.3)',
+    // Ombre pour améliorer l'impact visuel
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  responsiveContainer: {
+    alignSelf: 'center',
+    marginVertical: 8,
   },
   image: {
     backgroundColor: '#000',
+  },
+  responsiveImage: {
+    alignSelf: 'center',
   },
   controlButton: {
     position: 'absolute',
@@ -311,6 +365,8 @@ const styles = StyleSheet.create({
   },
   playButton: {
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    // Réduction de l'opacité pour indiquer que ce n'est plus le seul élément cliquable
+    opacity: 0.8,
   },
   loadingButton: {
     backgroundColor: 'rgba(255, 107, 53, 0.8)',

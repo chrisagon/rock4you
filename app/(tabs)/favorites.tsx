@@ -1,41 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Heart, Plus, CreditCard as Edit, Trash2, X, LogOut, AlertTriangle } from 'lucide-react-native';
+import { Heart, Plus, CreditCard as Edit, Trash2, X, LogOut, AlertTriangle, Maximize2 } from 'lucide-react-native';
 import { DanceMove, danceMoves } from '@/data/danceMoves';
 import FullScreenImageModal from '@/components/FullScreenImageModal';
+import PlaylistContentModal from '@/components/PlaylistContentModal';
 import GifPlayer from '@/components/GifPlayer';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFavorites } from '@/contexts/FavoritesContext';
+import { usePlaylist, PlayList } from '@/contexts/PlaylistContext';
 import { GifValidator } from '@/utils/gifValidation';
 import { router } from 'expo-router';
-
-interface PlayList {
-  id: string;
-  name: string;
-  moves: DanceMove[];
-  color: string;
-}
-
-const initialPlaylists: PlayList[] = [
-  {
-    id: '1',
-    name: 'À réviser',
-    moves: [],
-    color: '#FF6B35'
-  },
-  {
-    id: '2',
-    name: 'Cours du lundi',
-    moves: [],
-    color: '#4CAF50'
-  },
-];
 
 export default function FavoritesScreen() {
   const { user, logout } = useAuth();
   const { favorites, isLoading, removeFavorite } = useFavorites();
-  const [playlists, setPlaylists] = useState<PlayList[]>(initialPlaylists);
+  const { playlists, addPlaylist, deletePlaylist, removeMoveFromPlaylist } = usePlaylist();
   const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [selectedColor, setSelectedColor] = useState('#FF6B35');
@@ -44,18 +24,54 @@ export default function FavoritesScreen() {
   const [selectedMove, setSelectedMove] = useState<DanceMove | null>(null);
   const [showValidationReport, setShowValidationReport] = useState(false);
   const [validationReport, setValidationReport] = useState<any>(null);
+  const [playlistContentVisible, setPlaylistContentVisible] = useState(false);
+  const [selectedPlaylist, setSelectedPlaylist] = useState<PlayList | null>(null);
 
   const colors = ['#FF6B35', '#4CAF50', '#2196F3', '#9C27B0', '#F44336', '#FF9800'];
 
-  // Convertir les favoris API en DanceMove pour l'affichage
-  const getFavoriteMoves = (): DanceMove[] => {
+  // Convertir les favoris API en DanceMove pour l'affichage (avec useMemo pour la réactivité)
+  const favoriteMoves = useMemo((): DanceMove[] => {
+    console.log('🔄 Recalcul de favoriteMoves, nombre de favoris:', favorites.length);
     return favorites.map(favorite => {
       const move = danceMoves.find(m => m.id === favorite.itemId);
       return move ? { ...move, isFavorite: true } : null;
     }).filter(Boolean) as DanceMove[];
-  };
+  }, [favorites]);
 
-  const favoriteMoves = getFavoriteMoves();
+  // Gérer la suppression d'un favori
+  const handleRemoveFavorite = async (moveId: string) => {
+    console.log('🔄 handleRemoveFavorite appelée avec moveId:', moveId);
+    console.log('📋 Favoris actuels:', favorites.length);
+    
+    try {
+      // Trouver le favori correspondant à ce mouvement
+      const favorite = favorites.find(fav => fav.itemId === moveId);
+      console.log('🔍 Favori trouvé:', favorite);
+      
+      if (!favorite) {
+        console.warn('⚠️ Favori non trouvé pour le mouvement:', moveId);
+        console.log('📋 Liste des favoris disponibles:', favorites.map(f => ({ id: f.id, itemId: f.itemId })));
+        return;
+      }
+
+      console.log('🗑️ Tentative de suppression du favori ID:', favorite.id);
+      
+      // Supprimer le favori en utilisant son ID
+      const success = await removeFavorite(favorite.id);
+      console.log('📤 Résultat de la suppression:', success);
+      
+      if (success) {
+        console.log('✅ Favori supprimé avec succès - L\'élément devrait disparaître');
+        console.log('📋 Favoris restants:', favorites.length);
+      } else {
+        console.error('❌ Échec de la suppression');
+        Alert.alert('Erreur', 'Impossible de supprimer le favori');
+      }
+    } catch (error) {
+      console.error('❌ Erreur lors de la suppression du favori:', error);
+      Alert.alert('Erreur', 'Une erreur est survenue lors de la suppression');
+    }
+  };
 
   // Gérer la déconnexion
   const handleLogout = async () => {
@@ -81,22 +97,60 @@ export default function FavoritesScreen() {
   };
 
 
-  const createPlaylist = () => {
+  const createPlaylist = async () => {
     if (newPlaylistName.trim()) {
-      const newPlaylist: PlayList = {
-        id: Date.now().toString(),
-        name: newPlaylistName,
-        moves: [],
-        color: selectedColor
-      };
-      setPlaylists([...playlists, newPlaylist]);
-      setNewPlaylistName('');
-      setShowCreatePlaylist(false);
+      try {
+        await addPlaylist(newPlaylistName, selectedColor);
+        setNewPlaylistName('');
+        setShowCreatePlaylist(false);
+      } catch (error) {
+        console.error('Erreur lors de la création de la playlist:', error);
+        Alert.alert('Erreur', 'Impossible de créer la liste');
+      }
     }
   };
 
-  const deletePlaylist = (playlistId: string) => {
-    setPlaylists(playlists.filter(p => p.id !== playlistId));
+  const handleDeletePlaylist = (playlistId: string) => {
+    Alert.alert(
+      'Supprimer la liste',
+      'Êtes-vous sûr de vouloir supprimer cette liste ? Cette action est irréversible.',
+      [
+        { text: 'Annuler', style: 'cancel' },
+        {
+          text: 'Supprimer',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deletePlaylist(playlistId);
+            } catch (error) {
+              console.error('Erreur lors de la suppression de la playlist:', error);
+              Alert.alert('Erreur', 'Impossible de supprimer la liste');
+            }
+          }
+        }
+      ]
+    );
+  };
+
+  const openPlaylistContent = (playlist: PlayList) => {
+    setSelectedPlaylist(playlist);
+    setPlaylistContentVisible(true);
+  };
+
+  const closePlaylistContent = () => {
+    setPlaylistContentVisible(false);
+    setSelectedPlaylist(null);
+  };
+
+  const handleRemoveMoveFromPlaylist = async (playlistId: string, moveId: string) => {
+    try {
+      console.log('🗑️ Suppression de la passe', moveId, 'de la playlist', playlistId);
+      await removeMoveFromPlaylist(playlistId, moveId);
+      console.log('✅ Passe supprimée avec succès');
+    } catch (error) {
+      console.error('❌ Erreur suppression passe:', error);
+      Alert.alert('Erreur', 'Impossible de supprimer la passe de la liste');
+    }
   };
 
   const toggleGifPlayback = (id: string) => {
@@ -129,17 +183,7 @@ export default function FavoritesScreen() {
   };
 
 
-  const handleRemoveFavorite = async (moveId: string) => {
-    const favorite = favorites.find(fav => fav.itemId === moveId);
-    if (favorite) {
-      const success = await removeFavorite(favorite.id);
-      if (success) {
-        Alert.alert('✅ Succès', 'Supprimé des favoris');
-      } else {
-        Alert.alert('❌ Erreur', 'Impossible de supprimer le favori');
-      }
-    }
-  };
+
 
   const getLevelColor = (level: string) => {
     switch (level) {
@@ -188,21 +232,26 @@ export default function FavoritesScreen() {
           </View>
 
           {playlists.map((playlist) => (
-            <TouchableOpacity key={playlist.id} style={styles.playlistCard}>
-              <View style={[styles.playlistColor, { backgroundColor: playlist.color }]} />
-              <View style={styles.playlistContent}>
-                <Text style={styles.playlistName}>{playlist.name}</Text>
-                <Text style={styles.playlistCount}>
-                  {playlist.moves.length} {playlist.moves.length > 1 ? 'passes' : 'passe'}
-                </Text>
-              </View>
-              <TouchableOpacity 
+            <View key={playlist.id} style={styles.playlistCard}>
+              <TouchableOpacity
+                style={styles.playlistMainContent}
+                onPress={() => openPlaylistContent(playlist)}
+              >
+                <View style={[styles.playlistColor, { backgroundColor: playlist.color }]} />
+                <View style={styles.playlistContent}>
+                  <Text style={styles.playlistName}>{playlist.name}</Text>
+                  <Text style={styles.playlistCount}>
+                    {playlist.moves.length} {playlist.moves.length > 1 ? 'passes' : 'passe'}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
                 style={styles.deleteButton}
-                onPress={() => deletePlaylist(playlist.id)}
+                onPress={() => handleDeletePlaylist(playlist.id)}
               >
                 <Trash2 size={16} color="#666" />
               </TouchableOpacity>
-            </TouchableOpacity>
+            </View>
           ))}
         </View>
 
@@ -219,14 +268,24 @@ export default function FavoritesScreen() {
           )}
 
           {favoriteMoves.map((move) => (
-            <TouchableOpacity key={move.id} style={styles.moveCard}>
-              <GifPlayer
-                move={move}
-                isPlaying={playingGifs.has(move.id)}
-                onTogglePlay={() => toggleGifPlayback(move.id)}
-                onPress={() => openFullScreen(move)}
-                size="medium"
-              />
+            <View key={move.id} style={styles.moveCard}>
+              <View style={styles.gifContainer}>
+                <GifPlayer
+                  move={move}
+                  isPlaying={playingGifs.has(move.id)}
+                  onTogglePlay={() => toggleGifPlayback(move.id)}
+                  size="responsive"
+                  aspectRatio={4/3}
+                  maxWidth={200}
+                  maxHeight={150}
+                />
+                <TouchableOpacity
+                  style={styles.fullScreenButton}
+                  onPress={() => openFullScreen(move)}
+                >
+                  <Maximize2 size={16} color="#FFF" />
+                </TouchableOpacity>
+              </View>
               <View style={styles.moveContent}>
                 <Text style={styles.courseName}>{move.courseName}</Text>
                 <View style={styles.moveHeader}>
@@ -254,7 +313,7 @@ export default function FavoritesScreen() {
                   <Text style={styles.remarks}>{move.remarks}</Text>
                 )}
               </View>
-            </TouchableOpacity>
+            </View>
           ))}
 
           {favoriteMoves.length === 0 && !isLoading && (
@@ -369,6 +428,13 @@ export default function FavoritesScreen() {
         isPlaying={selectedMove ? playingGifs.has(selectedMove.id) : false}
         onClose={closeFullScreen}
       />
+
+      <PlaylistContentModal
+        visible={playlistContentVisible}
+        onClose={closePlaylistContent}
+        playlist={selectedPlaylist}
+        onRemoveMove={handleRemoveMoveFromPlaylist}
+      />
     </SafeAreaView>
   );
 }
@@ -432,11 +498,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#1A1A1A',
     borderRadius: 15,
     marginBottom: 10,
-    padding: 15,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#333',
+    overflow: 'hidden',
+  },
+  playlistMainContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
   },
   playlistColor: {
     width: 4,
@@ -469,10 +541,30 @@ const styles = StyleSheet.create({
     borderColor: '#333',
     flexDirection: 'row',
   },
-  imageContainer: {
+  gifContainer: {
     position: 'relative',
-    width: 100,
-    height: 100,
+    width: 120,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+  },
+  fullScreenButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    borderRadius: 6,
+    padding: 4,
+    zIndex: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   moveImage: {
     width: 100,

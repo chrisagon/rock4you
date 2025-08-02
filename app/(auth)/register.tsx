@@ -9,26 +9,30 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const { register } = useAuth();
 
   const handleRegister = async () => {
+    // Réinitialiser le message d'erreur
+    setErrorMessage('');
+    
     if (!username || !email || !password || !confirmPassword) {
-      Alert.alert('Erreur', 'Veuillez remplir tous les champs');
+      setErrorMessage('Veuillez remplir tous les champs');
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Erreur', 'Les mots de passe ne correspondent pas');
+      setErrorMessage('Les mots de passe ne correspondent pas');
       return;
     }
 
     if (password.length < 8) {
-      Alert.alert('Erreur', 'Le mot de passe doit contenir au moins 8 caractères');
+      setErrorMessage('Le mot de passe doit contenir au moins 8 caractères');
       return;
     }
 
     if (username.length < 3) {
-      Alert.alert('Erreur', 'Le nom d\'utilisateur doit contenir au moins 3 caractères');
+      setErrorMessage('Le nom d\'utilisateur doit contenir au moins 3 caractères');
       return;
     }
 
@@ -38,14 +42,15 @@ export default function RegisterScreen() {
       
       await register(username, email, password);
       
-      console.log('✅ Inscription réussie, redirection...');
+      console.log(' Inscription réussie, redirection...');
       // Redirection automatique après inscription réussie
       router.replace('/(tabs)');
     } catch (error) {
-      console.error('❌ Erreur inscription:', error);
+      console.error(' Erreur inscription:', error);
       
-      // Afficher l'erreur détaillée pour le débogage
-      let errorMessage = 'Une erreur est survenue';
+      // Extraire le message d'erreur détaillé
+      let errorMessage = 'Une erreur est survenue lors de l\'inscription';
+      
       if (error instanceof Error) {
         errorMessage = error.message;
         console.error('Détails de l\'erreur:', {
@@ -54,11 +59,16 @@ export default function RegisterScreen() {
         });
       }
       
-      // Améliorer l'affichage des erreurs multi-lignes
-      const title = 'Erreur d\'inscription';
-      const message = errorMessage.replace(/\n/g, '\n\n'); // Double saut de ligne pour meilleure lisibilité
+      // Nettoyer et formater le message d'erreur pour l'utilisateur
+      const cleanErrorMessage = errorMessage
+        .replace(/^Error: /, '') // Supprimer le préfixe "Error: "
+        .replace(/\n•/g, '\n\n•') // Améliorer l'espacement des puces
+        .trim();
       
-      Alert.alert(title, message);
+      console.log(' Message d\'erreur formaté pour l\'utilisateur:', cleanErrorMessage);
+      
+      // Afficher l'erreur directement sur la page
+      setErrorMessage(cleanErrorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -126,6 +136,12 @@ export default function RegisterScreen() {
             autoCorrect={false}
           />
         </View>
+
+        {errorMessage ? (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{errorMessage}</Text>
+          </View>
+        ) : null}
 
         <TouchableOpacity 
           style={[styles.button, isLoading && styles.buttonDisabled]} 
@@ -225,5 +241,18 @@ const styles = StyleSheet.create({
   link: {
     color: '#FF6B35',
     fontWeight: 'bold',
+  },
+  errorContainer: {
+    backgroundColor: '#FF4444',
+    borderRadius: 8,
+    padding: 12,
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  errorText: {
+    color: '#FFF',
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
   },
 });

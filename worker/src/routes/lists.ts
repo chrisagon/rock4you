@@ -13,7 +13,7 @@ import {
 } from '../utils/database';
 import { generateShareToken } from '../utils/auth';
 import { getCurrentUser } from '../middleware/auth';
-import { Liste, ListeCreate, ListeUpdate, PasseAdd, User } from '../types';
+import { User } from '../types';
 import { Env } from '../index';
 
 const listsRoutes = new Hono<{ Bindings: Env }>();
@@ -48,14 +48,13 @@ listsRoutes.get('/', zValidator('query', querySchema), async (c) => {
     const user = getCurrentUser(c) as User;
     const { page = '1', limit = '10', search, visibilite } = c.req.valid('query');
     
-    const pageNum = parseInt(page);
-    const limitNum = Math.min(parseInt(limit), 50); // Limite max de 50
+    const pageNum = parseInt(page, 10);
+    const limitNum = Math.min(parseInt(limit, 10), 50); // Limite max de 50
     const { offset, clause: paginationClause } = buildPaginationClause(pageNum, limitNum);
 
     // Construire la requête avec filtres
-    let whereConditions = ['(lf.owner_id = ? OR lm.user_id = ?)'];
+    let whereConditions = ['(lf.owner_id = ? OR lf.id IN (SELECT liste_id FROM ListeMembres WHERE user_id = ?))'];
     let params = [user.id, user.id];
-
     if (visibilite) {
       whereConditions.push('lf.visibilite = ?');
       params.push(visibilite);
@@ -86,7 +85,8 @@ listsRoutes.get('/', zValidator('query', querySchema), async (c) => {
         COUNT(DISTINCT lm2.id) as member_count,
         CASE WHEN lf.owner_id = ? THEN 'owner' 
              WHEN lm.role IS NOT NULL THEN lm.role 
-             ELSE NULL END as user_role
+             ELSE NULL END as user_role,
+        GROUP_CONCAT(DISTINCT ps.passe_id) as passes
       FROM ListesFavorites lf
       LEFT JOIN Utilisateurs u ON lf.owner_id = u.id
       LEFT JOIN PassesSauvegardes ps ON lf.id = ps.liste_id
@@ -104,12 +104,11 @@ listsRoutes.get('/', zValidator('query', querySchema), async (c) => {
     const countQuery = `
       SELECT COUNT(DISTINCT lf.id) as total
       FROM ListesFavorites lf
-      LEFT JOIN ListeMembres lm ON lf.id = lm.liste_id AND lm.user_id = ?
       WHERE ${whereClause}
     `;
-    const countResult = await selectFirst<{ total: number }>(c.env.DB, countQuery, [user.id, ...params]);
+        const countResult = await selectFirst<{ total: number }>(c.env.DB, countQuery, params);
     const total = countResult?.total || 0;
-
+    console.log('Listes retournées pour', user.id, ':', lists);
     return c.json({
       success: true,
       data: lists,
@@ -365,7 +364,7 @@ listsRoutes.delete('/:id', async (c) => {
       return c.json({ error: 'Liste non trouvée' }, 404);
     }
 
-    if (list.proprietaire_id !== user.id && user.role !== 'admin') {
+    if (list.owner_id !== user.id && user.role !== 'admin') {
       return c.json({ error: 'Seul le propriétaire peut supprimer cette liste' }, 403);
     }
 
@@ -388,6 +387,139 @@ listsRoutes.delete('/:id', async (c) => {
   } catch (error) {
     console.error('Erreur suppression liste:', error);
     return c.json({ error: 'Erreur lors de la suppression de la liste' }, 500);
+  }
+});
+
+/**
+ * POST /api/lists/:id/passes - Ajouter une passe à une liste
+ */
+listsRoutes.post('/:id/passes', zValidator('json', addMoveSchema), async (c) => {
+  try {
+    const user = getCurrentUser(c) as User;
+    const listId = c.req.param('id');
+    const { passe_id } = c.req.valid('json');
+
+    // Vérifier que la liste existe et que l'utilisateur a les permissions
+    const list = await selectFirst(
+      c.env.DB,
+      `SELECT lf.*, 
+              CASE WHEN lf.owner_id = ? THEN 'owner'
+                   WHEN lm.role IN ('editor', 'member') THEN lm.role
+                   ELSE NULL END as user_role
+       FROM ListesFavorites lf
+       LEFT JOIN ListeMembres lm ON lf.id = lm.liste_id AND lm.user_id = ?
+       WHERE lf.id = ?`,
+      [user.id, user.id, listId]
+    );
+
+    if (!list) {
+      return c.json({ error: 'Liste non trouvée' }, 404);
+    }
+
+    if (!list.user_role) {
+      return c.json({ error: 'Permissions insuffisantes pour ajouter une passe' }, 403);
+    }
+
+    // Vérifier si la passe existe déjà dans la liste
+    const existingMove = await selectFirst(
+      c.env.DB,
+      'SELECT id FROM PassesSauvegardes WHERE liste_id = ? AND passe_id = ?',
+      [listId, passe_id]
+    );
+
+    if (existingMove) {
+      return c.json({ error: 'Cette passe est déjà dans la liste' }, 409);
+    }
+
+    // Ajouter la passe à la liste
+    const moveId = await insertAndGetId(
+      c.env.DB,
+      'INSERT INTO PassesSauvegardes (liste_id, passe_id, added_by) VALUES (?, ?, ?)',
+      [listId, passe_id, user.id]
+    );
+
+    // Récupérer la passe ajoutée avec les détails
+    const addedMove = await selectFirst(
+      c.env.DB,
+      `SELECT ps.id, ps.passe_id, ps.added_at, u.username as added_by_name
+       FROM PassesSauvegardes ps
+       LEFT JOIN Utilisateurs u ON ps.added_by = u.id
+       WHERE ps.id = ?`,
+      [moveId]
+    );
+
+    return c.json({
+      success: true,
+      message: 'Passe ajoutée à la liste avec succès',
+      data: addedMove
+    }, 201);
+
+  } catch (error) {
+    console.error('Erreur ajout passe à la liste:', error);
+    return c.json({ error: 'Erreur lors de l\'ajout de la passe à la liste' }, 500);
+  }
+});
+
+/**
+ * DELETE /api/lists/:id/passes/:moveId - Supprimer une passe d'une liste
+ */
+listsRoutes.delete('/:id/passes/:moveId', async (c) => {
+  try {
+    const user = getCurrentUser(c) as User;
+    const listId = c.req.param('id');
+    const moveId = c.req.param('moveId');
+
+    // Vérifier que la liste existe et que l'utilisateur a les permissions
+    const list = await selectFirst(
+      c.env.DB,
+      `SELECT lf.*, 
+              CASE WHEN lf.owner_id = ? THEN 'owner'
+                   WHEN lm.role IN ('editor', 'member') THEN lm.role
+                   ELSE NULL END as user_role
+       FROM ListesFavorites lf
+       LEFT JOIN ListeMembres lm ON lf.id = lm.liste_id AND lm.user_id = ?
+       WHERE lf.id = ?`,
+      [user.id, user.id, listId]
+    );
+
+    if (!list) {
+      return c.json({ error: 'Liste non trouvée' }, 404);
+    }
+
+    if (!list.user_role) {
+      return c.json({ error: 'Permissions insuffisantes pour supprimer une passe' }, 403);
+    }
+
+    // Vérifier que la passe existe dans la liste
+    const existingMove = await selectFirst(
+      c.env.DB,
+      'SELECT id FROM PassesSauvegardes WHERE liste_id = ? AND passe_id = ?',
+      [listId, moveId]
+    );
+
+    if (!existingMove) {
+      return c.json({ error: 'Passe non trouvée dans cette liste' }, 404);
+    }
+
+    // Supprimer la passe de la liste
+    const deleted = await deleteAndGetCount(
+      c.env.DB,
+      'DELETE FROM PassesSauvegardes WHERE liste_id = ? AND passe_id = ?',
+      [listId, moveId]
+    );
+
+    if (deleted === 0) {
+      return c.json({ error: 'Passe non trouvée dans cette liste' }, 404);
+    }
+
+    return c.json({
+      success: true,
+      message: 'Passe supprimée de la liste avec succès'
+    });
+
+  } catch (error) {
+    console.error('Erreur suppression passe de la liste:', error);
+    return c.json({ error: 'Erreur lors de la suppression de la passe de la liste' }, 500);
   }
 });
 

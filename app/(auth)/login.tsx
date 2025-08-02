@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -7,11 +7,14 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const { login } = useAuth();
 
   const handleLogin = async () => {
+    setErrorMessage(''); // Effacer les erreurs précédentes
+    
     if (!email || !password) {
-      Alert.alert('Erreur', 'Veuillez remplir tous les champs');
+      setErrorMessage('Veuillez remplir tous les champs');
       return;
     }
 
@@ -20,7 +23,9 @@ export default function LoginScreen() {
       await login(email, password);
       router.replace('/(tabs)');
     } catch (error) {
-      Alert.alert('Erreur de connexion', error instanceof Error ? error.message : 'Une erreur est survenue');
+      const message = error instanceof Error ? error.message : 'Une erreur est survenue';
+      setErrorMessage(message);
+      console.log(' Erreur de connexion affichée:', message);
     } finally {
       setIsLoading(false);
     }
@@ -61,6 +66,12 @@ export default function LoginScreen() {
             autoCorrect={false}
           />
         </View>
+
+        {errorMessage ? (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>❌ {errorMessage}</Text>
+          </View>
+        ) : null}
 
         <TouchableOpacity 
           style={[styles.button, isLoading && styles.buttonDisabled]} 
@@ -160,5 +171,19 @@ const styles = StyleSheet.create({
   link: {
     color: '#FF6B35',
     fontWeight: 'bold',
+  },
+  errorContainer: {
+    backgroundColor: 'rgba(244, 67, 54, 0.1)',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#F44336',
+  },
+  errorText: {
+    color: '#F44336',
+    fontSize: 14,
+    textAlign: 'center',
+    fontWeight: '500',
   },
 });

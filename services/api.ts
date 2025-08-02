@@ -34,6 +34,27 @@ export interface Favorite {
   addedBy: string;
 }
 
+export interface Playlist {
+  id: string;
+  owner_id: string;
+  nom_liste: string;
+  description?: string;
+  visibilite: string;
+  share_token?: string;
+  date_creation?: string;
+  date_modification?: string;
+  passes?: PlaylistMove[];
+  nombre_passes?: number;
+}
+
+export interface PlaylistMove {
+  id: string;
+  liste_id: string;
+  passe_id: string;
+  date_ajout: string;
+  ordre?: number;
+}
+
 class ApiService {
   private async makeRequest<T>(
     endpoint: string,
@@ -133,6 +154,55 @@ class ApiService {
 
   async removeFavorite(favoriteId: number): Promise<ApiResponse> {
     return this.makeRequest(`/api/favorites/${favoriteId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Playlists/Listes
+  async getPlaylists(): Promise<ApiResponse<Playlist[]>> {
+    return this.makeRequest<Playlist[]>('/api/lists');
+  }
+
+  async getPlaylistById(playlistId: string): Promise<ApiResponse<any>> {
+    return this.makeRequest<any>(`/api/lists/${playlistId}`);
+  }
+
+  async createPlaylist(name: string, description?: string): Promise<ApiResponse<Playlist>> {
+    return this.makeRequest<Playlist>('/api/lists', {
+      method: 'POST',
+      body: JSON.stringify({ 
+        nom_liste: name,
+        description,
+        visibilite: 'private'
+      }),
+    });
+  }
+
+  async updatePlaylist(playlistId: string, updates: { name?: string; description?: string }): Promise<ApiResponse<Playlist>> {
+    return this.makeRequest<Playlist>(`/api/lists/${playlistId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        nom_liste: updates.name,
+        description: updates.description
+      }),
+    });
+  }
+
+  async deletePlaylist(playlistId: string): Promise<ApiResponse> {
+    return this.makeRequest(`/api/lists/${playlistId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async addMoveToPlaylist(playlistId: string, moveId: string): Promise<ApiResponse> {
+    return this.makeRequest(`/api/lists/${playlistId}/passes`, {
+      method: 'POST',
+      body: JSON.stringify({ passe_id: moveId }),
+    });
+  }
+
+  async removeMoveFromPlaylist(playlistId: string, moveId: string): Promise<ApiResponse> {
+    return this.makeRequest(`/api/lists/${playlistId}/passes/${moveId}`, {
       method: 'DELETE',
     });
   }
