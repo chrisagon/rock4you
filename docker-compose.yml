@@ -11,7 +11,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"     # Frontend web
-      - "3000:3000" # Backend API
+      - "3003:3000" # Backend API (port externe 3003, interne 3000)
     environment:
       - NODE_ENV=production
       - JWT_SECRET=${JWT_SECRET:-your-secret-key-change-me}

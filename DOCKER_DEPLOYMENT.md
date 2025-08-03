@@ -30,7 +30,7 @@ docker-compose ps
 
 L'application sera accessible sur :
 - **Frontend Web** : http://localhost
-- **API Backend** : http://localhost:3000
+- **API Backend** : http://localhost:3003
 
 ### Option 2: Docker Simple
 
@@ -42,7 +42,7 @@ docker build -t rock4you .
 docker run -d \
   --name rock4you-app \
   -p 80:80 \
-  -p 3000:3000 \
+  -p 3003:3000 \
   -e JWT_SECRET=your-secret-key \
   -v rock4you_data:/app/backend/data \
   rock4you
@@ -103,7 +103,7 @@ docker-compose logs -f rock4you-app
 ### Health Check
 ```bash
 # Vérifier la santé de l'API
-curl http://localhost:3000/api/health
+curl http://localhost:3003/api/health
 
 # Vérifier le frontend
 curl http://localhost
@@ -223,6 +223,9 @@ docker system prune -a
 
 # Accéder au shell du container
 docker-compose exec rock4you-app sh
+
+# Tester l'API sur le nouveau port
+curl http://localhost:3003/api/health
 ```
 
 ## 📈 Optimisations
