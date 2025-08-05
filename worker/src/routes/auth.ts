@@ -110,11 +110,11 @@ authRoutes.post('/register', zValidator('json', registerSchema), async (c) => {
       'HttpOnly',
       'Path=/',
       'Max-Age=3600', // 1 heure
-      'SameSite=Strict'
+      'SameSite=None' // Nécessaire pour les requêtes cross-origin avec credentials
     ];
     
     if (isProduction) {
-      cookieOptions.push('Secure');
+      cookieOptions.push('Secure'); // Secure est obligatoire avec SameSite=None
     }
 
     c.header('Set-Cookie', `auth_token=${accessToken}; ${cookieOptions.join('; ')}`);
@@ -200,11 +200,11 @@ authRoutes.post('/login', zValidator('json', loginSchema), async (c) => {
       'HttpOnly',
       'Path=/',
       'Max-Age=3600', // 1 heure
-      'SameSite=Strict'
+      'SameSite=None' // Nécessaire pour les requêtes cross-origin avec credentials
     ];
     
     if (isProduction) {
-      cookieOptions.push('Secure');
+      cookieOptions.push('Secure'); // Secure est obligatoire avec SameSite=None
     }
 
     c.header('Set-Cookie', `auth_token=${accessToken}; ${cookieOptions.join('; ')}`);

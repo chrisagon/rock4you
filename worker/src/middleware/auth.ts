@@ -10,15 +10,26 @@ import { User, JWTPayload, ApiError, Env } from '../types';
 export async function authMiddleware(c: Context<{ Bindings: Env; Variables: { user: User; token_payload: JWTPayload } }>, next: Next) {
   try {
     const authHeader = c.req.header('Authorization');
+    const cookieHeader = c.req.header('Cookie');
+    
+    console.log(' Auth Debug:', {
+      authHeader: authHeader ? 'Present' : 'Missing',
+      cookieHeader: cookieHeader ? cookieHeader.substring(0, 100) + '...' : 'Missing',
+      url: c.req.url,
+      method: c.req.method
+    });
+    
     let token = extractBearerToken(authHeader);
+    console.log(' Bearer token:', token ? 'Found' : 'Not found');
 
     // Si pas de token dans l'en-tête, chercher dans les cookies
     if (!token) {
-      const cookieHeader = c.req.header('Cookie');
       token = extractTokenFromCookie(cookieHeader);
+      console.log(' Cookie token:', token ? 'Found' : 'Not found');
     }
 
     if (!token) {
+      console.log(' No token found in headers or cookies');
       return c.json({
         success: false,
         error: 'Token d\'authentification requis',
