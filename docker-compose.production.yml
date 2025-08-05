@@ -1,0 +1,52 @@
+# Docker Compose pour Production avec Cloudflare D1
+# Utilise l'adaptateur D1 Remote pour se connecter à Cloudflare D1
+
+version: '3.8'
+
+services:
+  # Application principale (Frontend + Backend avec D1)
+  rock4you-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    ports:
+      - "80:80"     # Frontend web
+      - "3003:3000" # Backend API
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET}
+      - CORS_ORIGIN=${CORS_ORIGIN:-https://your-domain.com}
+      
+      # Configuration Cloudflare D1
+      - USE_CLOUDFLARE_D1=true
+      - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
+      - CLOUDFLARE_DATABASE_ID=${CLOUDFLARE_DATABASE_ID}
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rock4you.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.rock4you.tls.certresolver=letsencrypt"
+
+  # Monitoring et métriques (optionnel)
+  monitoring:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless-stopped
+    profiles: ["monitoring"]
+
+networks:
+  default:
+    name: rock4you_production
+
+# Pas de volumes pour la DB car on utilise Cloudflare D1

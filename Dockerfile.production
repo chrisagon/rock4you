@@ -1,0 +1,98 @@
+# Dockerfile pour Production avec Cloudflare D1
+# Multi-stage build optimisé pour la production
+
+# Stage 1: Build du frontend
+FROM node:18-alpine AS frontend-builder
+
+WORKDIR /app
+
+# Copier les fichiers de dépendances
+COPY package*.json ./
+COPY app.json ./
+COPY expo-env.d.ts ./
+COPY tsconfig.json ./
+
+# Installer les dépendances
+RUN npm ci --only=production
+
+# Copier le code source du frontend
+COPY app/ ./app/
+COPY components/ ./components/
+COPY contexts/ ./contexts/
+COPY data/ ./data/
+COPY hooks/ ./hooks/
+COPY services/ ./services/
+COPY types/ ./types/
+COPY utils/ ./utils/
+COPY assets/ ./assets/
+
+# Build pour le web avec optimisations production
+ENV NODE_ENV=production
+RUN npm run build:web
+
+# Stage 2: Setup du backend avec adaptateur D1
+FROM node:18-alpine AS backend-builder
+
+WORKDIR /app/backend
+
+# Installer les dépendances nécessaires
+RUN npm init -y && \
+    npm install hono @hono/node-server
+
+# Copier les adaptateurs D1
+COPY docker/backend-adapter-d1.js ./
+COPY docker/d1-remote-adapter.js ./
+
+# Créer le package.json pour le backend
+RUN echo '{ \
+  "name": "rock4you-backend-production", \
+  "version": "1.0.0", \
+  "main": "backend-adapter-d1.js", \
+  "scripts": { \
+    "start": "node backend-adapter-d1.js" \
+  }, \
+  "dependencies": { \
+    "hono": "^4.0.0", \
+    "@hono/node-server": "^1.0.0" \
+  } \
+}' > package.json
+
+# Stage 3: Image finale optimisée pour production
+FROM nginx:alpine AS production
+
+# Installer Node.js pour le backend
+RUN apk add --no-cache nodejs npm curl
+
+# Copier la build web du frontend
+COPY --from=frontend-builder /app/dist /usr/share/nginx/html
+
+# Copier le backend avec adaptateur D1
+COPY --from=backend-builder /app/backend /app/backend
+
+# Configuration Nginx pour production
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+
+# Script de démarrage pour production
+COPY docker/start-production.sh /start.sh
+RUN chmod +x /start.sh
+
+# Variables d'environnement par défaut
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV WEB_PORT=80
+ENV USE_CLOUDFLARE_D1=true
+
+# Créer un utilisateur non-root pour la sécurité
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Changer les permissions
+RUN chown -R nextjs:nodejs /app/backend
+
+EXPOSE 80 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:3000/api/health || exit 1
+
+CMD ["/start.sh"]

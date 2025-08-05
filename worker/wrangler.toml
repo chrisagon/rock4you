@@ -11,8 +11,8 @@ name = "rock4you-api-staging"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "rock4you-db"
-database_id = "a6dce45e-0f5f-40c6-87b5-d9845a9ffe74"
+database_name = "rock4you-prod"
+database_id = "ea166c89-e85b-4455-86ef-29191762bbd2"
 
 [vars]
 JWT_SECRET = "DNbcvUCejZ56S4TVC1PEVeUWySbp9OBxBZyG85dgP2M="
