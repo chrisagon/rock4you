@@ -70,11 +70,11 @@ export async function insertAndGetId(
       throw new Error('Échec de l\'insertion');
     }
     
-    if (result.meta.last_row_id === undefined) {
+    if (result.meta.last_row_id === undefined || result.meta.last_row_id === null) {
       throw new Error('ID de ligne non retourné');
     }
     
-    return result.meta.last_row_id as number;
+    return Number(result.meta.last_row_id);
   } catch (error) {
     console.error('Erreur SQL INSERT:', error);
     throw new ApiError('Erreur d\'insertion en base de données', 500, 'DATABASE_INSERT_ERROR');

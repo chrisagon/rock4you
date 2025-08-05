@@ -133,9 +133,14 @@ authRoutes.post('/register', zValidator('json', registerSchema), async (c) => {
     }, 201);
 
   } catch (error) {
-    console.error('Erreur inscription:', error);
+    console.error('Erreur inscription détaillée:', {
+      message: (error as Error).message,
+      stack: (error as Error).stack,
+      name: (error as Error).name
+    });
     return c.json({
-      error: 'Erreur lors de l\'inscription'
+      error: 'Erreur lors de l\'inscription',
+      debug: (error as Error).message
     }, 500);
   }
 });
