@@ -1,8 +1,8 @@
 import React, { memo, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Heart, Play, Pause, Maximize2, Plus } from 'lucide-react-native';
-import { DanceMove } from '@/data/danceMoves';
-import GifPlayer from './GifPlayer';
+import { DanceMove, getGifUrl } from '@/data/danceMoves';
+import CachedGif from './CachedGif';
 
 interface MoveCardProps {
   move: DanceMove;
@@ -48,8 +48,8 @@ const MoveCard = memo(({
   return (
     <View style={[styles.moveCard, { width }]}>
       <View style={styles.gifContainer}>
-        <GifPlayer
-          move={move}
+        <CachedGif
+          source={getGifUrl(move)}
           isPlaying={isPlaying}
           onTogglePlay={handleTogglePlay}
           size="responsive"
