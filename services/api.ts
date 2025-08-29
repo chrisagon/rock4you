@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://rock4you-api.christophe-thomas.workers.dev';
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://rock4you-api.christophe-thomas.workers.dev';
 
 export interface User {
   id: number;

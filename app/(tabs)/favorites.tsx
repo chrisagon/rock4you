@@ -2,10 +2,13 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Heart, Plus, CreditCard as Edit, Trash2, X, LogOut, AlertTriangle, Maximize2 } from 'lucide-react-native';
-import { DanceMove, danceMoves } from '@/data/danceMoves';
+import { DanceMove, danceMoves, levels } from '@/data/danceMoves';
 import FullScreenImageModal from '@/components/FullScreenImageModal';
 import PlaylistContentModal from '@/components/PlaylistContentModal';
 import GifPlayer from '@/components/GifPlayer';
+import Section from '@/components/Section';
+import FilterChips, { type ChipItem } from '@/components/FilterChips';
+import ResponsiveGrid from '@/components/ResponsiveGrid';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import { usePlaylist, PlayList } from '@/contexts/PlaylistContext';
@@ -26,6 +29,7 @@ export default function FavoritesScreen() {
   const [validationReport, setValidationReport] = useState<any>(null);
   const [playlistContentVisible, setPlaylistContentVisible] = useState(false);
   const [selectedPlaylist, setSelectedPlaylist] = useState<PlayList | null>(null);
+  const [selectedLevelFav, setSelectedLevelFav] = useState<string | null>(null);
 
   const colors = ['#FF6B35', '#4CAF50', '#2196F3', '#9C27B0', '#F44336', '#FF9800'];
 
@@ -37,6 +41,13 @@ export default function FavoritesScreen() {
       return move ? { ...move, isFavorite: true } : null;
     }).filter(Boolean) as DanceMove[];
   }, [favorites]);
+
+  const levelChips: ChipItem[] = useMemo(() => levels.map((lvl) => ({ id: lvl, label: lvl, selected: selectedLevelFav === lvl })), [selectedLevelFav]);
+  const onToggleFavLevel = (id: string) => setSelectedLevelFav((prev) => prev === id ? null : id);
+  const filteredFavoriteMoves = useMemo(() => {
+    if (!selectedLevelFav) return favoriteMoves;
+    return favoriteMoves.filter(m => m.level === selectedLevelFav);
+  }, [favoriteMoves, selectedLevelFav]);
 
   // Gérer la suppression d'un favori
   const handleRemoveFavorite = async (moveId: string) => {
@@ -219,121 +230,115 @@ export default function FavoritesScreen() {
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Mes listes</Text>
-            <TouchableOpacity 
-              style={styles.addButton}
-              onPress={() => setShowCreatePlaylist(true)}
-            >
+        <Section
+          title="Mes listes"
+          rightAction={(
+            <TouchableOpacity style={styles.addButton} onPress={() => setShowCreatePlaylist(true)}>
               <Plus size={16} color="#FFF" />
               <Text style={styles.addButtonText}>Créer</Text>
             </TouchableOpacity>
-          </View>
-
-          {playlists.map((playlist) => (
-            <View key={playlist.id} style={styles.playlistCard}>
-              <TouchableOpacity
-                style={styles.playlistMainContent}
-                onPress={() => openPlaylistContent(playlist)}
-              >
-                <View style={[styles.playlistColor, { backgroundColor: playlist.color }]} />
-                <View style={styles.playlistContent}>
-                  <Text style={styles.playlistName}>{playlist.name}</Text>
-                  <Text style={styles.playlistCount}>
-                    {playlist.moves.length} {playlist.moves.length > 1 ? 'passes' : 'passe'}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => handleDeletePlaylist(playlist.id)}
-              >
-                <Trash2 size={16} color="#666" />
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Passes favorites</Text>
-            <Text style={styles.sectionCount}>{favoriteMoves.length} passes</Text>
-          </View>
-
-          {isLoading && (
-            <View style={styles.loadingContainer}>
-              <Text style={styles.loadingText}>Chargement des favoris...</Text>
-            </View>
           )}
+        >
+        {playlists.map((playlist) => (
+          <View key={playlist.id} style={styles.playlistCard}>
+            <TouchableOpacity
+              style={styles.playlistMainContent}
+              onPress={() => openPlaylistContent(playlist)}
+            >
+              <View style={[styles.playlistColor, { backgroundColor: playlist.color }]} />
+              <View style={styles.playlistContent}>
+                <Text style={styles.playlistName}>{playlist.name}</Text>
+                <Text style={styles.playlistCount}>
+                  {playlist.moves.length} {playlist.moves.length > 1 ? 'passes' : 'passe'}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => handleDeletePlaylist(playlist.id)}
+            >
+              <Trash2 size={16} color="#666" />
+            </TouchableOpacity>
+          </View>
+        ))}
+      </Section>
 
-          {favoriteMoves.map((move) => (
-            <View key={move.id} style={styles.moveCard}>
-              <View style={styles.gifContainer}>
+      <Section
+        title="Passes favorites"
+        rightAction={<Text style={styles.sectionCount}>{filteredFavoriteMoves.length} passes</Text>}
+      >
+        <FilterChips items={levelChips} onToggle={onToggleFavLevel} />
+
+        {isLoading && (
+          <View style={styles.loadingContainer}>
+            <Text style={styles.loadingText}>Chargement des favoris...</Text>
+          </View>
+        )}
+
+        <ResponsiveGrid<DanceMove>
+          data={filteredFavoriteMoves}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item: move }) => (
+            <View style={{ backgroundColor: '#1A1A1A', borderRadius: 15, borderWidth: 1, borderColor: '#333', overflow: 'hidden' }}>
+              <View style={styles.gifContainerGrid}>
                 <GifPlayer
                   move={move}
                   isPlaying={playingGifs.has(move.id)}
                   onTogglePlay={() => toggleGifPlayback(move.id)}
                   size="responsive"
-                  aspectRatio={4/3}
-                  maxWidth={200}
-                  maxHeight={150}
+                  aspectRatio={16/9}
+                  maxHeight={200}
                 />
-                <TouchableOpacity
-                  style={styles.fullScreenButton}
-                  onPress={() => openFullScreen(move)}
-                >
-                  <Maximize2 size={16} color="#FFF" />
+                <TouchableOpacity style={[styles.fullScreenButton, { top: 12, right: 12 }]} onPress={() => openFullScreen(move)}>
+                  <Maximize2 size={18} color="#FFF" />
                 </TouchableOpacity>
               </View>
-              <View style={styles.moveContent}>
+              <View style={{ padding: 12 }}>
                 <Text style={styles.courseName}>{move.courseName}</Text>
                 <View style={styles.moveHeader}>
-                  <Text style={styles.moveName}>{move.movementName}</Text>
+                  <Text style={styles.moveName} numberOfLines={2}>{move.movementName}</Text>
                   <View style={styles.difficultyBadge}>
                     <Text style={styles.difficultyText}>Niv.{move.difficulty}</Text>
                   </View>
                   <TouchableOpacity onPress={() => handleRemoveFavorite(move.id)}>
-                    <Heart
-                      size={20}
-                      color="#FF6B35"
-                      fill="#FF6B35"
-                    />
+                    <Heart size={20} color="#FF6B35" fill="#FF6B35" />
                   </TouchableOpacity>
                 </View>
-                
                 <View style={styles.moveInfo}>
                   <View style={[styles.levelBadge, { backgroundColor: getLevelColor(move.level) }]}>
                     <Text style={styles.levelText}>{move.level}</Text>
                   </View>
                   <Text style={styles.duration}>{move.timeCount}</Text>
                 </View>
-                <Text style={styles.family}>{move.family}</Text>
+                <Text style={styles.family} numberOfLines={1}>{move.family}</Text>
                 {move.remarks && (
-                  <Text style={styles.remarks}>{move.remarks}</Text>
+                  <Text style={styles.remarks} numberOfLines={2}>{move.remarks}</Text>
                 )}
               </View>
             </View>
-          ))}
-
-          {favoriteMoves.length === 0 && !isLoading && (
-            <View style={styles.emptyState}>
-              <Heart size={48} color="#333" />
-              <Text style={styles.emptyStateText}>Aucune passe favorite</Text>
-              <Text style={styles.emptyStateSubtext}>
-                Ajoutez des passes à vos favoris depuis l'accueil
-              </Text>
-            </View>
           )}
-        </View>
-      </ScrollView>
+        />
 
-      <Modal
-        visible={showCreatePlaylist}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setShowCreatePlaylist(false)}
-      >
+        {favoriteMoves.length === 0 && !isLoading && (
+          <View style={styles.emptyState}>
+            <Heart size={48} color="#333" />
+            <Text style={styles.emptyStateText}>Aucune passe favorite</Text>
+            <Text style={styles.emptyStateSubtext}>
+              Ajoutez des passes à vos favoris depuis l'accueil
+            </Text>
+          </View>
+        )}
+
+      </Section>
+    </ScrollView>
+
+    {/* Modal de création de playlist */}
+    <Modal
+      visible={showCreatePlaylist}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={() => setShowCreatePlaylist(false)}
+    >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
@@ -781,14 +786,21 @@ const styles = StyleSheet.create({
     maxWidth: 500,
     maxHeight: '80%',
   },
+  gifContainerGrid: {
+    position: 'relative',
+    width: '100%',
+    backgroundColor: '#000',
+  },
   reportContent: {
-    maxHeight: 400,
+    maxHeight: '70%',
   },
   reportSummary: {
-    backgroundColor: '#333',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
+    backgroundColor: '#121212',
+    borderRadius: 12,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#333',
+    marginBottom: 12,
   },
   reportTitle: {
     fontSize: 18,

@@ -281,8 +281,8 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "12",
     "displacement": "Ligne fille",
     "remarks": "",
-    "gifFileName": "12 Trois tapes et tour cavalière.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/12 Trois tapes et tour cavalière.gif",
+    "gifFileName": "12 Trois tapes et tour fille.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/12 Trois tapes et tour fille.gif",
     "isFavorite": false,
     "level": "Débutant"
   },
@@ -303,8 +303,8 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "12",
     "displacement": "Ligne fille",
     "remarks": "",
-    "gifFileName": "13 Trois tapes les deux tournent.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/13 Trois tapes les deux tournent.gif",
+    "gifFileName": "13 Trois tapes les 2 tournent.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/13 Trois tapes les 2 tournent.gif",
     "isFavorite": false,
     "level": "Débutant"
   },
@@ -413,8 +413,8 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "16",
     "displacement": "Ligne garçon",
     "remarks": "",
-    "gifFileName": "vu en Wcs",
-    "driveLink": "18 Balade panier ligne garçon.gif",
+    "gifFileName": "Balade panier ligne garçon",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/18 Balade panier ligne garçon.gif",
     "isFavorite": false,
     "level": "Débutant"
   },
@@ -1293,8 +1293,8 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "",
-    "driveLink": "Spaghetti inversé.gif",
+    "gifFileName": "Espagnole garçon, Spaghetti inversé.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/58%20Espagnole%20gar%C3%A7on%2C%20Spaghetti%20invers%C3%A9.gif",
     "isFavorite": false,
     "level": "Débutant"
   },
@@ -1315,8 +1315,8 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "",
-    "driveLink": "spaghetti.gif",
+    "gifFileName": "Espagnole inversée garçon, spaghetti.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/59%20Espagnole%20invers%C3%A9e%20gar%C3%A7on%2C%20spaghetti.gif",
     "isFavorite": false,
     "level": "Débutant"
   },
@@ -1821,8 +1821,8 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "",
-    "driveLink": "",
+    "gifFileName": "82 Dos à dos mains parallèles.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/82%20Dos%20%C3%A0%20dos%20mains%20parall%C3%A8les.gif",
     "isFavorite": false,
     "level": "Débutant"
   },
@@ -1975,8 +1975,8 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "",
-    "driveLink": "arrivée espagnole inversée.gif",
+    "gifFileName": "90 Tope-là tenu, arrivée espagnole inversée.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/90%20Tope-l%C3%A0%20tenu%2C%20arriv%C3%A9e%20espagnole%20invers%C3%A9e.gif",
     "isFavorite": false,
     "level": "Débutant"
   },
@@ -2154,7 +2154,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "99 Panier inversé.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/99 Panier inversé.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_98",
@@ -2176,7 +2176,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "100 Berceau inversé.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/100 Berceau inversé.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_99",
@@ -2198,7 +2198,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "101 Corbeille inversée.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/101 Corbeille inversée.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_100",
@@ -2220,7 +2220,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "102 Tire-bouchon.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/102 Tire-bouchon.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_101",
@@ -2242,7 +2242,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "103 Genuflexion.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/103 Genuflexion.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_102",
@@ -2264,7 +2264,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "104 Genuflexion retour.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/104 Genuflexion retour.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_103",
@@ -2286,7 +2286,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "105 Glissé nuque MG MD.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/105 Glissé nuque MG MD.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_104",
@@ -2308,7 +2308,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "106 Glissé nuque MD MG.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/106 Glissé nuque MD MG.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_105",
@@ -2330,7 +2330,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "107 Chgt main 4 tours extérieurs.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/107 Chgt main 4 tours extérieurs.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_106",
@@ -2352,7 +2352,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "108 Chgt main dans le dos infini.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/108 Chgt main dans le dos infini.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_107",
@@ -2374,7 +2374,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "109 Tour libre dans le dos MD MG =_ MG MD.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/109 Tour libre dans le dos MD MG =_ MG MD.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_108",
@@ -2396,7 +2396,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "110 Enroulés infinis V2.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/110 Enroulés infinis V2.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_109",
@@ -2418,7 +2418,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "111 Enroulés infinis V3.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/111 Enroulés infinis V3.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_110",
@@ -2440,7 +2440,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "112 Preux chevalier (théière).gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/112 Preux chevalier (théière).gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_111",
@@ -2462,7 +2462,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "113 Tapes successives en face.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/113 Tapes successives en face.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_112",
@@ -2484,7 +2484,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "114 Tombé à droite bras droit.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/114 Tombé à droite bras droit.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_113",
@@ -2506,7 +2506,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "115 Tombé à droite bras gauche.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/115 Tombé à droite bras gauche.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_114",
@@ -2528,7 +2528,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "116 Tombé à gauche bras droit.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/116 Tombé à gauche bras droit.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_115",
@@ -2550,7 +2550,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "117 Tombé à gauche bras gauche.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/117 Tombé à gauche bras gauche.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_116",
@@ -2572,7 +2572,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "118 Tombé berceau ligne fille.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/118 Tombé berceau ligne fille.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_117",
@@ -2594,7 +2594,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "119 Tombé berceau ligne garçon.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/119 Tombé berceau ligne garçon.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_118",
@@ -2616,7 +2616,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "120 Tombé sous les bras.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/120 Tombé sous les bras.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_119",
@@ -2638,7 +2638,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "121 Tombé par-dessus la tête.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/121 Tombé par-dessus la tête.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_120",
@@ -2660,7 +2660,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "122 Tombé sortie épaule épaule.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/122 Tombé sortie épaule épaule.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_121",
@@ -2679,10 +2679,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "",
-    "driveLink": "bras dessous.gif",
+    "gifFileName": "123 Tombé bras dessus, bras dessous.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/123%20Tomb%C3%A9%20bras%20dessus%2C%20bras%20dessous.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_122",
@@ -2701,10 +2701,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "la mise en oeuvre est",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/124 Sortie de terre.gif",
+    "gifFileName": "124 Sortie de terre.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/124%20Sortie%20de%20terre.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_123",
@@ -2723,10 +2723,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "chez nous",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/125 Chandelle.gif",
+    "gifFileName": "125 Chandelle.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/125%20Chandelle.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_124",
@@ -2746,9 +2746,9 @@ export const danceMoves: DanceMove[] = [
     "displacement": "",
     "remarks": "",
     "gifFileName": "126 Porté tibia en avant.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/126 Porté tibia en avant.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/126%20Porté%20tibia%20en%20avant.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_125",
@@ -2768,9 +2768,9 @@ export const danceMoves: DanceMove[] = [
     "displacement": "",
     "remarks": "",
     "gifFileName": "127 Porté mariée.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/127 Porté mariée.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/127%20Porté%20mariée.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_126",
@@ -2792,7 +2792,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "128 Balançoire.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/128 Balançoire.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_127",
@@ -2814,7 +2814,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "129 Double espagnole V1.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/129 Double espagnole V1.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_128",
@@ -2836,7 +2836,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "130 Double espagnole V2.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/130 Double espagnole V2.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_129",
@@ -2858,7 +2858,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "131 Femme enceinte.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/131 Femme enceinte.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_130",
@@ -2880,7 +2880,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "132 Tombé espagnole.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/132 Tombé espagnole.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_131",
@@ -2902,7 +2902,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "133 Tombé sur la hanche.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/133 Tombé sur la hanche.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_132",
@@ -2924,7 +2924,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "134 Balade Tango.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/134 Balade Tango.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_133",
@@ -2946,7 +2946,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "135 Balade lapin.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/135 Balade lapin.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_134",
@@ -2968,7 +2968,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_135",
@@ -2990,7 +2990,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "mais amenés en rock",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/137 Tombé mains parallèles.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_136",
@@ -3012,7 +3012,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "138 Tombé mains croisées.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/138 Tombé mains croisées.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_137",
@@ -3034,7 +3034,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "139 Whip simple.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/139 Whip simple.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_138",
@@ -3056,7 +3056,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "140 Whip basket.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/140 Whip basket.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_139",
@@ -3078,7 +3078,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_140",
@@ -3100,7 +3100,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "142 Enroulé puis whip à la taille.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/142 Enroulé puis whip à la taille.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_141",
@@ -3122,7 +3122,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "143 Whip épaule.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/143 Whip épaule.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_142",
@@ -3144,7 +3144,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "144 Traversé MD MD envoie au bras.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/144 Traversé MD MD envoie au bras.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_143",
@@ -3166,7 +3166,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "145 whip dans le dos retenu au ventre.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/145 whip dans le dos retenu au ventre.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_144",
@@ -3188,7 +3188,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "146 Catapulte tombé sous les bras.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/146 Catapulte tombé sous les bras.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_145",
@@ -3210,7 +3210,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "147 Catapulte tombé par-dessus.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/147 Catapulte tombé par-dessus.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_146",
@@ -3232,7 +3232,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "148 Tombé dans le dos.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/148 Tombé dans le dos.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_147",
@@ -3254,7 +3254,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "149 Récupération à 2 mains.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/149 Récupération à 2 mains.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_148",
@@ -3276,7 +3276,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "150 Guidage à 2 mains.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/150 Guidage à 2 mains.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_149",
@@ -3298,7 +3298,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "151 Sortie 2 mains autour du cou devant.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/151 Sortie 2 mains autour du cou devant.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_150",
@@ -3320,7 +3320,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "153 Sortie 2 mains tombé pont.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/153 Sortie 2 mains tombé pont.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_151",
@@ -3342,7 +3342,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "154 Hésitations face en couple.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/154 Hésitations face en couple.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_152",
@@ -3364,7 +3364,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "155 Hésitations face mains parallèles.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/155 Hésitations face mains parallèles.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_153",
@@ -3386,7 +3386,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "156 Hésitations face MG MD.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/156 Hésitations face MG MD.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_154",
@@ -3408,7 +3408,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "157 Hésitations face mains croisées.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/157 Hésitations face mains croisées.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_155",
@@ -3430,7 +3430,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "158 Hésitations MD MD fille de dos.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/158 Hésitations MD MD fille de dos.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_156",
@@ -3452,7 +3452,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "159 Hésitations prise aux coudes.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/159 Hésitations prise aux coudes.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_157",
@@ -3474,7 +3474,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "160 Croche MG.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/160 Croche MG.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_158",
@@ -3496,7 +3496,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "161 Croche MD.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/161 Croche MD.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_159",
@@ -3518,7 +3518,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "162 Compas.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/162 Compas.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_160",
@@ -3540,7 +3540,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "exclusivement en Wcs",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/163 Toupie.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_161",
@@ -3562,7 +3562,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "164 Tours autour du garçon.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/164 Tours autour du garçon.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_162",
@@ -3584,7 +3584,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "164 Tours autour du garçon.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/164 Tours autour du garçon.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_163",
@@ -3606,7 +3606,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "166 Illusions déboulés tours forcés.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/166 Illusions déboulés tours forcés.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_164",
@@ -3628,7 +3628,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "167 Glissade sous le bras corbeille.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/167 Glissade sous le bras corbeille.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_165",
@@ -3650,7 +3650,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_166",
@@ -3672,7 +3672,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_167",
@@ -3694,7 +3694,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_168",
@@ -3716,7 +3716,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_169",
@@ -3738,7 +3738,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_170",
@@ -3760,7 +3760,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_171",
@@ -3782,7 +3782,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_172",
@@ -3804,7 +3804,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_173",
@@ -3826,7 +3826,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_174",
@@ -3848,7 +3848,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "177 Tombé à gauche avec vagues.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/177 Tombé à gauche avec vagues.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_175",
@@ -3870,7 +3870,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "178 Head - hear rolls.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/178 Head - hear rolls.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_176",
@@ -3892,7 +3892,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "179 MD MD doigt au coude.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/179 MD MD doigt au coude.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_177",
@@ -3914,7 +3914,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "180 Envoi au coude.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/180 Envoi au coude.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_178",
@@ -3936,7 +3936,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "181 MD MD doigt aux coudes sortie arrière.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/181 MD MD doigt aux coudes sortie arrière.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_179",
@@ -3958,7 +3958,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "182 Mains croisées sortie face doigts aux coudes.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/182 Mains croisées sortie face doigts aux coudes.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_180",
@@ -3980,7 +3980,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "183 Mains croisées doigts aux coudes sortie dos.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/183 Mains croisées doigts aux coudes sortie dos.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_181",
@@ -4002,7 +4002,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "184 Mains croisées 1 tour de plus V1.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/184 Mains croisées 1 tour de plus V1.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_182",
@@ -4024,7 +4024,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "185 Mains croisées 1 tour de plus V2.gif",
     "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/185 Mains croisées 1 tour de plus V2.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_183",
@@ -4046,7 +4046,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_184",
@@ -4068,7 +4068,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_185",
@@ -4087,10 +4087,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "Duck",
-    "driveLink": "188 Tour épaule duck.gif",
+    "gifFileName": "188 Tour épaule duck.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/188%20Tour%20%C3%A9paule%20duck.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_186",
@@ -4109,10 +4109,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "Idem",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/189 Tours intérieurs puis nuque.gif",
+    "gifFileName": "189 Tours intérieurs puis nuque.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/189%20Tours%20int%C3%A9rieurs%20puis%20nuque.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_187",
@@ -4134,7 +4134,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_188",
@@ -4153,10 +4153,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "Typiquement le genre de passe à Sam",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/191 Câlin passage des coudes garçon au-dessus.gif",
+    "gifFileName": "191 Câlin passage des coudes garçon au-dessus.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/191%20C%C3%A2lin%20passage%20des%20coudes%20gar%C3%A7on%20au-dessus.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Intermédiaire"
   },
   {
     "id": "move_189",
@@ -4175,10 +4175,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/192 épaule épaule envoi bras droit cavalière.gif",
+    "gifFileName": "192 épaule épaule envoi bras droit fille.gif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/192%20%C3%A9paule%20%C3%A9paule%20envoi%20bras%20droit%20fille.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_190",
@@ -4197,10 +4197,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/193 Tombé jambe au sol.gif",
+    "gifFileName": "Tombé jambe au sol",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/193%20Tomb%C3%A9%20jambe%20au%20sol.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_191",
@@ -4219,10 +4219,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "194 Penché autour du cou du garçon.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/194 Penché autour du cou du garçon.gif",
+    "gifFileName": "Penché autour du cou du garçon",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/194%20Pench%C3%A9%20autour%20du%20cou%20du%20gar%C3%A7on.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_192",
@@ -4241,10 +4241,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "195 Penché pompe pour la fille.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/195 Penché pompe pour la fille.gif",
+    "gifFileName": "Penché pompe pour la fille",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/195%20Pench%C3%A9%20pompe%20pour%20la%20fille.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_193",
@@ -4263,10 +4263,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "196 Penché sur le dos du garçon.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/196 Penché sur le dos du garçon.gif",
+    "gifFileName": "Penché sur le dos du garçon",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/196%20Pench%C3%A9%20sur%20le%20dos%20du%20gar%C3%A7on.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_194",
@@ -4285,10 +4285,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "197 Penché panier inversé.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/197 Penché panier inversé.gif",
+    "gifFileName": "Penché panier inversé",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/197%20Pench%C3%A9%20panier%20invers%C3%A9.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_195",
@@ -4307,10 +4307,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "198 Titanic sous le bras.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/198 Titanic sous le bras.gif",
+    "gifFileName": "Titanic sous le bras",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/198%20Titanic%20sous%20le%20bras.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_196",
@@ -4329,10 +4329,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "199 Penché Tango.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/199 Penché Tango.gif",
+    "gifFileName": "Penché Tango",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/199%20Pench%C3%A9%20Tango.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_197",
@@ -4351,10 +4351,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "200 Penché fille croise la jambe devant.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/200 Penché fille croise la jambe devant.gif",
+    "gifFileName": "Penché fille croise la jambe devant",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/200%20Pench%C3%A9%20fille%20croise%20la%20jambe%20devant.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_198",
@@ -4373,10 +4373,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "201 Tombé corbeille.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/201 Tombé corbeille.gif",
+    "gifFileName": "Tombé corbeille",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/201%20Tomb%C3%A9%20corbeille.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_199",
@@ -4395,10 +4395,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "202 Corbeille passage par-dessus la fille.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/202 Corbeille passage par-dessus la fille.gif",
+    "gifFileName": "Corbeille passage par-dessus la fille",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/202%20Corbeille%20passage%20par-dessus%20la%20fille.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_200",
@@ -4417,10 +4417,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "203 Tombé papillon vers l_avant.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/203 Tombé papillon vers l_avant.gif",
+    "gifFileName": "Tombé papillon vers l_avant",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/203%20Tomb%C3%A9%20papillon%20vers%20l_avant.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_201",
@@ -4439,10 +4439,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "204 Crochet.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/204 Crochet.gif",
+    "gifFileName": "Crochet",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/204%20Crochet.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_202",
@@ -4461,10 +4461,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "205 Crochet 2 tours.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/205 Crochet 2 tours.gif",
+    "gifFileName": "Crochet 2 tours",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/205%20Crochet%202%20tours.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_203",
@@ -4483,10 +4483,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "206 Billet sous le tapis.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/206 Billet sous le tapis.gif",
+    "gifFileName": "Billet sous le tapis",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/206%20Billet%20sous%20le%20tapis.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_204",
@@ -4505,10 +4505,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "207 Tombé Bachata.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/207 Tombé Bachata.gif",
+    "gifFileName": "Tombé Bachata",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/207%20Tomb%C3%A9%20Bachata.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_205",
@@ -4530,7 +4530,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_206",
@@ -4552,7 +4552,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_207",
@@ -4574,7 +4574,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_208",
@@ -4593,10 +4593,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "207 Tombé Bachata.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/207 Tombé Bachata.gif",
+    "gifFileName": "Tombé Bachata",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/207%20Tomb%C3%A9%20Bachata.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_209",
@@ -4615,10 +4615,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "GIF A REFAIRE",
-    "gifFileName": "212 Tombé face au sol sous les bras.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/212 Tombé face au sol sous les bras.gif",
+    "gifFileName": "Tombé face au sol sous les bras",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/212%20Tomb%C3%A9%20face%20au%20sol%20sous%20les%20bras.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_210",
@@ -4637,10 +4637,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "213 Titanic rotatif.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/213 Titanic rotatif.gif",
+    "gifFileName": "Titanic rotatif",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/213%20Titanic%20rotatif.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_211",
@@ -4659,10 +4659,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "214 Penché rotatif mains parallèles.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/214 Penché rotatif mains parallèles.gif",
+    "gifFileName": "Penché rotatif mains parallèles",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/214%20Pench%C3%A9%20rotatif%20mains%20parall%C3%A9les.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_212",
@@ -4681,10 +4681,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "215 Penché rotatif mains croisées.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/215 Penché rotatif mains croisées.gif",
+    "gifFileName": "Penché rotatif mains croisées",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/215%20Pench%C3%A9%20rotatif%20mains%20crois%C3%A9es.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_213",
@@ -4703,10 +4703,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "216 Tombé renversé sur ligne danseur.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/216 Tombé renversé sur ligne danseur.gif",
+    "gifFileName": "Tombé renversé sur ligne danseur",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/216%20Tomb%C3%A9%20renvers%C3%A9%20sur%20ligne%20danseur.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_214",
@@ -4725,10 +4725,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "217 Tombé fille relevée au-dessus de ses épaules.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/217 Tombé fille relevée au-dessus de ses épaules.gif",
+    "gifFileName": "Tombé fille relevée au-dessus de ses épaules",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/217%20Tomb%C3%A9%20fille%20relev%C3%A9e%20au-dessus%20de%20ses%20%C3%A9paules.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_215",
@@ -4747,10 +4747,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "218 Tombé jambes filles levées.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/218 Tombé jambes filles levées.gif",
+    "gifFileName": "Tombé jambes filles levées",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/218%20Tomb%C3%A9%20jambes%20filles%20lev%C3%A9es.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_216",
@@ -4769,10 +4769,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "Vidéo à reprendre : on ne lâche pas les mains",
-    "gifFileName": "219 Tombé jambes filles levées tenu.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/219 Tombé jambes filles levées tenu.gif",
+    "gifFileName": "Tombé jambes filles levées tenu",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/219%20Tomb%C3%A9%20jambes%20filles%20lev%C3%A9es%20tenu.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_217",
@@ -4791,10 +4791,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "220 Décalé puis assise sur genoux.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/220 Décalé puis assise sur genoux.gif",
+    "gifFileName": "Décalé puis assise sur genoux",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/220%20Décal%C3%A9%20puis%20assise%20sur%20genoux.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_218",
@@ -4813,10 +4813,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "221 Poisson.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/221 Poisson.gif",
+    "gifFileName": "Poisson",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/221%20Poisson.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_219",
@@ -4835,10 +4835,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "222 Porté arabesque.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/222 Porté arabesque.gif",
+    "gifFileName": "Porté arabesque",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/222%20Port%C3%A9%20arabesque.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_220",
@@ -4857,10 +4857,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "223 Dauphin.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/223 Dauphin.gif",
+    "gifFileName": "Dauphin",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/223%20Dauphin.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_221",
@@ -4879,10 +4879,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "224 Fil rouge.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/224 Fil rouge.gif",
+    "gifFileName": "Fil rouge",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/224%20Fil%20rouge.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_222",
@@ -4901,10 +4901,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "225 Tibias sur la cuisse.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/225 Tibias sur la cuisse.gif",
+    "gifFileName": "Tibias sur la cuisse",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/225%20Tibias%20sur%20la%20cuisse.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_223",
@@ -4923,10 +4923,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "226 Cavalière assise flamand rose.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/226 Cavalière assise flamand rose.gif",
+    "gifFileName": "Cavalière assise flamand rose",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/226%20Cavali%C3%A8re%20assise%20flamand%20rose.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_224",
@@ -4945,10 +4945,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "227 Ciseaux.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/227 Ciseaux.gif",
+    "gifFileName": "Ciseaux",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/227%20Ciseaux.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_225",
@@ -4967,10 +4967,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "228 Saut groupé d_un côté à l_autre.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/228 Saut groupé d_un côté à l_autre.gif",
+    "gifFileName": "Saut groupé d_un côté à l_autre",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/228%20Saut%20group%C3%A9%20d_un%20c%C3%B4t%C3%A9%20%C3%A0%20l_autre.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_226",
@@ -4989,10 +4989,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "229 Marché lunaire en ligne.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/229 Marché lunaire en ligne.gif",
+    "gifFileName": "Marché lunaire en ligne",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/229%20March%C3%A9%20lunaire%20en%20ligne.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_227",
@@ -5011,10 +5011,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "229 Marché lunaire en ligne.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/229 Marché lunaire en ligne.gif",
+    "gifFileName": "Marché lunaire en ligne",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/229%20March%C3%A9%20lunaire%20en%20ligne.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_228",
@@ -5033,10 +5033,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "230 Air France 4 mains.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/230 Air France 4 mains.gif",
+    "gifFileName": "Air France 4 mains",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/230%20Air%20France%204%20mains.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_229",
@@ -5055,10 +5055,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "231 Air France 2 mains.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/231 Air France 2 mains.gif",
+    "gifFileName": "Air France 2 mains",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/231%20Air%20France%202%20mains.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_230",
@@ -5077,10 +5077,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "232 Porté pied au genou.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/232 Porté pied au genou.gif",
+    "gifFileName": "Porté pied au genou",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/232%20Port%C3%A9%20pied%20au%20genou.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_231",
@@ -5099,10 +5099,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "233 Demi tour du monde.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/233 Demi tour du monde.gif",
+    "gifFileName": "Demi tour du monde",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/233%20Demi%20tour%20du%20monde.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_232",
@@ -5121,10 +5121,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "234 Tour du monde.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/234 Tour du monde.gif",
+    "gifFileName": "Tour du monde",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/234%20Tour%20du%20monde.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_233",
@@ -5143,10 +5143,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "235 Mains 2 coudes sur le dos.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/235 Mains 2 coudes sur le dos.gif",
+    "gifFileName": "Mains 2 coudes sur le dos",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/235%20Mains%202%20coudes%20sur%20le%20dos.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_234",
@@ -5165,10 +5165,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "236 Soleil.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/236 Soleil.gif",
+    "gifFileName": "Soleil",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/236%20Soleil.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_235",
@@ -5187,10 +5187,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "237 Planche - Superman.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/237 Planche - Superman.gif",
+    "gifFileName": "Planche - Superman",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/237%20Planche%20-%20Superman.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_236",
@@ -5212,7 +5212,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_237",
@@ -5231,10 +5231,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "239 Cheval simple.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/239 Cheval simple.gif",
+    "gifFileName": "Cheval simple",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/239%20Cheval%20simple.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_238",
@@ -5253,10 +5253,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "Vidéo non tournée",
-    "gifFileName": "239 Cheval simple.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/239 Cheval simple.gif",
+    "gifFileName": "Cheval 3*",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/239%20Cheval%20simple.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_239",
@@ -5278,7 +5278,7 @@ export const danceMoves: DanceMove[] = [
     "gifFileName": "",
     "driveLink": "",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_240",
@@ -5297,10 +5297,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "242 Moulinet.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/242 Moulinet.gif",
+    "gifFileName": "Moulinet",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/242%20Moulinet.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_241",
@@ -5319,10 +5319,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "-)",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/243 Déroulé en étoile.gif",
+    "gifFileName": "Déroulé en étoile",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/243%20Déroulé%20en%20étoile.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_242",
@@ -5341,10 +5341,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "Vidéo à retrouver",
-    "gifFileName": "243 Déroulé en étoile.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/243 Déroulé en étoile.gif",
+    "gifFileName": "enroulé bras droit cou",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/244%20enroulé%20bras%20droit%20cou.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_243",
@@ -5363,10 +5363,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "245 Titanic fin au cou.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/245 Titanic fin au cou.gif",
+    "gifFileName": "titanic fin au cou",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/245%20titanic%20fin%20au%20cou.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   },
   {
     "id": "move_244",
@@ -5385,10 +5385,10 @@ export const danceMoves: DanceMove[] = [
     "timeCount": "",
     "displacement": "",
     "remarks": "",
-    "gifFileName": "246 Ciseaux autour du cou.gif",
-    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/246 Ciseaux autour du cou.gif",
+    "gifFileName": " Ciseaux autour du cou",
+    "driveLink": "https://pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev/246%20Ciseaux%20autour%20du%20cou.gif",
     "isFavorite": false,
-    "level": "Débutant"
+    "level": "Avancé"
   }
 ];
 

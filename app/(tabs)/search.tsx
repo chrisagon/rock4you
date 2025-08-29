@@ -1,13 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, Image, Alert, FlatList, Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Search, Filter, Heart, Play, Pause, Maximize2, Plus } from 'lucide-react-native';
-import { danceMoves, DanceMove, categories, levels, getGifUrl, getAllFamilies, getAllCourses } from '@/data/danceMoves';
-import FullScreenImageModal from '@/components/FullScreenImageModal';
-import GifPlayer from '@/components/GifPlayer';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Modal,
+  TextInput,
+  Dimensions,
+  Animated,
+  Platform,
+  Alert
+} from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Search, Filter, Heart, Play, Pause, Maximize2, Plus, X, ChevronDown, Menu } from 'lucide-react-native';
+import { danceMoves, DanceMove, levels, getAllCourses, getAllFamilies } from '@/data/danceMoves';
 import PlaylistSelectionModal from '@/components/PlaylistSelectionModal';
+import ResponsiveGrid, { calcItemWidth, getNumColumns } from '@/components/ResponsiveGrid';
+import GifPlayer from '@/components/GifPlayer';
+import FullScreenImageModal from '@/components/FullScreenImageModal';
+import MoveCard from '@/components/MoveCard';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import { usePlaylist } from '@/contexts/PlaylistContext';
+import Section from '@/components/Section';
+import FilterChips, { type ChipItem } from '@/components/FilterChips';
 
 export default function SearchScreen() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,13 +31,17 @@ export default function SearchScreen() {
   const [selectedFamily, setSelectedFamily] = useState<string | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<number | null>(null);
+  const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
+  const [selectedSort, setSelectedSort] = useState<'relevance' | 'popularity' | 'date'>('relevance');
   const [playingGifs, setPlayingGifs] = useState<Set<string>>(new Set());
   const [fullScreenVisible, setFullScreenVisible] = useState(false);
   const [selectedMove, setSelectedMove] = useState<DanceMove | null>(null);
   const [playlistModalVisible, setPlaylistModalVisible] = useState(false);
   const [selectedMoveForPlaylist, setSelectedMoveForPlaylist] = useState<DanceMove | null>(null);
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
-  const { addFavorite, removeFavorite, isFavorite, favorites } = useFavorites();
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const slideAnim = useState(new Animated.Value(-300))[0];
+  const { addFavorite, removeFavorite, favorites } = useFavorites();
   const { playlists, addMoveToPlaylist } = usePlaylist();
 
   useEffect(() => {
@@ -31,21 +51,41 @@ export default function SearchScreen() {
     return () => subscription?.remove();
   }, []);
 
-  // Calcul du nombre de colonnes selon la largeur d'écran
-  const getNumColumns = () => {
-    const { width } = screenData;
-    if (width < 600) return 1; // Mobile portrait
-    if (width < 900) return 2; // Mobile paysage / Tablette portrait
-    return 3; // Tablette paysage / Desktop
-  };
+  // Déterminer si on est sur web/tablette (largeur > 768px)
+  const isDesktopLayout = screenData.width >= 768;
+  
+  // Pour le layout desktop, toujours 2 colonnes pour les vidéos
+  // Pour mobile, utiliser la logique responsive existante
+  const columns = isDesktopLayout ? 2 : getNumColumns(screenData.width);
+  const itemWidth = isDesktopLayout 
+    ? calcItemWidth(screenData.width * 0.75, 2, 20, 15) // 75% de la largeur pour les vidéos
+    : calcItemWidth(screenData.width, columns, 20, 15);
 
-  // Calcul de la largeur des vignettes
-  const getItemWidth = () => {
-    const { width } = screenData;
-    const numColumns = getNumColumns();
-    const padding = 20; // padding horizontal du container
-    const spacing = 15; // espacement entre les items
-    return (width - (padding * 2) - (spacing * (numColumns - 1))) / numColumns;
+  const uniqueLevels = useMemo(() => levels, []);
+  const uniqueCourses = useMemo(() => getAllCourses(), []);
+  const uniqueDifficulties = useMemo(() => [1, 2, 3, 4, 5], []);
+  const uniqueFamilies = useMemo(() => getAllFamilies().filter((f) => f !== ''), []);
+
+  // Chips data builders
+  const levelChips: ChipItem[] = uniqueLevels.map((lvl) => ({ id: lvl, label: lvl, selected: selectedLevel === lvl }));
+  const courseChips: ChipItem[] = uniqueCourses.map((c) => ({ id: c, label: c, selected: selectedCourse === c }));
+  const difficultyChips: ChipItem[] = uniqueDifficulties.map((d) => ({ id: String(d), label: `Niv.${d}`, selected: selectedDifficulty === d }));
+  const familyChips: ChipItem[] = uniqueFamilies.map((f) => ({ id: f, label: f, selected: selectedFamily === f }));
+
+  // Toggle handlers
+  const onToggleLevel = (id: string) => setSelectedLevel((prev) => prev === id ? null : id);
+  const onToggleCourse = (id: string) => setSelectedCourse((prev) => prev === id ? null : id);
+  const onToggleDifficulty = (id: string) => {
+    const n = parseInt(id, 10);
+    setSelectedDifficulty((prev) => prev === n ? null : n);
+  };
+  const onToggleFamily = (id: string) => setSelectedFamily((prev) => prev === id ? null : id);
+
+  const resetFilters = () => {
+    setSelectedLevel(null);
+    setSelectedFamily(null);
+    setSelectedCourse(null);
+    setSelectedDifficulty(null);
   };
 
   const filteredMoves = danceMoves.filter(move => {
@@ -61,50 +101,53 @@ export default function SearchScreen() {
     return matchesSearch && matchesLevel && matchesFamily && matchesCourse && matchesDifficulty;
   });
 
-  const toggleGifPlayback = (id: string) => {
+  const toggleGifPlayback = useCallback((moveId: string) => {
     setPlayingGifs(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
+      const next = new Set(prev);
+      if (next.has(moveId)) {
+        next.delete(moveId);
       } else {
-        newSet.add(id);
+        next.add(moveId);
       }
-      return newSet;
+      return next;
     });
-  };
+  }, []);
 
-  const openFullScreen = (move: DanceMove) => {
+  const openPlaylistModal = useCallback((move: DanceMove) => {
+    setSelectedMove(move);
+    setPlaylistModalVisible(true);
+  }, []);
+
+  const openFullScreen = useCallback((move: DanceMove) => {
     setSelectedMove(move);
     setFullScreenVisible(true);
-  };
+  }, []);
 
-  const closeFullScreen = () => {
+  const closeFullScreen = useCallback(() => {
     setFullScreenVisible(false);
     setSelectedMove(null);
-  };
+  }, []);
 
-  const openPlaylistModal = (move: DanceMove) => {
-    setSelectedMoveForPlaylist(move);
-    setPlaylistModalVisible(true);
-  };
-
-  const closePlaylistModal = () => {
+  const closePlaylistModal = useCallback(() => {
     setPlaylistModalVisible(false);
     setSelectedMoveForPlaylist(null);
-  };
+  }, []);
 
-  const handleAddToPlaylist = (playlistId: string) => {
+  const handleAddToPlaylist = useCallback((playlistId: string) => {
     if (selectedMoveForPlaylist) {
       addMoveToPlaylist(playlistId, selectedMoveForPlaylist);
     }
-  };
+  }, [selectedMoveForPlaylist]);
 
+  const isFavoriteMove = useCallback((moveId: string) => {
+    return favorites.some(fav => fav.itemId === moveId);
+  }, [favorites]);
 
-  const toggleFavorite = async (id: string) => {
-    console.log('🔄 Toggle favori pour:', id);
+  const toggleFavorite = useCallback(async (moveId: string) => {
+    console.log('🔄 Toggle favori pour:', moveId);
     
     // Trouver le favori existant pour cet item
-    const existingFavorite = favorites.find(fav => fav.itemId === id);
+    const existingFavorite = favorites.find(fav => fav.itemId === moveId);
     
     if (existingFavorite) {
       // Supprimer des favoris
@@ -116,24 +159,327 @@ export default function SearchScreen() {
       }
     } else {
       // Ajouter aux favoris
-      const success = await addFavorite(id);
+      const success = await addFavorite(moveId);
       if (success) {
         Alert.alert('✅ Succès', 'Ajouté aux favoris');
       } else {
         Alert.alert('❌ Erreur', 'Impossible d\'ajouter aux favoris');
       }
     }
-  };
+  }, [favorites, addFavorite, removeFavorite]);
 
-  const getLevelColor = (level: string) => {
+  const getLevelColor = useCallback((level: string) => {
     switch (level) {
       case 'Débutant': return '#4CAF50';
-      case 'Intermédiaire': return '#FF9800';
-      case 'Avancé': return '#F44336';
+      case 'Intermédiaire': return '#2196F3';
+      case 'Avancé': return '#FF9800';
       default: return '#666';
     }
+  }, []);
+
+  // Fonctions pour gérer le menu latéral mobile
+  const openSidebar = () => {
+    setSidebarVisible(true);
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
   };
 
+  const closeSidebar = () => {
+    Animated.timing(slideAnim, {
+      toValue: -300,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setSidebarVisible(false);
+    });
+  };
+
+  // Rendu pour layout desktop (web/tablette)
+  if (isDesktopLayout) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Recherche</Text>
+          <Text style={styles.subtitle}>Trouvez la passe parfaite</Text>
+        </View>
+
+        <View style={styles.searchContainer}>
+          <View style={styles.searchInputContainer}>
+            <Search size={20} color="#666" style={styles.searchIcon} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Rechercher une passe..."
+              placeholderTextColor="#666"
+              value={searchTerm}
+              onChangeText={setSearchTerm}
+            />
+          </View>
+        </View>
+
+        <View style={styles.desktopLayoutContainer}>
+          {/* Colonne de gauche : Filtres */}
+          <View style={styles.desktopSidebar}>
+            <View style={styles.sidebarHeader}>
+              <Text style={styles.sidebarTitle}>Filtres</Text>
+              <TouchableOpacity onPress={resetFilters}>
+                <Text style={styles.resetFiltersText}>Réinitialiser</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.sidebarScroll}>
+              <View style={styles.filterSectionDesktop}>
+                <Text style={styles.filterTitleDesktop}>Niveau</Text>
+                <View style={styles.filterChipsVertical}>
+                  {levelChips.map((chip) => (
+                    <TouchableOpacity
+                      key={chip.id}
+                      style={[
+                        styles.filterButtonDesktop,
+                        chip.selected && styles.filterButtonDesktopActive
+                      ]}
+                      onPress={() => onToggleLevel(chip.id)}
+                    >
+                      <Text style={[
+                        styles.filterButtonTextDesktop,
+                        chip.selected && styles.filterButtonTextDesktopActive
+                      ]}>
+                        {chip.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              <View style={styles.filterSectionDesktop}>
+                <Text style={styles.filterTitleDesktop}>Cours</Text>
+                <View style={styles.filterChipsVertical}>
+                  {courseChips.map((chip) => (
+                    <TouchableOpacity
+                      key={chip.id}
+                      style={[
+                        styles.filterButtonDesktop,
+                        chip.selected && styles.filterButtonDesktopActive
+                      ]}
+                      onPress={() => onToggleCourse(chip.id)}
+                    >
+                      <Text style={[
+                        styles.filterButtonTextDesktop,
+                        chip.selected && styles.filterButtonTextDesktopActive
+                      ]}>
+                        {chip.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              <View style={styles.filterSectionDesktop}>
+                <Text style={styles.filterTitleDesktop}>Difficulté</Text>
+                <View style={styles.filterChipsVertical}>
+                  {difficultyChips.map((chip) => (
+                    <TouchableOpacity
+                      key={chip.id}
+                      style={[
+                        styles.filterButtonDesktop,
+                        chip.selected && styles.filterButtonDesktopActive
+                      ]}
+                      onPress={() => onToggleDifficulty(chip.id)}
+                    >
+                      <Text style={[
+                        styles.filterButtonTextDesktop,
+                        chip.selected && styles.filterButtonTextDesktopActive
+                      ]}>
+                        {chip.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              <View style={styles.filterSectionDesktop}>
+                <Text style={styles.filterTitleDesktop}>Famille</Text>
+                <View style={styles.filterChipsVertical}>
+                  {familyChips.map((chip) => (
+                    <TouchableOpacity
+                      key={chip.id}
+                      style={[
+                        styles.filterButtonDesktop,
+                        chip.selected && styles.filterButtonDesktopActive
+                      ]}
+                      onPress={() => onToggleFamily(chip.id)}
+                    >
+                      <Text style={[
+                        styles.filterButtonTextDesktop,
+                        chip.selected && styles.filterButtonTextDesktopActive
+                      ]}>
+                        {chip.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              <View style={styles.filterSectionDesktop}>
+                <Text style={styles.filterTitleDesktop}>Trier par</Text>
+                <View style={styles.filterChipsVertical}>
+                  <TouchableOpacity
+                    style={[
+                      styles.filterButtonDesktop,
+                      selectedSort === 'relevance' && styles.filterButtonDesktopActive
+                    ]}
+                    onPress={() => setSelectedSort('relevance')}
+                  >
+                    <Text style={[
+                      styles.filterButtonTextDesktop,
+                      selectedSort === 'relevance' && styles.filterButtonTextDesktopActive
+                    ]}>
+                      Pertinence
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.filterButtonDesktop,
+                      selectedSort === 'popularity' && styles.filterButtonDesktopActive
+                    ]}
+                    onPress={() => setSelectedSort('popularity')}
+                  >
+                    <Text style={[
+                      styles.filterButtonTextDesktop,
+                      selectedSort === 'popularity' && styles.filterButtonTextDesktopActive
+                    ]}>
+                      Alphabétique
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.filterButtonDesktop,
+                      selectedSort === 'date' && styles.filterButtonDesktopActive
+                    ]}
+                    onPress={() => setSelectedSort('date')}
+                  >
+                    <Text style={[
+                      styles.filterButtonTextDesktop,
+                      selectedSort === 'date' && styles.filterButtonTextDesktopActive
+                    ]}>
+                      Difficulté
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+
+          {/* Colonne de droite : Résultats */}
+          <View style={styles.desktopMainContent}>
+            <View style={styles.resultsHeader}>
+              <Text style={styles.resultsTitle}>Résultats</Text>
+              <Text style={styles.resultsCount}>{filteredMoves.length} passes trouvées</Text>
+            </View>
+
+            {filteredMoves.length === 0 ? (
+              <View style={styles.noResults}>
+                <Text style={styles.noResultsText}>Aucune passe trouvée</Text>
+                <Text style={styles.noResultsSubtext}>
+                  Essayez de modifier vos filtres de recherche
+                </Text>
+              </View>
+            ) : (
+              <ResponsiveGrid<DanceMove>
+                data={filteredMoves}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item: move }) => (
+                  <MoveCard
+                    move={move}
+                    width={itemWidth}
+                    columns={columns}
+                    isPlaying={playingGifs.has(move.id)}
+                    isFavorite={isFavoriteMove(move.id)}
+                    onTogglePlay={toggleGifPlayback}
+                    onToggleFavorite={toggleFavorite}
+                    onOpenFullScreen={openFullScreen}
+                    onOpenPlaylist={openPlaylistModal}
+                    getLevelColor={getLevelColor}
+                  />
+                )}
+              />
+            )}
+          </View>
+        </View>
+
+        <Modal
+        visible={moreFiltersOpen}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setMoreFiltersOpen(false)}
+      >
+        <View style={styles.modalBackdrop}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Plus de filtres</Text>
+
+            <Text style={styles.modalSectionTitle}>Trier par</Text>
+            <View style={{ gap: 10 }}>
+              <TouchableOpacity
+                style={[styles.sortButton, selectedSort === 'relevance' && styles.sortButtonActive]}
+                onPress={() => setSelectedSort('relevance')}
+                accessibilityRole="button"
+                accessibilityLabel="Trier par pertinence"
+              >
+                <Text style={[styles.sortButtonText, selectedSort === 'relevance' && styles.sortButtonTextActive]}>Pertinence</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.sortButton, selectedSort === 'popularity' && styles.sortButtonActive]}
+                onPress={() => setSelectedSort('popularity')}
+                accessibilityRole="button"
+                accessibilityLabel="Trier alphabétiquement"
+              >
+                <Text style={[styles.sortButtonText, selectedSort === 'popularity' && styles.sortButtonTextActive]}>Alphabétique</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.sortButton, selectedSort === 'date' && styles.sortButtonActive]}
+                onPress={() => setSelectedSort('date')}
+                accessibilityRole="button"
+                accessibilityLabel="Trier par difficulté"
+              >
+                <Text style={[styles.sortButtonText, selectedSort === 'date' && styles.sortButtonTextActive]}>Difficulté</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.modalActions}>
+              <TouchableOpacity style={styles.resetButton} onPress={resetFilters}>
+                <Text style={styles.resetButtonText}>Réinitialiser</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.closeButton} onPress={() => setMoreFiltersOpen(false)}>
+                <Text style={styles.closeButtonText}>Fermer</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+        </Modal>
+
+        {fullScreenVisible && selectedMove && (
+        <FullScreenImageModal
+          visible={fullScreenVisible}
+          move={selectedMove}
+          isPlaying={playingGifs.has(selectedMove.id)}
+          onClose={closeFullScreen}
+        />
+      )}
+      <PlaylistSelectionModal
+        visible={playlistModalVisible}
+        onClose={closePlaylistModal}
+        playlists={playlists}
+        onSelectPlaylist={handleAddToPlaylist}
+        moveId={selectedMoveForPlaylist?.id || ''}
+        moveName={selectedMoveForPlaylist?.movementName || ''}
+      />
+      </SafeAreaView>
+    );
+  }
+
+  // Rendu pour layout mobile (par défaut)
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -142,113 +488,208 @@ export default function SearchScreen() {
       </View>
 
       <View style={styles.searchContainer}>
-        <View style={styles.searchInputContainer}>
-          <Search size={20} color="#666" style={styles.searchIcon} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Rechercher une passe..."
-            placeholderTextColor="#666"
-            value={searchTerm}
-            onChangeText={setSearchTerm}
-          />
+        <View style={styles.searchInputContainerMobile}>
+          <TouchableOpacity 
+            style={styles.hamburgerButton} 
+            onPress={openSidebar}
+          >
+            <Menu size={24} color="#FFF" />
+          </TouchableOpacity>
+          <View style={styles.searchInputWrapper}>
+            <Search size={20} color="#666" style={styles.searchIcon} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Rechercher une passe..."
+              placeholderTextColor="#666"
+              value={searchTerm}
+              onChangeText={setSearchTerm}
+            />
+          </View>
         </View>
       </View>
 
-      <View style={styles.filtersContainer}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Niveau:</Text>
-            <View style={styles.filterOptions}>
-              {levels.map(level => (
-                <TouchableOpacity
-                  key={level}
-                  style={[
-                    styles.filterButton,
-                    selectedLevel === level && styles.filterButtonActive
-                  ]}
-                  onPress={() => setSelectedLevel(selectedLevel === level ? null : level)}
-                >
-                  <Text style={[
-                    styles.filterButtonText,
-                    selectedLevel === level && styles.filterButtonTextActive
-                  ]}>
-                    {level}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+      {/* Menu latéral pour mobile */}
+      <Modal
+        visible={sidebarVisible}
+        transparent
+        animationType="none"
+        onRequestClose={closeSidebar}
+      >
+        <View style={styles.sidebarModalContainer}>
+          <TouchableOpacity 
+            style={styles.sidebarOverlay} 
+            activeOpacity={1}
+            onPress={closeSidebar}
+          />
+          <Animated.View 
+            style={[
+              styles.mobileSidebar,
+              { transform: [{ translateX: slideAnim }] }
+            ]}
+          >
+            <View style={styles.mobileSidebarHeader}>
+              <Text style={styles.mobileSidebarTitle}>Filtres</Text>
+              <TouchableOpacity onPress={closeSidebar}>
+                <X size={24} color="#FFF" />
+              </TouchableOpacity>
             </View>
-          </View>
+            
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.mobileSidebarContent}>
+              <View style={styles.filterSectionMobile}>
+                <Text style={styles.filterTitleMobile}>Niveau</Text>
+                <View style={styles.filterChipsVertical}>
+                  {levelChips.map((chip) => (
+                    <TouchableOpacity
+                      key={chip.id}
+                      style={[
+                        styles.filterButtonMobile,
+                        chip.selected && styles.filterButtonMobileActive
+                      ]}
+                      onPress={() => onToggleLevel(chip.id)}
+                    >
+                      <Text style={[
+                        styles.filterButtonTextMobile,
+                        chip.selected && styles.filterButtonTextMobileActive
+                      ]}>
+                        {chip.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
 
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Cours:</Text>
-            <View style={styles.filterOptions}>
-              {getAllCourses().map(course => (
-                <TouchableOpacity
-                  key={course}
-                  style={[
-                    styles.filterButton,
-                    selectedCourse === course && styles.filterButtonActive
-                  ]}
-                  onPress={() => setSelectedCourse(selectedCourse === course ? null : course)}
-                >
-                  <Text style={[
-                    styles.filterButtonText,
-                    selectedCourse === course && styles.filterButtonTextActive
-                  ]}>
-                    {course}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
+              <View style={styles.filterSectionMobile}>
+                <Text style={styles.filterTitleMobile}>Cours</Text>
+                <View style={styles.filterChipsVertical}>
+                  {courseChips.map((chip) => (
+                    <TouchableOpacity
+                      key={chip.id}
+                      style={[
+                        styles.filterButtonMobile,
+                        chip.selected && styles.filterButtonMobileActive
+                      ]}
+                      onPress={() => onToggleCourse(chip.id)}
+                    >
+                      <Text style={[
+                        styles.filterButtonTextMobile,
+                        chip.selected && styles.filterButtonTextMobileActive
+                      ]}>
+                        {chip.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
 
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Difficulté:</Text>
-            <View style={styles.filterOptions}>
-              {[1, 2, 3, 4, 5].map(difficulty => (
-                <TouchableOpacity
-                  key={difficulty}
-                  style={[
-                    styles.filterButton,
-                    selectedDifficulty === difficulty && styles.filterButtonActive
-                  ]}
-                  onPress={() => setSelectedDifficulty(selectedDifficulty === difficulty ? null : difficulty)}
-                >
-                  <Text style={[
-                    styles.filterButtonText,
-                    selectedDifficulty === difficulty && styles.filterButtonTextActive
-                  ]}>
-                    Niv.{difficulty}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
+              <View style={styles.filterSectionMobile}>
+                <Text style={styles.filterTitleMobile}>Difficulté</Text>
+                <View style={styles.filterChipsVertical}>
+                  {difficultyChips.map((chip) => (
+                    <TouchableOpacity
+                      key={chip.id}
+                      style={[
+                        styles.filterButtonMobile,
+                        chip.selected && styles.filterButtonMobileActive
+                      ]}
+                      onPress={() => onToggleDifficulty(chip.id)}
+                    >
+                      <Text style={[
+                        styles.filterButtonTextMobile,
+                        chip.selected && styles.filterButtonTextMobileActive
+                      ]}>
+                        {chip.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
 
-          <View style={styles.filterSection}>
-            <Text style={styles.filterTitle}>Famille:</Text>
-            <View style={styles.filterOptions}>
-              {getAllFamilies().map(family => (
-                <TouchableOpacity
-                  key={family}
-                  style={[
-                    styles.filterButton,
-                    selectedFamily === family && styles.filterButtonActive
-                  ]}
-                  onPress={() => setSelectedFamily(selectedFamily === family ? null : family)}
-                >
-                  <Text style={[
-                    styles.filterButtonText,
-                    selectedFamily === family && styles.filterButtonTextActive
-                  ]}>
-                    {family}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+              <View style={styles.filterSectionMobile}>
+                <Text style={styles.filterTitleMobile}>Famille</Text>
+                <View style={styles.filterChipsVertical}>
+                  {familyChips.map((chip) => (
+                    <TouchableOpacity
+                      key={chip.id}
+                      style={[
+                        styles.filterButtonMobile,
+                        chip.selected && styles.filterButtonMobileActive
+                      ]}
+                      onPress={() => onToggleFamily(chip.id)}
+                    >
+                      <Text style={[
+                        styles.filterButtonTextMobile,
+                        chip.selected && styles.filterButtonTextMobileActive
+                      ]}>
+                        {chip.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              <View style={styles.filterSectionMobile}>
+                <Text style={styles.filterTitleMobile}>Trier par</Text>
+                <View style={styles.filterChipsVertical}>
+                  <TouchableOpacity
+                    style={[
+                      styles.filterButtonMobile,
+                      selectedSort === 'relevance' && styles.filterButtonMobileActive
+                    ]}
+                    onPress={() => setSelectedSort('relevance')}
+                  >
+                    <Text style={[
+                      styles.filterButtonTextMobile,
+                      selectedSort === 'relevance' && styles.filterButtonTextMobileActive
+                    ]}>
+                      Pertinence
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.filterButtonMobile,
+                      selectedSort === 'popularity' && styles.filterButtonMobileActive
+                    ]}
+                    onPress={() => setSelectedSort('popularity')}
+                  >
+                    <Text style={[
+                      styles.filterButtonTextMobile,
+                      selectedSort === 'popularity' && styles.filterButtonTextMobileActive
+                    ]}>
+                      Alphabétique
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.filterButtonMobile,
+                      selectedSort === 'date' && styles.filterButtonMobileActive
+                    ]}
+                    onPress={() => setSelectedSort('date')}
+                  >
+                    <Text style={[
+                      styles.filterButtonTextMobile,
+                      selectedSort === 'date' && styles.filterButtonTextMobileActive
+                    ]}>
+                      Difficulté
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ScrollView>
+
+            <View style={styles.mobileSidebarFooter}>
+              <TouchableOpacity 
+                style={styles.resetButtonMobile} 
+                onPress={() => {
+                  resetFilters();
+                  closeSidebar();
+                }}
+              >
+                <Text style={styles.resetButtonTextMobile}>Réinitialiser les filtres</Text>
+              </TouchableOpacity>
             </View>
-          </View>
-        </ScrollView>
-      </View>
+          </Animated.View>
+        </View>
+      </Modal>
 
       <View style={styles.resultsContainer}>
         <View style={styles.resultsHeader}>
@@ -264,15 +705,11 @@ export default function SearchScreen() {
             </Text>
           </View>
         ) : (
-          <FlatList
+          <ResponsiveGrid<DanceMove>
             data={filteredMoves}
-            key={getNumColumns()} // Force re-render when columns change
-            numColumns={getNumColumns()}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContent}
-            columnWrapperStyle={getNumColumns() > 1 ? styles.row : undefined}
+            keyExtractor={(item) => item.id}
             renderItem={({ item: move }) => (
-              <View style={[styles.moveCard, { width: getItemWidth() }]}>
+              <View style={[styles.moveCard, { width: itemWidth }]}> 
                 <View style={styles.gifContainer}>
                   <GifPlayer
                     move={move}
@@ -280,7 +717,7 @@ export default function SearchScreen() {
                     onTogglePlay={() => toggleGifPlayback(move.id)}
                     size="responsive"
                     aspectRatio={16/9}
-                    maxWidth={getItemWidth() - 30}
+                    maxWidth={itemWidth - 30}
                     maxHeight={200}
                   />
                   <TouchableOpacity
@@ -292,7 +729,7 @@ export default function SearchScreen() {
                 </View>
                 <View style={styles.moveContent}>
                   <View style={styles.moveHeader}>
-                    <Text style={[styles.moveName, { fontSize: getNumColumns() > 2 ? 16 : 18 }]} numberOfLines={2}>
+                    <Text style={[styles.moveName, { fontSize: columns > 2 ? 16 : 18 }]} numberOfLines={2}>
                       {move.movementName}
                     </Text>
                     <View style={styles.difficultyBadge}>
@@ -301,8 +738,8 @@ export default function SearchScreen() {
                     <TouchableOpacity onPress={() => toggleFavorite(move.id)}>
                       <Heart
                         size={20}
-                        color={isFavorite(move.id) ? '#FF6B35' : '#666'}
-                        fill={isFavorite(move.id) ? '#FF6B35' : 'none'}
+                        color={isFavoriteMove(move.id) ? '#FF6B35' : '#666'}
+                        fill={isFavoriteMove(move.id) ? '#FF6B35' : 'none'}
                       />
                     </TouchableOpacity>
                   </View>
@@ -317,11 +754,11 @@ export default function SearchScreen() {
                   <Text style={styles.courseName} numberOfLines={1}>{move.courseName}</Text>
                   <Text style={styles.family} numberOfLines={1}>Famille: {move.family}</Text>
                   
-                  {move.remarks && getNumColumns() === 1 && (
+                  {move.remarks && columns === 1 && (
                     <Text style={styles.remarks} numberOfLines={2}>{move.remarks}</Text>
                   )}
                   
-                  {getNumColumns() === 1 && (
+                  {columns === 1 && (
                     <View style={styles.technicalInfo}>
                       <Text style={styles.technicalText}>
                         {move.startPosition} → {move.endPosition}
@@ -344,10 +781,11 @@ export default function SearchScreen() {
                 </View>
               </View>
             )}
-            keyExtractor={(item) => item.id}
           />
         )}
       </View>
+
+
 
       <FullScreenImageModal
         visible={fullScreenVisible}
@@ -473,6 +911,82 @@ const styles = StyleSheet.create({
   resultsCount: {
     fontSize: 14,
     color: '#666',
+  },
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'flex-end',
+  },
+  modalCard: {
+    backgroundColor: '#0D0D0D',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    padding: 20,
+    borderTopWidth: 1,
+    borderColor: '#222',
+  },
+  modalTitle: {
+    fontSize: 18,
+    color: '#FFF',
+    fontWeight: '700',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  modalSectionTitle: {
+    fontSize: 14,
+    color: '#CCC',
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  sortButton: {
+    backgroundColor: '#121212',
+    borderWidth: 1,
+    borderColor: '#333',
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+  },
+  sortButtonActive: {
+    backgroundColor: 'rgba(255,107,53,0.12)',
+    borderColor: '#FF6B35',
+  },
+  sortButtonText: {
+    color: '#DDD',
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  sortButtonTextActive: {
+    color: '#FF6B35',
+  },
+  modalActions: {
+    marginTop: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  resetButton: {
+    flex: 1,
+    backgroundColor: '#1A1A1A',
+    borderWidth: 1,
+    borderColor: '#444',
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  resetButtonText: {
+    color: '#FFF',
+    fontWeight: '700',
+  },
+  closeButton: {
+    flex: 1,
+    backgroundColor: '#FF6B35',
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    color: '#000',
+    fontWeight: '700',
   },
   moveCard: {
     backgroundColor: '#1A1A1A',
@@ -621,5 +1135,193 @@ const styles = StyleSheet.create({
     color: '#FF6B35',
     marginLeft: 5,
     fontWeight: '600',
+  },
+  desktopLayoutContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+  },
+  desktopSidebar: {
+    width: '25%',
+    minWidth: 200,
+    maxWidth: 280,
+    backgroundColor: '#1A1A1A',
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#333',
+    marginRight: 20,
+    padding: 20,
+    height: '100%',
+  },
+  sidebarHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
+  },
+  sidebarTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
+  resetFiltersText: {
+    fontSize: 14,
+    color: '#FF6B35',
+    fontWeight: '600',
+  },
+  sidebarScroll: {
+    flex: 1,
+  },
+  filterSectionDesktop: {
+    marginBottom: 25,
+  },
+  filterTitleDesktop: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#CCC',
+    marginBottom: 12,
+  },
+  filterChipsVertical: {
+    gap: 8,
+  },
+  filterButtonDesktop: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    backgroundColor: '#0D0D0D',
+    borderWidth: 1,
+    borderColor: '#333',
+    width: '100%',
+  },
+  filterButtonDesktopActive: {
+    backgroundColor: '#FF6B35',
+    borderColor: '#FF6B35',
+  },
+  filterButtonTextDesktop: {
+    fontSize: 14,
+    color: '#CCC',
+    fontWeight: '500',
+  },
+  filterButtonTextDesktopActive: {
+    color: '#FFF',
+    fontWeight: '600',
+  },
+  desktopMainContent: {
+    flex: 1,
+    paddingRight: 0,
+  },
+  // Styles pour le menu hamburger mobile
+  searchInputContainerMobile: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1A1A1A',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#333',
+    gap: 10,
+  },
+  hamburgerButton: {
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchInputWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  sidebarModalContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  sidebarOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  mobileSidebar: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 280,
+    backgroundColor: '#0D0D0D',
+    borderRightWidth: 1,
+    borderRightColor: '#333',
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  mobileSidebarHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
+  },
+  mobileSidebarTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
+  mobileSidebarContent: {
+    flex: 1,
+    padding: 20,
+  },
+  filterSectionMobile: {
+    marginBottom: 25,
+  },
+  filterTitleMobile: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#CCC',
+    marginBottom: 12,
+  },
+  filterButtonMobile: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    backgroundColor: '#1A1A1A',
+    borderWidth: 1,
+    borderColor: '#333',
+    width: '100%',
+    marginBottom: 8,
+  },
+  filterButtonMobileActive: {
+    backgroundColor: '#FF6B35',
+    borderColor: '#FF6B35',
+  },
+  filterButtonTextMobile: {
+    fontSize: 14,
+    color: '#CCC',
+    fontWeight: '500',
+  },
+  filterButtonTextMobileActive: {
+    color: '#FFF',
+    fontWeight: '600',
+  },
+  mobileSidebarFooter: {
+    padding: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#333',
+  },
+  resetButtonMobile: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: '#FF6B35',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  resetButtonTextMobile: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFF',
   },
 });

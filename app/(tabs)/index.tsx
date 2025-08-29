@@ -8,6 +8,10 @@ import GifPlayer from '@/components/GifPlayer';
 import PlaylistSelectionModal from '@/components/PlaylistSelectionModal';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import { usePlaylist } from '@/contexts/PlaylistContext';
+import Section from '@/components/Section';
+import QuickActions from '@/components/QuickActions';
+import FilterChips, { type ChipItem } from '@/components/FilterChips';
+import { router } from 'expo-router';
 
 export default function HomeScreen() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,6 +21,7 @@ export default function HomeScreen() {
   const [playlistModalVisible, setPlaylistModalVisible] = useState(false);
   const [selectedMoveForPlaylist, setSelectedMoveForPlaylist] = useState<DanceMove | null>(null);
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
+  const [selectedLevelQuick, setSelectedLevelQuick] = useState<string | null>(null);
   const { addFavorite, removeFavorite, isFavorite, favorites } = useFavorites();
   const { playlists, addMoveToPlaylist } = usePlaylist();
 
@@ -42,6 +47,17 @@ export default function HomeScreen() {
     const padding = 20; // padding horizontal du container
     const spacing = 15; // espacement entre les items
     return (width - (padding * 2) - (spacing * (numColumns - 1))) / numColumns;
+  };
+
+  // Quick filters (niveau)
+  const levelChips: ChipItem[] = ['Débutant', 'Intermédiaire', 'Avancé'].map((lvl) => ({
+    id: lvl,
+    label: lvl,
+    selected: selectedLevelQuick === lvl,
+  }));
+
+  const toggleLevelQuick = (id: string) => {
+    setSelectedLevelQuick((prev) => (prev === id ? null : id));
   };
 
   const toggleFavorite = async (id: string) => {
@@ -108,13 +124,17 @@ export default function HomeScreen() {
   };
 
 
-  const filteredMoves = danceMoves.filter(move =>
-    move.movementName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    move.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    move.level.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    move.family.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    move.remarks.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredMoves = danceMoves.filter(move => {
+    const q = searchTerm.toLowerCase();
+    const matchesQuery =
+      move.movementName.toLowerCase().includes(q) ||
+      move.courseName.toLowerCase().includes(q) ||
+      move.level.toLowerCase().includes(q) ||
+      move.family.toLowerCase().includes(q) ||
+      move.remarks.toLowerCase().includes(q);
+    const matchesLevelQuick = !selectedLevelQuick || move.level === selectedLevelQuick;
+    return matchesQuery && matchesLevelQuick;
+  });
 
   const getLevelColor = (level: string) => {
     switch (level) {
@@ -141,6 +161,27 @@ export default function HomeScreen() {
           onChangeText={setSearchTerm}
         />
       </View>
+
+      <Section
+        title="Raccourcis"
+        rightAction={null}
+        containerStyle={{ paddingHorizontal: 20, marginBottom: 8 }}
+      >
+        <QuickActions
+          actions={[
+            { id: 'go-search', label: 'Recherche', onPress: () => router.push('/(tabs)/search') },
+            { id: 'go-lists', label: 'Mes listes', onPress: () => router.push('/(tabs)/favorites') },
+          ]}
+        />
+      </Section>
+
+      <Section
+        title="Filtres rapides"
+        rightAction={null}
+        containerStyle={{ paddingHorizontal: 20, marginBottom: 4 }}
+      >
+        <FilterChips items={levelChips} onToggle={toggleLevelQuick} />
+      </Section>
 
       <View style={styles.movesContainer}>
         <View style={styles.sectionHeader}>

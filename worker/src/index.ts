@@ -24,10 +24,21 @@ app.use('*', logger());
 app.use('*', prettyJSON());
 app.use('*', cors({
   origin: (origin, c) => {
-    const allowedOrigin = c.env.CORS_ORIGIN;
-    if (allowedOrigin === '*' || origin === allowedOrigin) {
+    const allowedOrigins = c.env.CORS_ORIGIN;
+    
+    // Gérer le cas wildcard
+    if (allowedOrigins === '*') {
       return origin;
     }
+    
+    // Parser la liste CSV d'origines autorisées
+    const origins = allowedOrigins.split(',').map((o: string) => o.trim());
+    
+    // Vérifier si l'origine est dans la liste
+    if (origin && origins.includes(origin)) {
+      return origin;
+    }
+    
     return null;
   },
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

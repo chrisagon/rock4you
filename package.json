@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "EXPO_NO_TELEMETRY=1 expo start",
     "build:web": "expo export --platform web",
+    "build:web:prod": "expo export --platform web --output-dir dist",
+    "deploy:cloudflare": "node scripts/deploy-cloudflare.js",
     "lint": "expo lint",
     "test": "node scripts/test-frontend.js",
     "test:backend": "cd worker && node scripts/test-api.js --local",
