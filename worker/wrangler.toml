@@ -16,7 +16,9 @@ database_id = "ea166c89-e85b-4455-86ef-29191762bbd2"
 
 [vars]
 JWT_SECRET = "DNbcvUCejZ56S4TVC1PEVeUWySbp9OBxBZyG85dgP2M="
-CORS_ORIGIN = "https://rock4you-frontend.pages.dev"
+# Autoriser plusieurs origines (séparées par des virgules). Doivent correspondre exactement à l'origin du frontend.
+# Exemple: Pages par défaut + éventuel domaine custom
+CORS_ORIGIN = "https://rock4you-frontend.pages.dev, https://rock4you.pages.dev"
 DEFAULT_FAVORITES_LIST_NAME = "Mes Favoris"
 
 # Variables d'environnement pour le développement local
