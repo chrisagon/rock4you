@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>UX Design Validation: Rock4me phase 1 — enchaînement</title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --border: #e7e5e4;
+    --text: #1c1917;
+    --muted: #78716c;
+    --verdict-strong: #16a34a;
+    --verdict-adequate: #65a30d;
+    --verdict-thin: #d97706;
+    --verdict-broken: #dc2626;
+    --sev-low: #64748b;
+    --sev-medium: #ca8a04;
+    --sev-high: #ea580c;
+    --sev-critical: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 15px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+  header.report-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .title h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .title .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .synthesis { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--muted); border-radius: 8px; padding: 18px 22px; margin-bottom: 24px; font-size: 15.5px; }
+  .synthesis p { margin: 0 0 10px; }
+  .synthesis p:last-child { margin-bottom: 0; }
+  .dimension-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 24px; }
+  .dim-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  .dim-card .dim-name { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .dim-card .dim-verdict { font-size: 14px; font-weight: 600; }
+  section.dimension, section.reviewer-section { margin-bottom: 14px; }
+  section.dimension details, section.reviewer-section details { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  section summary { padding: 14px 20px; cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 12px; }
+  section summary::-webkit-details-marker { display: none; }
+  section summary::before { content: "▸"; display: inline-block; color: var(--muted); transition: transform 0.15s ease; }
+  section details[open] summary::before { transform: rotate(90deg); }
+  section summary h2 { display: inline; margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.005em; flex: 1; }
+  .verdict-pill { font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: white; }
+  .verdict-strong { background: var(--verdict-strong); }
+  .verdict-adequate { background: var(--verdict-adequate); }
+  .verdict-thin { background: var(--verdict-thin); }
+  .verdict-broken { background: var(--verdict-broken); }
+  .dim-body { padding: 4px 20px 18px; }
+  .dim-judgment { color: var(--text); font-size: 14.5px; }
+  .dim-judgment p { margin: 0 0 10px; }
+  .findings-list { padding: 0 20px 4px; }
+  article.finding { padding: 14px 0; border-top: 1px solid var(--border); }
+  article.finding:first-child { border-top: none; }
+  article.finding header { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+  .badge { font-size: 10.5px; padding: 3px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.4; }
+  .badge-sev-low { background: rgba(100, 116, 139, 0.12); color: var(--sev-low); }
+  .badge-sev-medium { background: rgba(202, 138, 4, 0.14); color: var(--sev-medium); }
+  .badge-sev-high { background: rgba(234, 88, 12, 0.14); color: var(--sev-high); }
+  .badge-sev-critical { background: rgba(220, 38, 38, 0.14); color: var(--sev-critical); }
+  .finding-title { margin: 0; font-size: 15px; font-weight: 500; flex: 1; min-width: 200px; }
+  .finding-location { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; color: var(--muted); }
+  .finding-note, .finding-fix { margin-top: 6px; font-size: 14px; }
+  .finding-fix strong { color: var(--muted); font-weight: 500; }
+  .reviewer-source { font-size: 12px; color: var(--muted); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .mechanical { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-top: 24px; font-size: 14px; }
+  .mechanical h3 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .mechanical ul { margin: 0; padding-left: 20px; }
+  .mechanical li { margin-bottom: 4px; color: var(--text); }
+  footer.report-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  footer .meta { display: flex; gap: 24px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header class="report-header">
+      <div class="title">
+        <h1>Rock4me phase 1 (update enchaînement) — UX Design Validation Report</h1>
+        <div class="subtitle">DocumentationR4Y/initiative-rock4me/ux-phase-1 — DESIGN.md + EXPERIENCE.md</div>
+      </div>
+    </header>
+
+    <div class="synthesis">
+      <p><strong>Relecteure structure (rubric) :</strong> « Paire de spines cohérente et directement extractible par story-dev : la couverture des flux tient à la fois le brief et l'enchaînement, et la forme est canonique. Le contrat casse seulement sur la couche jetons — accent-wash viole la règle d'hex du spec, et aucun objectif de contraste n'est énoncé. Les états réseau de Favoris et la persistance du mode Réordonner sont les incertitudes restantes. »</p>
+      <p><strong>Relecteure prose :</strong> « La voix des spines tient : sobre, tutoiement, aucun encouragement ; l'ajout de l'enchaînement est structurellement bien intégré, mais le nouveau contenu porte une dérive de vocabulaire (« séquence »), une hypothèse présentée comme décision (les deux boucles) et deux phrases faussées dans le Flow 5. »</p>
+      <p><strong>Synthèse :</strong> les 33 trouvailles (2 lentilles) ont été <em>résolues</em> dans les spines avant finalisation — corrige le jeton critique <code>accent-wash</code>, ajoute la cible de contraste 4,5:1 avec encre sombre sur la pilule accent, complète les états Favoris et la persistance du Réordonner, et nettoie le vocabulaire et le Flow 5. Aucune trouvaille ne reste ouverte ; les notes d'architecture (colonne de rang D1, gel d'image du GIF) sont consignées au memlog.</p>
+    </div>
+
+    <div class="dimension-summary">
+      <div class="dim-card"><div class="dim-name">1. Flow coverage</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">2. Token completeness</div><div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div></div>
+      <div class="dim-card"><div class="dim-name">3. Component coverage</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">4. State coverage</div><div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div></div>
+      <div class="dim-card"><div class="dim-name">5. Visual references</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">6. Bloat &amp; overspecification</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+      <div class="dim-card"><div class="dim-name">7. Inheritance discipline</div><div class="dim-verdict" style="color: var(--verdict-adequate)">adequate</div></div>
+      <div class="dim-card"><div class="dim-name">8. Shape fit</div><div class="dim-verdict" style="color: var(--verdict-strong)">strong</div></div>
+    </div>
+
+    <section class="dimension">
+      <details open>
+        <summary><h2>1. Flow coverage</h2><span class="verdict-pill verdict-strong">strong</span></summary>
+        <div class="dim-body"><div class="dim-judgment"><p>Chaque parcours du brief a sa Key Flow ou sa couverture IA ; l'enchaînement est couvert contre le memlog (mode plein écran, deux boucles, contrôles, écran de fin, Réordonner, passes sans geste, périmètre). Chaque flux a son protagoniste (Christophe), ses étapes numérotées et son climax ; les flux 1 et 5 portent un échec.</p></div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">Flux 2 et 3 sans chemin d'échec</h3><span class="finding-location">EXPERIENCE.md §Key Flows</span></header>
+            <div class="finding-note">Les surfaces ont des états d'échec documentés, mais les flux ne les rejouent pas.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> lignes « Échec » ajoutées aux flows 2 (filtres vides) et 3 (ajout hors ligne), renvoyant aux états existants.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details open>
+        <summary><h2>2. Token completeness</h2><span class="verdict-pill verdict-adequate">adequate</span></summary>
+        <div class="dim-body"><div class="dim-judgment"><p>18 couleurs, 4 rôles typography, rayons, espacements et composants définis ; toutes les références du prose se résolvent. Deux charges lourdes manquaient : le type hex et le contraste.</p></div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-critical">critical</span><h3 class="finding-title">accent-wash en rgba(), le spec exige hex</h3><span class="finding-location">DESIGN.md frontmatter</span></header>
+            <div class="finding-note">Un consommateur qui résout les jetons type par type lèverait une erreur sur <code>accent-wash</code>.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> <code>'#FF6B351A'</code> (8 chiffres hex).</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">Aucun objectif de contraste énoncé</h3><span class="finding-location">DESIGN.md §Colors</span></header>
+            <div class="finding-note">L'Accessibility Floor délègue le contraste à DESIGN.md, qui ne disait rien de chiffré ; encre blanche sur pilule accent ≈ 2,8:1.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> ligne Contraste (texte ≥ 4,5:1 ; ink-muted désactivé sous la cible) + ink de la pilule passé à <code>{colors.surface-deep}</code> (≈ 7,4:1).</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">Marges énoncées en chiffres, hors jetons</h3><span class="finding-location">DESIGN.md §Layout</span></header>
+            <div class="finding-note">20 / 40 px écrits en dur.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> références <code>{spacing.5}</code> et <code>{spacing.6}</code>.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary><h2>3. Component coverage</h2><span class="verdict-pill verdict-strong">strong</span></summary>
+        <div class="dim-body"><div class="dim-judgment"><p>12 lignes Component Patterns, 10 composants du prose et 10 clés du frontmatter mappent une pour une ; règles réelles partout ; les composants comportement-only sont déclarés.</p></div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">Feuille de filtres sans ancre visuelle</h3><span class="finding-location">DESIGN.md §Components</span></header>
+            <div class="finding-note">Règles de comportement présentes, spec visuelle dispersée entre Elevation et Shapes.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> ligne dédiée (surface raised, coin {rounded.md}, voile {colors.surface-deep} à 80 %).</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details open>
+        <summary><h2>4. State coverage</h2><span class="verdict-pill verdict-adequate">adequate</span></summary>
+        <div class="dim-body"><div class="dim-judgment"><p>Réviser, Session, écran d'enchaînement et Catalogue riches. Les angles morts étaient concentrés sur le réseau de Favoris et les bornes fines de l'enchaînement.</p></div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Favoris sans état de chargement ni d'erreur</h3><span class="finding-location">EXPERIENCE.md §State Patterns</span></header>
+            <div class="finding-note">Seule surface alimentée par l'API, sans état intermédiaire.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> deux états (« Chargement des listes… », « Impossible de charger tes listes. » + « Réessayer »).</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Favoris vide non défini</h3><span class="finding-location">EXPERIENCE.md §State Patterns</span></header>
+            <div class="finding-note">Le flow 3 suppose déjà une liste existante.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> « Aucune liste pour l'instant. » + « Parcourir le catalogue ».</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Persistance du Réordonner indéterminée</h3><span class="finding-location">EXPERIENCE.md §Component Patterns</span></header>
+            <div class="finding-note">Ni quand l'ordre est sauvegardé, ni l'échec de sauvegarde.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> sauvegarde à « Terminer » ; échec → ordre local + « Ordre non enregistré. ». Note architecture (colonne de rang D1) au memlog.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">Angles morts fins de l'enchaînement</h3><span class="finding-location">EXPERIENCE.md §State Patterns, §Component Patterns</span></header>
+            <div class="finding-note">Premier geste lent au lancement ; « Précédente » sur la première passe.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> attente au lancement couverte ; Précédente désactivée sur la première passe.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">Fiche d'une passe sans geste sans état</h3><span class="finding-location">EXPERIENCE.md §State Patterns</span></header>
+            <div class="finding-note">Le bouton Enchaîner lui interdit d'exister, mais la fiche n'était pas décrite.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> la fiche affiche les métadonnées sans cadre de geste.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary><h2>5. Visual reference coverage</h2><span class="verdict-pill verdict-strong">strong</span></summary>
+        <div class="dim-body"><div class="dim-judgment"><p>Aucun dossier mockups/ wireframes/ imports/ — cohérent avec la décision enregistrée « no mockups : every surface is built from the spine tables » ; l'écran d'enchaînement suit la même règle (choix confirmé par l'utilisateur). Aucune référence pendante.</p></div></div>
+        <div class="findings-list"></div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary><h2>6. Bloat &amp; overspecification</h2><span class="verdict-pill verdict-strong">strong</span></summary>
+        <div class="dim-body"><div class="dim-judgment"><p>Aucun pixel hors jeton, aucune reformulation pure du source, prose fonctionnel, sections chargées. Une redondance locale relevée.</p></div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">Justification « retour navigateur/Android » doublée, gel de pause triplé</h3><span class="finding-location">EXPERIENCE.md §IA, §§Composants</span></header>
+            <div class="finding-note">Deux paragraphes voisins portent la même clause ; la règle de pause s'énonçait à trois endroits.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> clause gardée une fois au paragraphe Modales ; gel de pause normatif à l'état Pause uniquement.</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details open>
+        <summary><h2>7. Inheritance discipline</h2><span class="verdict-pill verdict-adequate">adequate</span></summary>
+        <div class="dim-body"><div class="dim-judgment"><p>Sources résolues, vocabulaire tenu, noms de composants identiques, chiffres concordants (29 = 244 − 215). Une divergence de source restait ouverte.</p></div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Brief exclut « renommage et réordonnancement des listes »</h3><span class="finding-location">brief-memorisation-des-passes.md §Périmètre vs EXPERIENCE.md</span></header>
+            <div class="finding-note">Rien ne liait l'ajout à la ligne du brief qu'il déborde.</div>
+            <div class="finding-fix"><strong>Appliqué (différemment) :</strong> ligne [HYPOTHÈSE] en Foundation de EXPERIENCE.md ; interprétation consignée au memlog : l'exclusion du brief vise les opérations sur les listes (renommer, réordonner des listes), le nouveau mode réordonne les passes <em>dans</em> une liste. Brief inchangé.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">« La carte de décision », synonyme hors glossaire</h3><span class="finding-location">DESIGN.md §Colors</span></header>
+            <div class="finding-note">Seul synonyme d'un vocabulaire par ailleurs tenu.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> « la carte de révision ».</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <section class="dimension">
+      <details>
+        <summary><h2>8. Shape fit</h2><span class="verdict-pill verdict-strong">strong</span></summary>
+        <div class="dim-body"><div class="dim-judgment"><p>DESIGN.md dans l'ordre canonique exact, EXPERIENCE.md complet avec les requis-si-applicables. Aucune section inventée ni manquante.</p></div></div>
+        <div class="findings-list"></div>
+      </details>
+    </section>
+
+    <section class="reviewer-section">
+      <details open>
+        <summary><h2>Revue prose</h2><span class="reviewer-source">review-prose.md</span></summary>
+        <div class="dim-body"><div class="dim-judgment"><p>« Verdict global : la voix des spines tient (sobre, tutoiement, zéro exclamation/emoji, DESIGN.md et EXPERIENCE.md parlent d'une même voix) ; l'enchaînement est bien intégré structurellement, mais le nouveau contenu porte trois défauts de fond — dérive « séquence », deux boucles présentées comme décision, deux phrases faussées dans le Flow 5 — tout se corrige à la ligne près. »</p></div></div>
+        <div class="findings-list">
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">« Séquence » sert de synonyme ×4</h3><span class="finding-location">EXPERIENCE.md §State Patterns, §Key Flows</span></header>
+            <div class="finding-note">La Foundation interdit les synonymes.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> remplacé par « l'enchaînement » partout.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">Deux boucles présentées comme décision</h3><span class="finding-location">EXPERIENCE.md §State Patterns</span></header>
+            <div class="finding-note">Le memlog enregistre un paramètre ajustable ; tag [HYPOTHÈSE] requis.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> « [HYPOTHÈSE : deux boucles en phase 1, paramètre ajustable] ».</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-high">high</span><h3 class="finding-title">Ligne d'échec du Flow 5 faussée</h3><span class="finding-location">EXPERIENCE.md §Key Flows, Flow 5</span></header>
+            <div class="finding-note">« Il n'a strictement rien à re-configurer » ne dit rien d'un chargement lent.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> « « Chargement du geste… » tient la place, l'enchaînement attend ; il peut toucher Précédente ou Pause pendant l'attente. »</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Climax contradictoire</h3><span class="finding-location">EXPERIENCE.md Flow 5, ét. 7</span></header>
+            <div class="finding-note">« Rejouer » suivi de « sans un seul tap » se contredit.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> « les six passes se succèdent sans autre interaction ».</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">« Trois boutons de {surface-raised} » (génitif flottant)</h3><span class="finding-location">DESIGN.md §Components</span></header>
+            <div class="finding-note">Lecture ambiguë.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> « trois boutons sur fond {colors.surface-raised} ».</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">« Pilule », troisième nom de forme</h3><span class="finding-location">DESIGN.md §Components</span></header>
+            <div class="finding-note">§Shapes fixe déjà puces et pastilles.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> « fond plein {colors.accent} ».</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Libellés d'accessibilité incomplets</h3><span class="finding-location">EXPERIENCE.md §Accessibility Floor</span></header>
+            <div class="finding-note">Descendre, Reprise, Suivante, Précédente n'avaient pas de libellé.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> « Faire descendre {nom} dans la liste », « Reprendre {nom} », « Revenir à la passe précédente », « Aller à la passe suivante ».</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">« Lecture » défini nulle part, deux sens</h3><span class="finding-location">EXPERIENCE.md §Foundation</span></header>
+            <div class="finding-note">Porte à la fois le déroulement d'un geste et celui d'un enchaînement.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> « une lecture est un déroulement en cours : celui d'un geste révélé, ou celui d'un enchaînement. »</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">« Liste jouée d'un bout à l'autre » (participe flottant)</h3><span class="finding-location">EXPERIENCE.md §IA</span></header>
+            <div class="finding-note">Se lit mal.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> « qui lance l'enchaînement de cette liste ».</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-medium">medium</span><h3 class="finding-title">Écart de traçabilité brief ↔ spines</h3><span class="finding-location">brief §Périmètre vs spines</span></header>
+            <div class="finding-note">L'enchaînement et le Réordonner sont hors brief.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> ligne [HYPOTHÈSE] en Foundation, comme ci-dessus.</div>
+          </article>
+          <article class="finding">
+            <header><span class="badge badge-sev-low">low</span><h3 class="finding-title">Dix ajustements de ligne</h3><span class="finding-location">DESIGN.md frontmatter ; EXPERIENCE.md §Voice, §State, §Key Flows</span></header>
+            <div class="finding-note">Doublon de clause Modales ; « tâche de fond » ; étape 2 du Flow 5 ; « ordonnable » ; « ordre conservé » ambigu ; ligne « Bravo » dupliquée ; clés frontmatter sequence-* trompeuses et date updated manquante ; « figure » hors glossaire ; point final du compteur ; deux lignes « Passe sans geste » homonymes.</div>
+            <div class="finding-fix"><strong>Appliqué :</strong> tous corrigés — clause unique, cellule « Lancer une lecture sans tap explicite », étape 2 réécrite, « son ordre reste modifiable dans Réordonner », « l'ordre se met à jour à chaque coup », « On rejoue ? » en contre-exemple, clés chain-button/chain-card/chain-bar + updated 2026-10-28, « exécute la passe », compteur sans point final, seconde ligne renommée « Passe sans geste en enchaînement ».</div>
+          </article>
+        </div>
+      </details>
+    </section>
+
+    <div class="mechanical">
+      <h3>Notes mécaniques</h3>
+      <ul>
+        <li>Sources d'EXPERIENCE.md résolues ; DESIGN.md n'en porte pas — conforme.</li>
+        <li>Aucune référence croisée cassée : jetons et rôles se résolvent dans les deux spines.</li>
+        <li>Décisions du memlog sans orpheline : chaque décision enchaînement a son état ou son composant.</li>
+        <li>Recherches de story-dev à porter à l'architecture : colonne de rang D1 (persistance du réordonnancement), gel d'image pour la pause d'un GIF.</li>
+      </ul>
+    </div>
+
+    <footer class="report-footer">
+      <div class="meta">
+        <span>Rubric: DocumentationR4Y/initiative-rock4me/ux-phase-1/review-rubric.md</span>
+        <span>Prose: DocumentationR4Y/initiative-rock4me/ux-phase-1/review-prose.md</span>
+        <span>Generated: 2026-10-28</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

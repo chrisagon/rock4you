@@ -1,0 +1,39 @@
+# initiative-rock4me → epics ; l'ordre de build est l'ordre des tables. `id` permanent.
+# Brouillon de slicing (Sofia, 2026-10-28) — non validé.
+
+[[epic]]
+id = 1
+slug = "epic-boucle"
+title = "Boucle de rappel"
+description = "Sur l'app déployée, un utilisateur révise sa file du jour : geste caché, révélé au tap, voté à trois états, la file se termine et se reconstitue le lendemain ; chaque geste n'est téléchargé qu'une fois par navigateur (correctif média minimal, qui livre la porte média unique de utils/gifCache.ts aux épics suivants)."
+covers = ["R1", "R6"]
+
+[[epic]]
+id = 2
+slug = "epic-familles"
+title = "Familles comme indice"
+description = "Sur l'app déployée, toutes les passes portent une famille et un niveau affichés, filtrables ; les familles non classées sont assumées."
+covers = ["R2"]
+
+[[epic]]
+id = 3
+slug = "epic-enchainement"
+title = "L'enchaînement d'une liste"
+description = "Sur l'app déployée, « Enchaîner » joue une liste de bout en bout (boucles fixes, pause, pas-à-pas, fin + Rejouer) et le réordonnancement persisté (rank D1, un appel batch idempotent) fixe l'ordre de danse ; le lecteur réutilise la porte média de l'épic boucle, aucun second chemin média ; la story du contrat de lecture règle aussi la dette des listes (plafond à 10, N+1) et publie la forme de réponse avant tout consommateur."
+covers = ["R4"]
+after = [{ epic = 1, needs = "le lecteur de geste de la boucle (révélation, cache, porte média unique)" }]
+
+[[epic]]
+id = 4
+slug = "epic-acces"
+title = "Accès sans compte"
+description = "Sur l'app déployée, Access authentifie avant l'application (OTP email), le Worker vérifie la preuve sur chaque route protégée, le cutover unique retire JWT maison et écrans de connexion ; le cutover se vérifie sur la forme d'API des listes stabilisée par l'épic enchaînement."
+covers = ["R3"]
+after = [{ epic = 3, needs = "la forme d'API des listes stabilisée, pour vérifier le cutover" }]
+
+[[epic]]
+id = 5
+slug = "epic-correctifs"
+title = "Surfaces au standard"
+description = "Sur l'app déployée, les écrans principaux du web respectent cibles 44 px, safe areas et virtualisation de la grille favoris ; il touche les écrans consolidés par les épics 1 à 3 (l'ordre de build le passe en dernier) ; la porte média vit dans l'épic boucle."
+covers = ["R5"]
