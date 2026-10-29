@@ -1,0 +1,57 @@
+# epic-boucle — stories planifiées ; l'ordre des tables = ordre de build. `id` permanent.
+# Validé par agent à contexte frais le 2026-10-29 ; corrections appliquées.
+
+[[entry]]
+id = 1
+type = "story"
+title = "Tracer : file du jour vivante"
+description = "La voie la plus fine à travers toutes les couches de l'épic : état de révision local durable (survit au redémarrage, opaque au serveur, AD-1), file du jour dérivée et plafonnée (12 premières non vues, ordre catalogue [HYPOTHÈSE]), onglet Réviser avec « N passes à revoir », session plein écran où une carte montre nom/famille/niveau et révèle son geste au tap, joué en boucle ; un bouton d'avance jetable fait progresser la file (retiré à la story 3, quand les votes arrivent)."
+verify = "Sur l'app web en dev local (expo + worker), Réviser affiche « 12 passes à revoir », la carte révèle le geste au tap, le geste tourne en boucle, la voie jetable avance, et l'état de révision et la file du jour survivent à un rechargement."
+covers = ["R1"]
+after = []
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 2
+type = "story"
+title = "Porte média unique (R6)"
+description = "Retrait du cache-busting, chargement du geste à la révélation seulement, la porte passe par utils/gifCache.ts seul (gardes Platform.OS conservées, un second chemin jamais créé) ; politique d'éviction native fixée sur le plafond existant ; Rejouer et re-révélation servis du cache. Si le cache web ne tient pas devant l'absence de Cache-Control de r2.dev, activer un domaine de zone pour les GIF dans cette story (AD-4)."
+verify = "Sur l'app web en dev local, une seconde révélation ne télécharge rien et aucune requête ne porte de paramètre cache-busting ; en navigation, rien ne se télécharge avant la révélation."
+covers = ["R2"]
+after = [1]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 3
+type = "story"
+title = "Auto-évaluation à trois états"
+description = "Après révélation : barre À revoir / Hésité / Su (cibles 44 px, libellés d'accessibilité), le vote avance sans confirmation, « Passer » avance sans voter ; nombre de passes sues mis à jour à chaque vote, sans animation ; révélation et vote annoncés aux lecteurs d'écran ; desktop : l'espace ou Entrée révèle, 1/2/3 votent ; le bouton d'avance de la story 1 cède. Les votes alimentent la file du lendemain (story 4 les consomme)."
+verify = "Sur l'app web en dev local, trois cartes votées déroulent les trois états, chaque vote avance sans confirmation et le compteur de sues suit, sans animation."
+covers = ["R1"]
+after = [2]
+hitl = false
+risk = "low"
+
+[[entry]]
+id = 4
+type = "story"
+title = "Composition et fin de file"
+description = "« C'est fini pour aujourd'hui » avec le nombre de passes vues ; la file du lendemain reprend les ratées/hésitées puis complète à 12 avec des passes jamais vues [HYPOTHÈSE] ; les 29 passes sans geste n'entrent jamais dans la file ; « Geste indisponible » retire la passe de la file, qui n'est plus re-proposée (exclusion persistée dans l'état local) ; file vide → « Rien à revoir aujourd'hui » + « Réviser librement ». Consomme les votes de la story 3 et la disponibilité posée par la story 2."
+verify = "Sur l'app web en dev local, après une session finie, la file suivante démarre sur les ratées d'hier ; une passe sans geste en est exclue de bout en bout."
+covers = ["R1"]
+after = [3]
+hitl = false
+risk = "medium"
+
+[[entry]]
+id = 5
+type = "story"
+title = "Refactor sweep"
+description = "Ménage seulement, à partir des plans et revues des stories 1-4 : code mort retiré, écrans alignés sur les tables des spines (DESIGN/EXPERIENCE), cibles et libellés d'accessibilité revérifiés ; aucun nouveau comportement."
+verify = "Typecheck et lint passent sur les fichiers touchés et aucune modification de comportement n'est rapportée par les vérifications des stories 1-4."
+covers = []
+after = [4]
+hitl = false
+risk = "low"

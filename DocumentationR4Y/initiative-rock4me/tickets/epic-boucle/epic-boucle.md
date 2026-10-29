@@ -52,3 +52,8 @@ Pour Christophe : une révision qui expose ses manques et s'achève, avec chaque
 - design — DocumentationR4Y/initiative-rock4me/ux-phase-1/EXPERIENCE.md, §Component Patterns (Carte de révision, Révélation, auto-évaluation), §State Patterns, §Key Flows 1 et 4
 - design — DocumentationR4Y/initiative-rock4me/ux-phase-1/DESIGN.md, Composants Carte de révision, Barre d'auto-évaluation
 - architecture — DocumentationR4Y/initiative-rock4me/architecture-phase-1/architecture-phase-1.md, sections AD-1, AD-4, AD-7
+
+## Notes
+
+- Decision: la story 1 (« Tracer : file du jour vivante ») est le tracer bullet de l'épic ; les stories forment une voie unique 1→2→3→4→5 (même écran de session partagé), le sweep ferme l'épique. Daté 2026-10-29.
+- Decision: les vérifications de stories tournent en dev local (expo + worker localhost) ; les done-when intégrés à la Pages déployée tournent à la clôture de l'épique, sur le push de l'utilisateur (consent demandé à ce moment-là, jamais poussé par l'agent). Daté 2026-10-29.
