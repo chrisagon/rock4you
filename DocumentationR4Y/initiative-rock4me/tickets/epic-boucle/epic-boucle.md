@@ -7,7 +7,7 @@ covers: ["R1", "R6"]
 sources: [DocumentationR4Y/initiative-rock4me/initiative-rock4me.md]
 companions: [DocumentationR4Y/initiative-rock4me/ux-phase-1/EXPERIENCE.md, DocumentationR4Y/initiative-rock4me/ux-phase-1/DESIGN.md, DocumentationR4Y/initiative-rock4me/architecture-phase-1/architecture-phase-1.md]
 after: []
-refined: false
+refined: true
 risk: medium
 ---
 
@@ -20,6 +20,13 @@ La file du jour vit sur l'app déployée : le nom s'affiche, le geste reste cach
 ## Outcome
 
 Pour Christophe : une révision qui expose ses manques et s'achève, avec chaque geste téléchargé une seule fois par navigateur (signal du parent, section Done when).
+
+## Requirements
+
+1. **Boucle de rappel** (R1, parent R1)
+   La file du jour est plafonnée, se révèle carte par carte (geste masqué puis révélé sur tap), se vote à trois états (à revoir / hésité / su) et se termine par un état explicite « C'est fini pour aujourd'hui » ; le nombre de passes sues est consultable. Les passes sans geste ne sont jamais proposées.
+2. **Cache web des médias** (R2, parent R6)
+   Une passe révélée n'est téléchargée qu'une fois par navigateur puis servie par le cache ; le geste ne se charge qu'à la révélation, jamais avant pendant la navigation.
 
 ## Done when
 
