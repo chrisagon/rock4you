@@ -1,5 +1,5 @@
 import { Tabs, router } from 'expo-router';
-import { Chrome as Home, Search, Heart, User } from 'lucide-react-native';
+import { BookOpen, Chrome as Home, Search, Heart, User } from 'lucide-react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { PlaylistProvider } from '@/contexts/PlaylistContext';
 import { useEffect } from 'react';
@@ -41,6 +41,15 @@ export default function TabLayout() {
             height: 60,
           },
         }}>
+        <Tabs.Screen
+          name="revise"
+          options={{
+            title: 'Réviser',
+            tabBarIcon: ({ size, color }) => (
+              <BookOpen size={size} color={color} />
+            ),
+          }}
+        />
         <Tabs.Screen
           name="index"
           options={{

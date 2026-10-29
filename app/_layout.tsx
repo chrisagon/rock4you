@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { FavoritesProvider } from '@/contexts/FavoritesContext';
+import { ReviewProvider } from '@/contexts/ReviewContext';
 import { initCacheSystem } from '@/utils/gifCache';
 
 export default function RootLayout() {
@@ -19,11 +20,13 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <FavoritesProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+        <ReviewProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </ReviewProvider>
       </FavoritesProvider>
     </AuthProvider>
   );
