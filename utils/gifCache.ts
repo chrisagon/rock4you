@@ -8,7 +8,9 @@ interface CacheConfig {
 
 // Configuration par défaut pour le cache
 const DEFAULT_CONFIG: CacheConfig = {
-  maxSizeMB: 100,
+  // AD-7 : le plafond tient une session complète (12 passes × ~16,8 Mo ≈ 202 Mo) + marge —
+  // AD-4 : hors réseau, un geste en cache se joue sans re-téléchargement sur natif
+  maxSizeMB: 512,
   expirationDays: 7
 };
 
@@ -47,7 +49,14 @@ export const cacheGif = async (gifUrl: string): Promise<string> => {
       gifUrl,
       cacheFilePath
     );
-    
+
+    // Appliquer le plafond d'éviction existant après l'écriture (AD-7)
+    try {
+      await manageCacheSize();
+    } catch {
+      // L'éviction ne doit jamais faire échouer la mise en cache
+    }
+
     console.log('GIF mis en cache avec succès:', gifUrl);
     return downloadResult.uri;
   } catch (error) {

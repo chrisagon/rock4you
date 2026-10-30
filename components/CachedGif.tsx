@@ -26,7 +26,7 @@ export const CachedGif: React.FC<CachedGifProps> = ({
   maxWidth,
   maxHeight
 }) => {
-  const { cachedUrl, isLoading, error, reloadFromSource } = useGifCache(source);
+  const { cachedUrl, isLoading, error, reloadFromSource } = useGifCache(source, isPlaying);
   const [loadError, setLoadError] = useState<boolean>(false);
 
   // Configuration des tailles

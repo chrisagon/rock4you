@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, View, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { X } from 'lucide-react-native';
 import { DanceMove, getGifUrl } from '@/data/danceMoves';
+import { cacheGif } from '@/utils/gifCache';
 
 interface FullScreenImageModalProps {
   visible: boolean;
@@ -18,11 +19,28 @@ const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
   isPlaying,
   onClose
 }) => {
+  const [resolvedSrc, setResolvedSrc] = useState<string | null>(null);
+
+  // Lecture de geste : passe par la porte média unique (AD-7)
+  const gifUrl = move && move.hasGif ? getGifUrl(move) : null;
+  useEffect(() => {
+    if (visible && isPlaying && gifUrl) {
+      let cancelled = false;
+      cacheGif(gifUrl).then(src => {
+        if (!cancelled) setResolvedSrc(src);
+      }).catch(() => {});
+      return () => {
+        cancelled = true;
+      };
+    }
+    setResolvedSrc(null);
+  }, [visible, isPlaying, gifUrl]);
+
   if (!move) return null;
 
   const getImageSource = () => {
-    if (isPlaying && move.hasGif) {
-      return { uri: getGifUrl(move) };
+    if (isPlaying && move.hasGif && resolvedSrc) {
+      return { uri: resolvedSrc };
     }
     return require('@/assets/images/logoRock4you.png');
   };

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, Image, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { Play, Pause, AlertCircle, RefreshCw } from 'lucide-react-native';
 import { DanceMove, getGifUrl } from '@/data/danceMoves';
+import { cacheGif } from '@/utils/gifCache';
 
 interface GifPlayerProps {
   move: DanceMove;
@@ -34,6 +35,8 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
     status: 'loading',
     retryCount: 0
   });
+  // src résolu par la porte média (web : URL, natif : chemin fichier)
+  const [resolvedSrc, setResolvedSrc] = useState<string | null>(null);
 
   const sizeConfig = {
     small: { width: 80, height: 80 },
@@ -61,15 +64,15 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
     return cloudflareR2Pattern.test(url);
   }, []);
 
-  // Tentative de chargement du GIF avec retry (sans requête CORS)
-  const loadGif = useCallback(async (retryCount = 0) => {
+  // Validation de l'URL du GIF + statut, sans téléchargement (AD-4 : rien avant la révélation)
+  const loadGif = useCallback((retryCount = 0) => {
     if (!move.hasGif) {
       setGifState({ status: 'unavailable', retryCount: 0 });
       return;
     }
 
     const gifUrl = getGifUrl(move);
-    
+
     if (!validateGifUrl(gifUrl)) {
       setGifState({
         status: 'error',
@@ -79,52 +82,48 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
       return;
     }
 
-    setGifState(prev => ({ ...prev, status: 'loading' }));
-
-    // Validation optimiste : on assume que l'URL est valide si elle passe la validation
-    // Cela évite les problèmes CORS avec les requêtes HEAD répétées
-    try {
-      // Délai simulé pour le chargement
-      await new Promise(resolve => setTimeout(resolve, 300));
-      setGifState({ status: 'loaded', retryCount });
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
-      
-      if (retryCount < 2) {
-        // Retry avec délai exponentiel
-        setTimeout(() => loadGif(retryCount + 1), Math.pow(2, retryCount) * 1000);
-        setGifState(prev => ({
-          ...prev,
-          retryCount: retryCount + 1,
-          lastError: errorMessage
-        }));
-      } else {
-        setGifState({
-          status: 'error',
-          retryCount,
-          lastError: errorMessage
-        });
-      }
-    }
+    setGifState({ status: 'loaded', retryCount: retryCount || 0 });
   }, [move, validateGifUrl]);
 
-  // Chargement initial et gestion du cache
+  // Le src se résout par la porte média (AD-7), à la lecture seulement (AD-4) :
+  // jamais au montage des grilles, seulement quand le geste joue (révélation, bouton play).
   useEffect(() => {
-    // Vérifier si on a déjà validé cette URL récemment
+    if (gifState.status !== 'loaded' || !isPlaying) return;
+    const gifUrl = getGifUrl(move);
+    if (!validateGifUrl(gifUrl)) return;
+
+    let cancelled = false;
+    cacheGif(gifUrl)
+      .then(src => {
+        if (!cancelled) setResolvedSrc(src);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [gifState.status, isPlaying, move, validateGifUrl]);
+
+  // Chargement initial : statut servi du cache de session s'il est frais, sans téléchargement
+  useEffect(() => {
+    setResolvedSrc(null);
     const cacheKey = `gif_${move.id}_${getGifUrl(move)}`;
     const cached = sessionStorage?.getItem(cacheKey);
-    
+
     if (cached) {
-      const { timestamp, status } = JSON.parse(cached);
-      const now = Date.now();
-      
-      // Cache valide pendant 10 minutes
-      if ((now - timestamp) < 600000) {
-        setGifState({ status, retryCount: 0 });
-        return;
+      try {
+        const { timestamp, status } = JSON.parse(cached);
+        const now = Date.now();
+
+        // Cache valide pendant 10 minutes
+        if ((now - timestamp) < 600000) {
+          setGifState({ status, retryCount: 0 });
+          return;
+        }
+      } catch {
+        // sessionStorage indisponible, on retombe sur la validation
       }
     }
-    
+
     loadGif();
   }, [loadGif, move.id]);
 
@@ -199,11 +198,9 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
   const getImageSource = () => {
     switch (gifState.status) {
       case 'loaded':
-        if (isPlaying) {
-          // Ajouter un timestamp pour éviter le cache du navigateur lors des revisionnages
-          const gifUrl = getGifUrl(move);
-          const separator = gifUrl.includes('?') ? '&' : '?';
-          return { uri: `${gifUrl}${separator}t=${Date.now()}` };
+        if (isPlaying && resolvedSrc) {
+          // URI stable, sans cache-busting : cache HTTP/natif sert les re-lectures (AD-4)
+          return { uri: resolvedSrc };
         }
         return require('@/assets/images/logoRock4you.png');
       case 'loading':
@@ -301,11 +298,12 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
         </View>
       )}
       
-      {/* Overlay de chargement */}
-      {gifState.status === 'loading' && gifState.retryCount > 0 && (
+      {/* Overlay de chargement : libellé exact de la spine (EXPERIENCE.md, état Révélation en cours) ;
+          visible seulement quand le geste se charge réellement (révélation/play), jamais en navigation */}
+      {(gifState.status === 'loading' || (gifState.status === 'loaded' && isPlaying && !resolvedSrc)) && (
         <View style={styles.loadingOverlay}>
           <RefreshCw size={16} color="#FF6B35" />
-          <Text style={styles.loadingText}>Tentative {gifState.retryCount + 1}/3</Text>
+          <Text style={styles.loadingText}>Chargement du geste…</Text>
         </View>
       )}
       
@@ -408,18 +406,20 @@ const styles = StyleSheet.create({
   },
   loadingOverlay: {
     position: 'absolute',
-    bottom: 4,
-    right: 4,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    borderRadius: 4,
-    padding: 4,
-    flexDirection: 'row',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
     alignItems: 'center',
+    padding: 8,
   },
   loadingText: {
     color: '#FF6B35',
-    fontSize: 8,
-    marginLeft: 4,
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 4,
   },
   unavailableOverlay: {
     position: 'absolute',

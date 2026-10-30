@@ -4,11 +4,12 @@ import { cacheGif, removeCachedGif } from '@/utils/gifCache';
 /**
  * Hook personnalisé pour gérer le cache des GIFs
  * @param gifUrl URL du GIF à mettre en cache
+ * @param warmWhen réchauffe le cache quand cette condition devient vraie (une lecture, jamais en navigation)
  * @returns État de chargement, URL en cache et fonctions utilitaires
  */
-export const useGifCache = (gifUrl: string | undefined) => {
+export const useGifCache = (gifUrl: string | undefined, warmWhen: boolean = true) => {
   const [cachedUrl, setCachedUrl] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   /**
@@ -35,8 +36,9 @@ export const useGifCache = (gifUrl: string | undefined) => {
     }
   };
   
-  // Chargement initial du GIF en cache
+  // Réchauffage à la demande : jamais au montage (AD-4 : rien en navigation avant la révélation)
   useEffect(() => {
+    if (!warmWhen) return;
     const loadCachedGif = async () => {
       if (!gifUrl) {
         setIsLoading(false);
@@ -59,7 +61,7 @@ export const useGifCache = (gifUrl: string | undefined) => {
     };
     
     loadCachedGif();
-  }, [gifUrl]);
+  }, [gifUrl, warmWhen]);
   
   return {
     cachedUrl,
