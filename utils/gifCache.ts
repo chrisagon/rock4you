@@ -17,6 +17,18 @@ const DEFAULT_CONFIG: CacheConfig = {
 // Dossier principal pour le cache des GIFs
 const CACHE_DIR = `${FileSystem.cacheDirectory}gifs`;
 
+// AD-4 : repli zone-domaine — r2.dev ne sert aucun Cache-Control (ni CDN), les GIF passent
+// par le domaine de zone (cache Cloudflare) quand il est configuré ; URLs stables, un seul chemin
+const R2_PUBLIC_HOST = 'pub-e9db5024dff64a89897b25c9ea2a0d59.r2.dev';
+const R2_CUSTOM_DOMAIN = process.env.EXPO_PUBLIC_CLOUDFLARE_R2_CUSTOM_DOMAIN;
+
+export const resolveMediaUrl = (gifUrl: string): string => {
+  if (R2_CUSTOM_DOMAIN && gifUrl.startsWith(`https://${R2_PUBLIC_HOST}/`)) {
+    return gifUrl.replace(R2_PUBLIC_HOST, R2_CUSTOM_DOMAIN);
+  }
+  return gifUrl;
+};
+
 /**
  * Met en cache un GIF et retourne l'URL locale du fichier mis en cache
  * 
@@ -24,7 +36,7 @@ const CACHE_DIR = `${FileSystem.cacheDirectory}gifs`;
  * @returns Promise avec l'URL locale du fichier mis en cache
  */
 export const cacheGif = async (gifUrl: string): Promise<string> => {
-  if (Platform.OS === 'web') return gifUrl;
+  if (Platform.OS === 'web') return resolveMediaUrl(gifUrl);
   try {
     // Créer un nom de fichier unique basé sur l'URL du GIF
     const filename = gifUrl.split('/').pop();
@@ -44,9 +56,10 @@ export const cacheGif = async (gifUrl: string): Promise<string> => {
       await FileSystem.makeDirectoryAsync(CACHE_DIR, { intermediates: true });
     }
     
-    // Télécharger le GIF dans le cache
+    // Télécharger le GIF dans le cache (domaine de zone quand configuré, AD-4)
+    const downloadUrl = resolveMediaUrl(gifUrl);
     const downloadResult = await FileSystem.downloadAsync(
-      gifUrl,
+      downloadUrl,
       cacheFilePath
     );
 
