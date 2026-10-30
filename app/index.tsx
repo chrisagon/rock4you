@@ -13,7 +13,7 @@ export default function LandingPage() {
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Image source={require('@/assets/images/logoRock4you.png')} style={styles.logo} resizeMode="contain" />
-          <Text style={styles.brand}>Rock4you</Text>
+          <Text style={styles.brand}>Rock4me</Text>
         </View>
         <View style={styles.headerRight}>
           <TouchableOpacity onPress={handleLogin} style={styles.headerLinkBtn}>
@@ -29,7 +29,7 @@ export default function LandingPage() {
       <View style={styles.hero}>
         <Text style={styles.heroTitle}>Révisez toutes vos passes de rock, partout.</Text>
         <Text style={styles.heroSubtitle}>
-          Rock4you vous permet de réviser chacune des passes vues en cours de débutant à intermédiaire, sur mobile, tablette ou PC.
+          Rock4me vous permet de réviser chacune des passes vues en cours de débutant à intermédiaire, sur mobile, tablette ou PC.
         </Text>
         <View style={styles.heroCtas}>
           <TouchableOpacity onPress={handlePrimaryCta} style={styles.primaryBtn}>
@@ -47,7 +47,7 @@ export default function LandingPage() {
 
       {/* Bénéfices */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Pourquoi utiliser Rock4you ?</Text>
+        <Text style={styles.sectionTitle}>Pourquoi utiliser Rock4me ?</Text>
         <View style={styles.cards}>
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Des vidéos courtes, ciblées</Text>
@@ -68,7 +68,7 @@ export default function LandingPage() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Fonctionnalités</Text>
         <View style={styles.features}>
-          <FeatureItem title="Catalogue complet de passes" desc="Toutes les passes de rock enseignées par Rock4you, indexées et chapitrées." />
+          <FeatureItem title="Catalogue complet de passes" desc="Toutes les passes de rock enseignées par Rock4me, indexées et chapitrées." />
           <FeatureItem title="Listes personnalisées" desc="Créez vos listes favorites pour réviser rapidement ce qui compte." />
           <FeatureItem title="Révisions express" desc="Des vidéos courtes pour se remettre en tête l'essentiel avant les cours ou les soirées." />
         </View>
@@ -83,7 +83,7 @@ export default function LandingPage() {
         </View>
         <View style={styles.faqItem}>
           <Text style={styles.faqQ}>Que vais-je trouver dans l'application ?</Text>
-          <Text style={styles.faqA}>Toutes les passes de rock proposées par Rock4you dans ses cours.</Text>
+          <Text style={styles.faqA}>Toutes les passes de rock proposées par Rock4me dans ses cours.</Text>
         </View>
         <View style={styles.faqItem}>
           <Text style={styles.faqQ}>Combien ça coûte ?</Text>
@@ -103,7 +103,7 @@ export default function LandingPage() {
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>© {new Date().getFullYear()} Rock4you</Text>
+        <Text style={styles.footerText}>© {new Date().getFullYear()} Rock4me</Text>
       </View>
     </ScrollView>
   );

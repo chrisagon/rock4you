@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 
 interface CacheConfig {
@@ -21,6 +22,7 @@ const CACHE_DIR = `${FileSystem.cacheDirectory}gifs`;
  * @returns Promise avec l'URL locale du fichier mis en cache
  */
 export const cacheGif = async (gifUrl: string): Promise<string> => {
+  if (Platform.OS === 'web') return gifUrl;
   try {
     // Créer un nom de fichier unique basé sur l'URL du GIF
     const filename = gifUrl.split('/').pop();
@@ -60,6 +62,7 @@ export const cacheGif = async (gifUrl: string): Promise<string> => {
  * @param maxSizeMB Taille maximale du cache en Mo
  */
 export const manageCacheSize = async (maxSizeMB = DEFAULT_CONFIG.maxSizeMB) => {
+  if (Platform.OS === 'web') return;
   try {
     const dirInfo = await FileSystem.getInfoAsync(CACHE_DIR);
     
@@ -114,6 +117,7 @@ export const manageCacheSize = async (maxSizeMB = DEFAULT_CONFIG.maxSizeMB) => {
  * @param expirationDays Nombre de jours après lesquels un fichier est considéré comme expiré
  */
 export const cleanExpiredCache = async (expirationDays = DEFAULT_CONFIG.expirationDays) => {
+  if (Platform.OS === 'web') return;
   try {
     const dirInfo = await FileSystem.getInfoAsync(CACHE_DIR);
     
@@ -142,6 +146,10 @@ export const cleanExpiredCache = async (expirationDays = DEFAULT_CONFIG.expirati
  * Initialise le système de cache
  */
 export const initCacheSystem = async (config: CacheConfig = DEFAULT_CONFIG) => {
+  if (Platform.OS === 'web') {
+    console.log('Système de cache désactivé sur le web');
+    return;
+  }
   try {
     // Créer le dossier de cache si nécessaire
     const dirInfo = await FileSystem.getInfoAsync(CACHE_DIR);
@@ -168,6 +176,7 @@ export const initCacheSystem = async (config: CacheConfig = DEFAULT_CONFIG) => {
  * @param gifUrl URL du GIF à supprimer du cache
  */
 export const removeCachedGif = async (gifUrl: string): Promise<boolean> => {
+  if (Platform.OS === 'web') return false;
   try {
     const filename = gifUrl.split('/').pop();
     const cacheFilePath = `${CACHE_DIR}/${filename}`;
@@ -191,6 +200,7 @@ export const removeCachedGif = async (gifUrl: string): Promise<boolean> => {
  * Efface tout le cache de GIFs
  */
 export const clearAllCache = async (): Promise<boolean> => {
+  if (Platform.OS === 'web') return false;
   try {
     const dirInfo = await FileSystem.getInfoAsync(CACHE_DIR);
     
@@ -212,6 +222,13 @@ export const clearAllCache = async (): Promise<boolean> => {
  * Obtient des informations sur le cache de GIFs
  */
 export const getCacheInfo = async () => {
+  if (Platform.OS === 'web') {
+    return {
+      exists: false,
+      size: 0,
+      fileCount: 0,
+    };
+  }
   try {
     const dirInfo = await FileSystem.getInfoAsync(CACHE_DIR);
     

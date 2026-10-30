@@ -148,7 +148,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Rock4you.mobile</Text>
+        <Text style={styles.title}>Rock4me.mobile</Text>
         <Text style={styles.subtitle}>Maîtrisez vos passes de danse</Text>
       </View>
 

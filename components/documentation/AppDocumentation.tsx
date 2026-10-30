@@ -6,14 +6,14 @@ export default function AppDocumentation() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.section}>
-        <Text style={styles.title}>Rock4you.mobile - Documentation</Text>
+        <Text style={styles.title}>Rock4me.mobile - Documentation</Text>
         <Text style={styles.subtitle}>Application mobile d'apprentissage de danse rock</Text>
       </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Vue d'ensemble</Text>
         <Text style={styles.text}>
-          Rock4you.mobile est une application mobile dédiée à l'apprentissage et à la révision 
+          Rock4me.mobile est une application mobile dédiée à l'apprentissage et à la révision 
           des passes de danse rock. Elle permet aux utilisateurs d'accéder à une bibliothèque 
           de mouvements de danse avec GIFs animés stockés sur Google Drive, de créer des listes personnalisées 
           et de suivre leur progression.

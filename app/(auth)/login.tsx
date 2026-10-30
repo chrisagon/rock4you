@@ -35,7 +35,7 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Connexion</Text>
-        <Text style={styles.subtitle}>Connectez-vous à votre compte Rock4you</Text>
+        <Text style={styles.subtitle}>Connectez-vous à votre compte Rock4me</Text>
       </View>
 
       <View style={styles.form}>

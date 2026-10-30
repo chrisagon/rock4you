@@ -78,7 +78,7 @@ export default function RegisterScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Inscription</Text>
-        <Text style={styles.subtitle}>Créez votre compte Rock4you</Text>
+        <Text style={styles.subtitle}>Créez votre compte Rock4me</Text>
       </View>
 
       <View style={styles.form}>
