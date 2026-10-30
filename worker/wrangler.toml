@@ -15,16 +15,16 @@ database_name = "rock4you-prod"
 database_id = "ea166c89-e85b-4455-86ef-29191762bbd2"
 
 [vars]
-JWT_SECRET = "DNbcvUCejZ56S4TVC1PEVeUWySbp9OBxBZyG85dgP2M="
+# JWT_SECRET est un secret Cloudflare (wrangler secret put). Sa valeur locale de developpement vit dans worker/.dev.vars.
 # Autoriser plusieurs origines (séparées par des virgules). Doivent correspondre exactement à l'origin du frontend.
 # Exemple: Pages par défaut + éventuel domaine custom
-CORS_ORIGIN = "https://rock4you-frontend.pages.dev, https://rock4you.pages.dev"
+CORS_ORIGIN = "https://rock4me.pages.dev, https://rock4you-frontend.pages.dev, https://rock4you.pages.dev"
 DEFAULT_FAVORITES_LIST_NAME = "Mes Favoris"
 
 # Variables d'environnement pour le développement local
 [env.development]
 [env.development.vars]
-JWT_SECRET = "dev-jwt-secret-change-in-production"
+JWT_SECRET = "IPVENKq6Yg-IYk747VNYIMSqHrDYiNnxCqx3EWLxXOZww3l1fbgSZN_5ADClLoXj"
 CORS_ORIGIN = "*"
 
 [[env.development.d1_databases]]

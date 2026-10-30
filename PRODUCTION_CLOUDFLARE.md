@@ -68,7 +68,7 @@ JWT_SECRET = "your-production-jwt-secret"
 npm run build:web
 
 # 2. Déployer sur Pages
-npx wrangler pages deploy dist --project-name rock4you-frontend
+npx wrangler pages deploy dist --project-name rock4you
 ```
 
 #### Option B: Container Docker (Frontend seul)

@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import type { Context } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { 
@@ -27,8 +28,7 @@ const registerSchema = z.object({
 
 const loginSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(1)
-});
+  password: z.string().min(1)});
 
 const refreshSchema = z.object({
   refresh_token: z.string()
@@ -105,12 +105,12 @@ authRoutes.post('/register', zValidator('json', registerSchema), async (c) => {
     const refreshToken = await generateRefreshToken(newUser, c.env.JWT_SECRET);
 
     // Définir le cookie d'authentification
-    const isProduction = c.env.CORS_ORIGIN !== '*';
+    const isProduction = new URL(c.req.url).protocol === 'https:';
     const cookieOptions = [
       'HttpOnly',
       'Path=/',
       'Max-Age=3600', // 1 heure
-      'SameSite=None' // Nécessaire pour les requêtes cross-origin avec credentials
+      `SameSite=${isProduction ? 'None' : 'Lax'}` // Lax en local : un navigateur rejette SameSite=None sans Secure
     ];
     
     if (isProduction) {
@@ -195,12 +195,12 @@ authRoutes.post('/login', zValidator('json', loginSchema), async (c) => {
     const refreshToken = await generateRefreshToken(userWithoutPassword, c.env.JWT_SECRET);
 
     // Définir le cookie d'authentification
-    const isProduction = c.env.CORS_ORIGIN !== '*';
+    const isProduction = new URL(c.req.url).protocol === 'https:';
     const cookieOptions = [
       'HttpOnly',
       'Path=/',
       'Max-Age=3600', // 1 heure
-      'SameSite=None' // Nécessaire pour les requêtes cross-origin avec credentials
+      `SameSite=${isProduction ? 'None' : 'Lax'}` // Lax en local : un navigateur rejette SameSite=None sans Secure
     ];
     
     if (isProduction) {
@@ -291,8 +291,10 @@ authRoutes.post('/refresh', zValidator('json', refreshSchema), async (c) => {
  * POST /auth/logout - Déconnexion (optionnel - côté client principalement)
  */
 authRoutes.post('/logout', async (c) => {
-  // Effacer le cookie d'authentification
-  c.header('Set-Cookie', 'auth_token=; HttpOnly; Path=/; Max-Age=0; SameSite=Strict');
+  // Effacer le cookie d'authentification avec les mêmes attributs que la pose
+  const isProduction = new URL(c.req.url).protocol === 'https:';
+  const sameSite = isProduction ? 'None; Secure' : 'Lax';
+  c.header('Set-Cookie', `auth_token=; HttpOnly; Path=/; Max-Age=0; SameSite=${sameSite}`);
   
   return c.json({
     success: true,
@@ -303,16 +305,34 @@ authRoutes.post('/logout', async (c) => {
 /**
  * GET /auth/me - Informations sur l'utilisateur actuel (nécessite authentification)
  */
+function readAuthToken(c: Context<{ Bindings: Env }>): string | null {
+  const authHeader = c.req.header('Authorization');
+  if (authHeader?.startsWith('Bearer ')) {
+    return authHeader.slice(7);
+  }
+
+  const cookieHeader = c.req.header('Cookie');
+  if (!cookieHeader) return null;
+
+  for (const raw of cookieHeader.split(';')) {
+    const [name, ...rest] = raw.trim().split('=');
+    if (name === 'auth_token' && rest.length > 0) {
+      return decodeURIComponent(rest.join('='));
+    }
+  }
+
+  return null;
+}
+
 authRoutes.get('/me', async (c) => {
   try {
-    const authHeader = c.req.header('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const token = readAuthToken(c);
+    if (!token) {
       return c.json({
         error: 'Token d\'authentification requis'
       }, 401);
     }
 
-    const token = authHeader.substring(7);
     const payload = await verifyToken(token, c.env.JWT_SECRET);
 
     const user = await selectFirst<User>(
