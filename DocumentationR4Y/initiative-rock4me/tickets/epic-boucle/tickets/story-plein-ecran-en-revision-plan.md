@@ -3,7 +3,7 @@ title: 'Plein écran en révision (epic-boucle / story 1.6)'
 type: 'feature'
 ticket: '6'
 created: '2026-10-30'
-status: 'built'
+status: done
 baseline_revision: '45c5d433df046a8bbfe5ce968b2be7d226338082'
 route: 'oneshot'
 route_source: 'auto'
