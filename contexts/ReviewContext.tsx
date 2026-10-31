@@ -12,8 +12,14 @@ export interface ReviewState {
   carteIndex: number;
   dernierLancement: number | null;
   termine: boolean;
-  // Vote à trois états par passe (story 1.3) ; story 4 les consomme pour la file du lendemain
+  // Vote à trois états par passe (story 1.3) ; la composition J+1 reprend les ratées/hésitées
   votes: { [id: string]: 'arevoir' | 'hesite' | 'su' };
+  // Geste indisponible : passe bannie à vie (story 1.4, EXPERIENCE.md:88)
+  exclusions: string[];
+  // Ensemble cumulé des passes déjà présentées : entrée de composition « jamais vues », jamais affiché
+  vues: string[];
+  // Nombre de passes vues du jour, figé à la fin de session (story 1.4, EXPERIENCE.md:86)
+  passesVues?: number;
 }
 
 const ETAT_INITIAL: ReviewState = {
@@ -22,14 +28,34 @@ const ETAT_INITIAL: ReviewState = {
   dernierLancement: null,
   termine: false,
   votes: {},
+  exclusions: [],
+  vues: [],
 };
 
-// La file du jour exclut les passes sans geste, dans l'ordre du catalogue
-function deriverFileDuJour(): string[] {
-  return danceMoves
+// Composition [HYPOTHÈSE] (spine EXPERIENCE.md:84) : ratées/hésitées de la veille d'abord
+// (ordre catalogue), complétées à 12 par des passes jamais vues ; sans geste jamais, et
+// gestes indisponibles bannis à vie. Les « Su » (présentées donc en vues) ne reviennent pas.
+function composerFile(
+  fileVeille: string[],
+  votes: { [id: string]: 'arevoir' | 'hesite' | 'su' },
+  exclusions: string[],
+  vues: string[]
+): string[] {
+  const exclues = new Set(exclusions);
+  const dejaVues = new Set(vues);
+  const jouables = danceMoves
     .filter(mouvement => mouvement.hasGif && mouvement.driveLink)
-    .slice(0, TAILLE_FILE_JOUR)
+    .filter(mouvement => !exclues.has(mouvement.id));
+  const ratees = jouables
+    .filter(mouvement => fileVeille.includes(mouvement.id))
+    .filter(mouvement => votes[mouvement.id] === 'arevoir' || votes[mouvement.id] === 'hesite')
     .map(mouvement => mouvement.id);
+  // Une passe votée (même « Passée ») a été présentée : elle ne compte plus comme jamais vue,
+  // ce qui rend ratees et jamaisVues disjointes aussi pour les états d'avant le cumul « vues »
+  const jamaisVues = jouables
+    .filter(mouvement => !dejaVues.has(mouvement.id) && votes[mouvement.id] === undefined)
+    .map(mouvement => mouvement.id);
+  return [...ratees, ...jamaisVues].slice(0, TAILLE_FILE_JOUR);
 }
 
 interface ReviewContextType {
@@ -38,9 +64,11 @@ interface ReviewContextType {
   dernierLancement: number | null;
   termine: boolean;
   sues: number;
+  passesVues?: number;
   estCharge: boolean;
   avancer: () => void;
   voter: (vote: 'arevoir' | 'hesite' | 'su') => void;
+  exclue: (id: string) => void;
 }
 
 const ReviewContext = createContext<ReviewContextType | undefined>(undefined);
@@ -62,19 +90,48 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
         const brut = await AsyncStorage.getItem(CLEF_STOCKAGE_REVIEW);
         if (brut) {
           const sauvegarde = JSON.parse(brut) as ReviewState;
-          if (sauvegarde && Array.isArray(sauvegarde.fileDuJour) && sauvegarde.fileDuJour.length > 0) {
+          // Une file vide est légitime (tous gestes exclus) : on la garde —
+          // les exclusions et votes qu'elle porte vivent à vie
+          if (sauvegarde && Array.isArray(sauvegarde.fileDuJour)) {
             // carteIndex est un index de confiance : clamp dans [0, fileDuJour.length]
             const indexBrut = Number(sauvegarde.carteIndex);
             const indexValide = Number.isFinite(indexBrut) ? Math.trunc(indexBrut) : 0;
             // votes : absent des états d'avant la story 1.3 -> {} (rétrocompatible)
-            etatCharge = {
-              ...sauvegarde,
-              carteIndex: Math.min(Math.max(indexValide, 0), sauvegarde.fileDuJour.length),
-              votes:
-                sauvegarde.votes && typeof sauvegarde.votes === 'object' && !Array.isArray(sauvegarde.votes)
-                  ? sauvegarde.votes
-                  : {},
-            };
+            const votes =
+              sauvegarde.votes && typeof sauvegarde.votes === 'object' && !Array.isArray(sauvegarde.votes)
+                ? sauvegarde.votes
+                : {};
+            // exclusions et vues : absents d'avant la story 1.4 -> [] (rétrocompatible)
+            const exclusions = Array.isArray(sauvegarde.exclusions) ? sauvegarde.exclusions : [];
+            const vues = Array.isArray(sauvegarde.vues) ? sauvegarde.vues : [];
+            const memeJour =
+              sauvegarde.dernierLancement != null &&
+              new Date(sauvegarde.dernierLancement).toDateString() === new Date().toDateString();
+
+            if (memeJour) {
+              etatCharge = {
+                ...sauvegarde,
+                carteIndex: Math.min(Math.max(indexValide, 0), sauvegarde.fileDuJour.length),
+                votes,
+                exclusions,
+                vues,
+              };
+            } else {
+              // Jour suivant (EXPERIENCE.md:84) : ratées/hésitées de la veille puis jamais vues ;
+              // « vues » ne s'étend PAS à la composition : une passe devient vue quand elle sort de l'écran,
+              // les passes non atteintes en cours de route restent proposables le lendemain
+              const nouvelleFile = composerFile(sauvegarde.fileDuJour, votes, exclusions, vues);
+              etatCharge = {
+                fileDuJour: nouvelleFile,
+                carteIndex: 0,
+                dernierLancement: Date.now(),
+                termine: false,
+                votes,
+                exclusions,
+                vues,
+                passesVues: 0,
+              };
+            }
           }
         }
       } catch (error) {
@@ -82,12 +139,18 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
       }
 
       if (!etatCharge) {
+        // Premier lancement : 12 premières jouables jamais vues, ordre catalogue ;
+        // « vues » se remplit au fil des sorties d'écran, pas à la composition
+        const nouvelleFile = composerFile([], {}, [], []);
         etatCharge = {
-          fileDuJour: deriverFileDuJour(),
+          fileDuJour: nouvelleFile,
           carteIndex: 0,
           dernierLancement: Date.now(),
           termine: false,
           votes: {},
+          exclusions: [],
+          vues: [],
+          passesVues: 0,
         };
       }
 
@@ -111,12 +174,19 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
     });
   }, [etat]);
 
-  // Avance sans voter (« Passer ») : la passe reste dans la file du jour
+  // Avance sans voter (« Passer ») : la passe reste dans la file du jour.
+  // passesVues : chaque passe qui quitte l'écran compte comme vue (EXPERIENCE.md:86) ;
+  // « vue » = présentée : la passe entre dans le cumul vues en quittant l'écran, pas à la composition,
+  // pour que les passes non atteintes en cours de route redeviennent proposables
   const avancer = () => {
     setEtat(prev => {
       if (!prev || prev.termine || prev.fileDuJour.length === 0) return prev;
+      const passeSortante = prev.fileDuJour[prev.carteIndex];
+      const vues = [...(prev.vues ?? []), passeSortante];
       const surDerniere = prev.carteIndex >= prev.fileDuJour.length - 1;
-      return surDerniere ? { ...prev, termine: true } : { ...prev, carteIndex: prev.carteIndex + 1 };
+      return surDerniere
+        ? { ...prev, vues, termine: true, passesVues: (prev.passesVues ?? 0) + 1 }
+        : { ...prev, vues, carteIndex: prev.carteIndex + 1, passesVues: (prev.passesVues ?? 0) + 1 };
     });
   };
 
@@ -133,10 +203,28 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
       }
       const passe = prev.fileDuJour[prev.carteIndex];
       const votes = { ...prev.votes, [passe]: vote };
+      const vues = [...(prev.vues ?? []), passe];
       const surDerniere = prev.carteIndex >= prev.fileDuJour.length - 1;
       return surDerniere
-        ? { ...prev, votes, termine: true }
-        : { ...prev, votes, carteIndex: prev.carteIndex + 1 };
+        ? { ...prev, votes, vues, termine: true, passesVues: (prev.passesVues ?? 0) + 1 }
+        : { ...prev, votes, vues, carteIndex: prev.carteIndex + 1, passesVues: (prev.passesVues ?? 0) + 1 };
+    });
+  };
+
+  // Geste indisponible (EXPERIENCE.md:88) : la passe sort de la file et n'est plus proposée.
+  // Dernière passe retirée -> fin de session ; une passe exclue compte comme vue.
+  const exclue = (id: string) => {
+    setEtat(prev => {
+      if (!prev) return prev;
+      const fileRestante = prev.fileDuJour.filter(passeId => passeId !== id);
+      return {
+        ...prev,
+        fileDuJour: fileRestante,
+        exclusions: [...new Set([...prev.exclusions, id])],
+        vues: [...(prev.vues ?? []), id],
+        termine: fileRestante.length === 0 ? true : prev.termine,
+        passesVues: (prev.passesVues ?? 0) + 1,
+      };
     });
   };
 
@@ -149,9 +237,11 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
     dernierLancement: etat?.dernierLancement ?? null,
     termine: etat?.termine ?? false,
     sues,
+    passesVues: etat?.passesVues,
     estCharge: etat !== null,
     avancer,
     voter,
+    exclue,
   };
 
   return (

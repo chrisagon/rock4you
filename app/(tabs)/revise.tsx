@@ -26,6 +26,12 @@ export default function ReviseScreen() {
           <Text style={styles.suesTexte}>
             {sues === 1 ? '1 passe sue' : `${sues} passes sues`}
           </Text>
+          <TouchableOpacity
+            style={styles.boutonCommencer}
+            onPress={() => router.push('/search')}
+          >
+            <Text style={styles.boutonCommencerTexte}>Réviser librement</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <View style={styles.fileContainer}>

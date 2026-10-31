@@ -22,9 +22,17 @@ const LIBELLES_VOTE: { [v in Vote]: string } = { arevoir: 'À revoir', hesite: '
 const LIBELLES_VOTE_ACC: { [v in Vote]: string } = { arevoir: 'à revoir', hesite: 'hésité', su: 'su' };
 
 export default function SessionRevisionScreen() {
-  const { fileDuJour, carteIndex, termine, estCharge, avancer, voter } = useReview();
+  const { fileDuJour, carteIndex, termine, estCharge, avancer, voter, exclue, passesVues } = useReview();
   const [revelePourId, setRevelePourId] = useState<string | null>(null);
   const [annonce, setAnnonce] = useState('');
+  // « Geste indisponible. » : la passe sort de la file (EXPERIENCE.md:88) — message visible quelques secondes
+  const [noticeGeste, setNoticeGeste] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!noticeGeste) return;
+    const tempo = setTimeout(() => setNoticeGeste(null), 6000);
+    return () => clearTimeout(tempo);
+  }, [noticeGeste]);
 
   const enFin = termine || carteIndex >= fileDuJour.length;
   const moveCourante = enFin ? null : danceMoves.find(m => m.id === fileDuJour[carteIndex]) ?? null;
@@ -87,6 +95,11 @@ export default function SessionRevisionScreen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.finContainer}>
           <Text style={styles.finTexte}>C'est fini pour aujourd'hui.</Text>
+          {passesVues != null && (
+            <Text style={styles.passesVuesTexte}>
+              {passesVues === 1 ? '1 passe vue' : `${passesVues} passes vues`}
+            </Text>
+          )}
           <TouchableOpacity style={styles.boutonFin} onPress={() => router.back()}>
             <Text style={styles.boutonFinTexte}>Retour à Réviser</Text>
           </TouchableOpacity>
@@ -121,6 +134,7 @@ export default function SessionRevisionScreen() {
           <View style={styles.carte}>
             <Text style={styles.title}>{moveCourante.movementName}</Text>
             <Text style={styles.meta}>{famille} · {moveCourante.level}</Text>
+            {noticeGeste && <Text style={styles.noticeGeste}>{noticeGeste}</Text>}
 
             {revele ? (
               <>
@@ -132,6 +146,14 @@ export default function SessionRevisionScreen() {
                   aspectRatio={16 / 9}
                   maxWidth={560}
                   maxHeight={315}
+                  onIndisponible={() => {
+                    // EXPERIENCE.md:88 : « Geste indisponible. » — la passe sort de la file
+                    setNoticeGeste('Geste indisponible.');
+                    annoncer(
+                      `Geste indisponible : ${moveCourante.movementName} sort de la file et ne sera plus proposée.`
+                    );
+                    exclue(moveCourante.id);
+                  }}
                 />
 
                 <View style={styles.barreVote}>
@@ -232,6 +254,11 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 12,
   },
+  noticeGeste: {
+    fontSize: 12,
+    color: '#FF6B35',
+    marginBottom: 8,
+  },
   cadreRevelation: {
     width: '100%',
     aspectRatio: 16 / 9,
@@ -295,6 +322,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFFFFF',
     textAlign: 'center',
+  },
+  passesVuesTexte: {
+    fontSize: 16,
+    color: '#CCCCCC',
+    textAlign: 'center',
+    marginTop: 8,
   },
   boutonFin: {
     marginTop: 24,

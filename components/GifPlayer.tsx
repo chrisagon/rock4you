@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Image, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { View, Image, TouchableOpacity, Text, StyleSheet, Alert, Platform } from 'react-native';
 import { Play, Pause, AlertCircle, RefreshCw } from 'lucide-react-native';
 import { DanceMove, getGifUrl } from '@/data/danceMoves';
 import { cacheGif } from '@/utils/gifCache';
@@ -13,6 +13,8 @@ interface GifPlayerProps {
   aspectRatio?: number;
   maxWidth?: number;
   maxHeight?: number;
+  // Signalé une fois quand le geste s'avère indisponible (EXPERIENCE.md:88)
+  onIndisponible?: () => void;
 }
 
 interface GifState {
@@ -29,7 +31,8 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
   size = 'medium',
   aspectRatio = 1,
   maxWidth,
-  maxHeight
+  maxHeight,
+  onIndisponible
 }) => {
   const [gifState, setGifState] = useState<GifState>({
     status: 'loading',
@@ -37,6 +40,14 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
   });
   // src résolu par la porte média (web : URL, natif : chemin fichier)
   const [resolvedSrc, setResolvedSrc] = useState<string | null>(null);
+  // L'indisponibilité n'est signalée qu'une fois par instance ; ref pour garder loadGif stable
+  const indisponibleSignale = React.useRef(false);
+  const onIndisponibleRef = React.useRef(onIndisponible);
+  onIndisponibleRef.current = onIndisponible;
+  // Un échec réseau momentané ne bannit pas le geste (EXPERIENCE.md:90) : une recharge
+  // discrète en ligne avant de déclarer indisponible ; hors ligne, jamais d'exclusion
+  const [rechargeCle, setRechargeCle] = useState(0);
+  const tentativeRecharge = React.useRef(false);
 
   const sizeConfig = {
     small: { width: 80, height: 80 },
@@ -68,6 +79,10 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
   const loadGif = useCallback((retryCount = 0) => {
     if (!move.hasGif) {
       setGifState({ status: 'unavailable', retryCount: 0 });
+      if (!indisponibleSignale.current) {
+        indisponibleSignale.current = true;
+        onIndisponibleRef.current?.();
+      }
       return;
     }
 
@@ -79,6 +94,11 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
         retryCount: 0,
         lastError: 'URL invalide ou malformée'
       });
+      // URL morte : indisponible dès la validation (EXPERIENCE.md:88)
+      if (!indisponibleSignale.current) {
+        indisponibleSignale.current = true;
+        onIndisponibleRef.current?.();
+      }
       return;
     }
 
@@ -101,7 +121,7 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
     return () => {
       cancelled = true;
     };
-  }, [gifState.status, isPlaying, move, validateGifUrl]);
+  }, [gifState.status, isPlaying, move, validateGifUrl, rechargeCle]);
 
   // Chargement initial : statut servi du cache de session s'il est frais, sans téléchargement
   useEffect(() => {
@@ -151,6 +171,19 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
 
   // Gestion des erreurs d'image (détection réelle d'échec de chargement)
   const handleImageError = () => {
+    // Hors ligne : erreur visible sans exclusion — la passe reste, on peut voter sans geste
+    if (Platform.OS === 'web' && !navigator.onLine) {
+      setGifState(prev => ({ ...prev, status: 'error', lastError: 'Hors ligne : geste non chargé' }));
+      return;
+    }
+
+    // En ligne, première erreur : une recharge discrète avant de déclarer indisponible
+    if (!tentativeRecharge.current) {
+      tentativeRecharge.current = true;
+      setRechargeCle(cle => cle + 1);
+      return;
+    }
+
     setGifState(prev => ({
       ...prev,
       status: 'error',
@@ -163,6 +196,12 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
       sessionStorage?.removeItem(cacheKey);
     } catch (error) {
       // Ignore les erreurs de sessionStorage
+    }
+
+    // Geste indisponible (EXPERIENCE.md:88) : signalement unique
+    if (!indisponibleSignale.current) {
+      indisponibleSignale.current = true;
+      onIndisponibleRef.current?.();
     }
   };
 
@@ -279,12 +318,20 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
       activeOpacity={0.8}
     >
       <Image
+        key={rechargeCle}
         source={getImageSource()}
         style={[
           styles.image,
           dimensions,
           size === 'responsive' && [styles.responsiveImage, responsiveStyles]
         ]}
+        onLoad={() => {
+          // Une recharge réussie remet le geste en lecture et autorise une future recharge
+          tentativeRecharge.current = false;
+          setGifState(prev =>
+            prev.status === 'error' ? { ...prev, status: 'loaded', lastError: undefined } : prev
+          );
+        }}
         onError={handleImageError}
         resizeMode="contain"
       />
@@ -293,7 +340,7 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
       {gifState.status === 'error' && (
         <View style={styles.errorOverlay}>
           <AlertCircle size={20} color="#FF6B35" />
-          <Text style={styles.errorText}>Gif indisponible</Text>
+          <Text style={styles.errorText}>Geste indisponible</Text>
           <Text style={styles.errorSubtext}>Toucher pour détails</Text>
         </View>
       )}
@@ -310,7 +357,7 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
       {/* Overlay indisponible */}
       {gifState.status === 'unavailable' && (
         <View style={styles.unavailableOverlay}>
-          <Text style={styles.unavailableOverlayText}>Pas de GIF</Text>
+          <Text style={styles.unavailableOverlayText}>Geste indisponible</Text>
         </View>
       )}
       
