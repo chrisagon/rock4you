@@ -3,7 +3,7 @@ title: 'Porte média unique (R6) (epic-boucle / story 1.2)'
 type: 'feature'
 ticket: '2'
 created: '2026-10-30'
-status: 'built'
+status: done
 baseline_revision: '2424d06c547a25bdd190371827ca9f41cb6581ec'
 route: 'oneshot'
 route_source: 'auto'
