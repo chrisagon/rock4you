@@ -15,11 +15,13 @@ interface GifPlayerProps {
   maxHeight?: number;
   // Signalé une fois quand le geste s'avère indisponible (EXPERIENCE.md:88)
   onIndisponible?: () => void;
+  // false quand onTogglePlay est inert (session de révision) : le conteneur
+  // porte un libellé d'état, pas un libellé d'action mensonger
+  a11yToggle?: boolean;
 }
 
 interface GifState {
   status: 'loading' | 'loaded' | 'error' | 'unavailable';
-  retryCount: number;
   lastError?: string;
 }
 
@@ -32,11 +34,11 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
   aspectRatio = 1,
   maxWidth,
   maxHeight,
-  onIndisponible
+  onIndisponible,
+  a11yToggle = true
 }) => {
   const [gifState, setGifState] = useState<GifState>({
-    status: 'loading',
-    retryCount: 0
+    status: 'loading'
   });
   // src résolu par la porte média (web : URL, natif : chemin fichier)
   const [resolvedSrc, setResolvedSrc] = useState<string | null>(null);
@@ -76,9 +78,9 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
   }, []);
 
   // Validation de l'URL du GIF + statut, sans téléchargement (AD-4 : rien avant la révélation)
-  const loadGif = useCallback((retryCount = 0) => {
+  const loadGif = useCallback(() => {
     if (!move.hasGif) {
-      setGifState({ status: 'unavailable', retryCount: 0 });
+      setGifState({ status: 'unavailable' });
       if (!indisponibleSignale.current) {
         indisponibleSignale.current = true;
         onIndisponibleRef.current?.();
@@ -91,7 +93,6 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
     if (!validateGifUrl(gifUrl)) {
       setGifState({
         status: 'error',
-        retryCount: 0,
         lastError: 'URL invalide ou malformée'
       });
       // URL morte : indisponible dès la validation (EXPERIENCE.md:88)
@@ -102,7 +103,7 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
       return;
     }
 
-    setGifState({ status: 'loaded', retryCount: retryCount || 0 });
+    setGifState({ status: 'loaded' });
   }, [move, validateGifUrl]);
 
   // Le src se résout par la porte média (AD-7), à la lecture seulement (AD-4) :
@@ -136,7 +137,7 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
 
         // Cache valide pendant 10 minutes
         if ((now - timestamp) < 600000) {
-          setGifState({ status, retryCount: 0 });
+          setGifState({ status });
           return;
         }
       } catch {
@@ -166,7 +167,7 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
 
   // Gestion du retry manuel
   const handleRetry = () => {
-    loadGif(0);
+    loadGif();
   };
 
   // Gestion des erreurs d'image (détection réelle d'échec de chargement)
@@ -211,8 +212,7 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
       'Détails de l\'erreur',
       `Mouvement: ${move.movementName}\n` +
       `URL: ${getGifUrl(move)}\n` +
-      `Erreur: ${gifState.lastError || 'Inconnue'}\n` +
-      `Tentatives: ${gifState.retryCount + 1}/3\n\n` +
+      `Erreur: ${gifState.lastError || 'Inconnue'}\n\n` +
       `Note: Les erreurs CORS sont normales lors des tests de connectivité.`,
       [
         { text: 'Fermer', style: 'cancel' },
@@ -227,7 +227,7 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
     const cacheKey = `gif_${move.id}_${getGifUrl(move)}`;
     try {
       sessionStorage?.removeItem(cacheKey);
-      loadGif(0); // Recharger
+      loadGif(); // Recharger
     } catch (error) {
       // Ignore les erreurs de sessionStorage
     }
@@ -316,6 +316,16 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
       onPress={handleContainerPress}
       disabled={gifState.status === 'loading'}
       activeOpacity={0.8}
+      accessibilityRole="imagebutton"
+      accessibilityLabel={
+        a11yToggle
+          ? gifState.status === 'loaded' && isPlaying
+            ? `Mettre ${move.movementName} en pause`
+            : gifState.status === 'loaded'
+              ? `Reprendre ${move.movementName}`
+              : undefined
+          : `Geste révélé de ${move.movementName}`
+      }
     >
       <Image
         key={rechargeCle}
@@ -370,21 +380,10 @@ const GifPlayer: React.FC<GifPlayerProps> = ({
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    backgroundColor: '#000',
+    backgroundColor: '#000000',
     borderRadius: 12,
     overflow: 'hidden',
-    // Amélioration visuelle pour indiquer que la zone est cliquable
-    borderWidth: 1,
-    borderColor: 'rgba(255, 107, 53, 0.3)',
-    // Ombre pour améliorer l'impact visuel
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    // DESIGN : pas d'ombre portée sur une carte, pas de bordure accent décorative
   },
   responsiveContainer: {
     alignSelf: 'center',
@@ -400,11 +399,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: [{ translateX: -12 }, { translateY: -12 }],
+    transform: [{ translateX: -22 }, { translateY: -22 }],
     borderRadius: 12,
     padding: 4,
-    minWidth: 24,
-    minHeight: 24,
+    minWidth: 44,
+    minHeight: 44,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -424,7 +423,7 @@ const styles = StyleSheet.create({
   },
   unavailableText: {
     color: '#FFF',
-    fontSize: 8,
+    fontSize: 12,
     fontWeight: 'bold',
   },
   errorOverlay: {
@@ -440,14 +439,14 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: '#FF6B35',
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 4,
   },
   errorSubtext: {
     color: '#CCC',
-    fontSize: 8,
+    fontSize: 12,
     textAlign: 'center',
     marginTop: 2,
   },

@@ -14,3 +14,11 @@
 - source_plan: DocumentationR4Y/initiative-rock4me/tickets/epic-boucle/tickets/story-auto-evaluation-a-trois-etats-plan.md
   summary: L'écran de fin de session « C'est fini pour aujourd'hui. » omet le nombre de passes vues (EXPERIENCE.md:86).
   evidence: Trouvaille vérifiée de la revue quick story 1.3 ; la story 1.4 « Composition et fin de file » est le propriétaire déclaré de cet écran (son ticket porte le nombre de passes vues) — cross-check ici, pas de doublon de code en 1.3.
+
+- source_plan: DocumentationR4Y/initiative-rock4me/tickets/epic-boucle/tickets/story-refactor-sweep-plan.md
+  summary: JWT_SECRET de worker/.dev.vars = valeur déjà tracée dans worker/wrangler.toml (secret jumeau) et l'ancien jeton vit encore dans .env.production — rotation sans hygiène réelle.
+  evidence: Trouvaille vérifiée de la revue quick story 1.5 ; les deux fichiers sont des fichiers sensibles déjà tracés (AGENTS.md Secrets) — opération de secret-hygiène humaine (rotation + purge croisée) hors story, au moment rotate-secret ou équivalent.
+
+- source_plan: DocumentationR4Y/initiative-rock4me/tickets/epic-boucle/tickets/story-refactor-sweep-plan.md
+  summary: AGENTS.md documente ~14 erreurs tsc préexistantes ; le réel mesuré au 2026-10-30 = 12 erreurs / 4 fichiers (components/Section.tsx, utils/gifCache.ts, worker/src/middleware/auth.ts, worker/src/routes/lists.ts).
+  evidence: Trouvaille documentaire de la revue quick story 1.5 ; la mise à jour d'AGENTS.md est un fix différable à la baseline suivante (éditer AGENTS.md hors story par la classification) ; les runs mesurent maintenant 12/4 à trois reprises.

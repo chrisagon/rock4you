@@ -149,6 +149,8 @@ export default function SessionRevisionScreen() {
                   move={moveCourante}
                   // Une seule lecture en cours (AD-7) : le plein écran suspend la lecture de la carte
                   isPlaying={!pleinEcranActif}
+                  // Le toggle de la carte est inerte en session (pas de pause) : libellé d'état
+                  a11yToggle={false}
                   onTogglePlay={() => {}}
                   size="responsive"
                   aspectRatio={16 / 9}
@@ -288,10 +290,10 @@ const styles = StyleSheet.create({
   cadreRevelation: {
     width: '100%',
     aspectRatio: 16 / 9,
+    // Token reveal-button (DESIGN.md) : surface-raised, ink-tertiary, rounded.md, 44 px
+    minHeight: 44,
     borderRadius: 12,
-    backgroundColor: '#000000',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 107, 53, 0.3)',
+    backgroundColor: '#333333',
     justifyContent: 'center',
     alignItems: 'center',
   },
