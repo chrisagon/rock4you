@@ -46,12 +46,23 @@ hitl = false
 risk = "medium"
 
 [[entry]]
+id = 6
+type = "story"
+title = "Plein écran en révision"
+description = "L'utilisateur veut agrandir le geste révélé : un bouton plein écran (cible 44 px) ouvre la modale plein écran existante (FullScreenImageModal, déjà routée par la porte média de la story 1.2) sur la passe en cours de révision, geste en boucle ; fermeture par tap extérieur ou croix, en français tutoiement ; le retour conserve la session et sa progression."
+verify = "Sur l'app web en dev local, depuis la session de révision, le bouton plein écran ouvre le geste agrandi en boucle, la fermeture revient sur la même carte, et la lecture passe par la porte (aucun ?t=, cache effectif)."
+covers = ["R1"]
+after = [4]
+hitl = false
+risk = "low"
+
+[[entry]]
 id = 5
 type = "story"
 title = "Refactor sweep"
-description = "Ménage seulement, à partir des plans et revues des stories 1-4 : code mort retiré, écrans alignés sur les tables des spines (DESIGN/EXPERIENCE), cibles et libellés d'accessibilité revérifiés ; aucun nouveau comportement."
-verify = "Typecheck et lint passent sur les fichiers touchés et aucune modification de comportement n'est rapportée par les vérifications des stories 1-4."
+description = "Ménage seulement, à partir des plans et revues des stories 1-6 : code mort retiré, écrans alignés sur les tables des spines (DESIGN/EXPERIENCE), cibles et libellés d'accessibilité revérifiés ; aucun nouveau comportement."
+verify = "Typecheck et lint passent sur les fichiers touchés et aucune modification de comportement n'est rapportée par les vérifications des stories 1-6."
 covers = []
-after = [4]
+after = [6]
 hitl = false
 risk = "low"
