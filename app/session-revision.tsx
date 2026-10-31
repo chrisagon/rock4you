@@ -11,8 +11,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft, Maximize } from 'lucide-react-native';
 import GifPlayer from '@/components/GifPlayer';
+import FullScreenImageModal from '@/components/FullScreenImageModal';
 import { danceMoves } from '@/data/danceMoves';
 import { useReview } from '@/contexts/ReviewContext';
 
@@ -27,6 +28,10 @@ export default function SessionRevisionScreen() {
   const [annonce, setAnnonce] = useState('');
   // « Geste indisponible. » : la passe sort de la file (EXPERIENCE.md:88) — message visible quelques secondes
   const [noticeGeste, setNoticeGeste] = useState<string | null>(null);
+  // Plein écran du geste révélé (story 1.6) : lié à L'ID de la passe affichée, pas à l'index —
+  // une exclusion ou un vote clavier referme la modale au même rendu, sans jamais montrer
+  // le geste d'une autre passe pas encore révélée
+  const [pleinEcranId, setPleinEcranId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!noticeGeste) return;
@@ -113,6 +118,8 @@ export default function SessionRevisionScreen() {
 
   const famille = moveCourante.family || 'Non classée';
   const revele = revelePourId === moveCourante.id;
+  // La modale plein écran vise la passe affichée : fermée dès que cette passe n'y est plus
+  const pleinEcranActif = pleinEcranId === moveCourante.id;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -140,7 +147,8 @@ export default function SessionRevisionScreen() {
               <>
                 <GifPlayer
                   move={moveCourante}
-                  isPlaying
+                  // Une seule lecture en cours (AD-7) : le plein écran suspend la lecture de la carte
+                  isPlaying={!pleinEcranActif}
                   onTogglePlay={() => {}}
                   size="responsive"
                   aspectRatio={16 / 9}
@@ -187,6 +195,15 @@ export default function SessionRevisionScreen() {
                 >
                   <Text style={styles.boutonPasserTexte}>Passer</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.boutonPleinEcran}
+                  onPress={() => setPleinEcranId(moveCourante.id)}
+                  accessibilityLabel={`Agrandir le geste de ${moveCourante.movementName}`}
+                >
+                  <Maximize size={16} color="#FFFFFF" />
+                  <Text style={styles.boutonPleinEcranTexte}>Plein écran</Text>
+                </TouchableOpacity>
               </>
             ) : (
               <TouchableOpacity
@@ -207,6 +224,15 @@ export default function SessionRevisionScreen() {
       <Text style={styles.regionAnnonce} accessibilityLiveRegion="polite">
         {annonce}
       </Text>
+
+      {moveCourante && pleinEcranActif && (
+        <FullScreenImageModal
+          visible
+          move={moveCourante}
+          isPlaying
+          onClose={() => setPleinEcranId(null)}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -303,6 +329,22 @@ const styles = StyleSheet.create({
   boutonPasserTexte: {
     fontSize: 14,
     color: '#999999',
+  },
+  boutonPleinEcran: {
+    marginTop: 12,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    minHeight: 44,
+    borderRadius: 9999,
+    backgroundColor: '#333333',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  boutonPleinEcranTexte: {
+    fontSize: 14,
+    color: '#FFFFFF',
   },
   regionAnnonce: {
     position: 'absolute',
