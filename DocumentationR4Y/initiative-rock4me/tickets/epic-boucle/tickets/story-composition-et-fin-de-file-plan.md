@@ -3,7 +3,7 @@ title: 'Composition et fin de file (epic-boucle / story 1.4)'
 type: 'feature'
 ticket: '4'
 created: '2026-10-30'
-status: 'built'
+status: done
 baseline_revision: '062aa5d1ef565a44e215b722fb8c94a903c9dfff'
 route: 'oneshot'
 route_source: 'auto'
