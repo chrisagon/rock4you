@@ -12,6 +12,8 @@ export interface ReviewState {
   carteIndex: number;
   dernierLancement: number | null;
   termine: boolean;
+  // Vote à trois états par passe (story 1.3) ; story 4 les consomme pour la file du lendemain
+  votes: { [id: string]: 'arevoir' | 'hesite' | 'su' };
 }
 
 const ETAT_INITIAL: ReviewState = {
@@ -19,6 +21,7 @@ const ETAT_INITIAL: ReviewState = {
   carteIndex: 0,
   dernierLancement: null,
   termine: false,
+  votes: {},
 };
 
 // La file du jour exclut les passes sans geste, dans l'ordre du catalogue
@@ -34,8 +37,10 @@ interface ReviewContextType {
   carteIndex: number;
   dernierLancement: number | null;
   termine: boolean;
+  sues: number;
   estCharge: boolean;
   avancer: () => void;
+  voter: (vote: 'arevoir' | 'hesite' | 'su') => void;
 }
 
 const ReviewContext = createContext<ReviewContextType | undefined>(undefined);
@@ -61,9 +66,14 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
             // carteIndex est un index de confiance : clamp dans [0, fileDuJour.length]
             const indexBrut = Number(sauvegarde.carteIndex);
             const indexValide = Number.isFinite(indexBrut) ? Math.trunc(indexBrut) : 0;
+            // votes : absent des états d'avant la story 1.3 -> {} (rétrocompatible)
             etatCharge = {
               ...sauvegarde,
               carteIndex: Math.min(Math.max(indexValide, 0), sauvegarde.fileDuJour.length),
+              votes:
+                sauvegarde.votes && typeof sauvegarde.votes === 'object' && !Array.isArray(sauvegarde.votes)
+                  ? sauvegarde.votes
+                  : {},
             };
           }
         }
@@ -77,6 +87,7 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
           carteIndex: 0,
           dernierLancement: Date.now(),
           termine: false,
+          votes: {},
         };
       }
 
@@ -100,7 +111,7 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
     });
   }, [etat]);
 
-  // Avance jetable (retirée à la story 3, remplacée par les votes)
+  // Avance sans voter (« Passer ») : la passe reste dans la file du jour
   const avancer = () => {
     setEtat(prev => {
       if (!prev || prev.termine || prev.fileDuJour.length === 0) return prev;
@@ -109,13 +120,38 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
     });
   };
 
+  // Vote à trois états : enregistre puis avance aussitôt, sans confirmation (EXPERIENCE.md:69)
+  const voter = (vote: 'arevoir' | 'hesite' | 'su') => {
+    setEtat(prev => {
+      if (
+        !prev ||
+        prev.termine ||
+        prev.fileDuJour.length === 0 ||
+        prev.carteIndex >= prev.fileDuJour.length
+      ) {
+        return prev;
+      }
+      const passe = prev.fileDuJour[prev.carteIndex];
+      const votes = { ...prev.votes, [passe]: vote };
+      const surDerniere = prev.carteIndex >= prev.fileDuJour.length - 1;
+      return surDerniere
+        ? { ...prev, votes, termine: true }
+        : { ...prev, votes, carteIndex: prev.carteIndex + 1 };
+    });
+  };
+
+  // Passes sues : chaque vote « Su » compte, sans animation (EXPERIENCE.md:66)
+  const sues = etat ? Object.values(etat.votes).filter(v => v === 'su').length : 0;
+
   const value: ReviewContextType = {
     fileDuJour: etat?.fileDuJour ?? ETAT_INITIAL.fileDuJour,
     carteIndex: etat?.carteIndex ?? ETAT_INITIAL.carteIndex,
     dernierLancement: etat?.dernierLancement ?? null,
     termine: etat?.termine ?? false,
+    sues,
     estCharge: etat !== null,
     avancer,
+    voter,
   };
 
   return (
