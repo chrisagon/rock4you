@@ -3,7 +3,7 @@ title: 'Auto-évaluation à trois états (epic-boucle / story 1.3)'
 type: 'feature'
 ticket: '3'
 created: '2026-10-30'
-status: 'in-progress'
+status: done
 baseline_revision: 'c65214f7c6de0fa25c3bfd8fa31ba3b658a05646'
 route: 'oneshot'
 route_source: 'auto'
