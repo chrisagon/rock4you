@@ -53,7 +53,7 @@ export default function SessionRevisionScreen() {
       ? danceMoves.find(m => m.id === fileDuJour[carteIndex + 1]) ?? null
       : null;
     annoncer(
-      `Vote ${LIBELLES_VOTE[vote]} enregistré. ${moveSuivante ? `Passe suivante : ${moveSuivante.movementName}.` : 'C\'est fini pour aujourd\'hui.'}`
+      `Vote ${LIBELLES_VOTE[vote]} enregistré. ${moveSuivante ? `Passe suivante : ${moveSuivante.movementName}.` : 'C\'est fini pour cette session.'}`
     );
   };
 
@@ -99,7 +99,7 @@ export default function SessionRevisionScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.finContainer}>
-          <Text style={styles.finTexte}>C'est fini pour aujourd'hui.</Text>
+          <Text style={styles.finTexte}>C'est fini pour cette session.</Text>
           {passesVues != null && (
             <Text style={styles.passesVuesTexte}>
               {passesVues === 1 ? '1 passe vue' : `${passesVues} passes vues`}
@@ -189,7 +189,7 @@ export default function SessionRevisionScreen() {
                       ? danceMoves.find(m => m.id === fileDuJour[carteIndex + 1]) ?? null
                       : null;
                     annoncer(
-                      `Passe passée sans vote. ${moveSuivante ? `Passe suivante : ${moveSuivante.movementName}.` : 'C\'est fini pour aujourd\'hui.'}`
+                      `Passe passée sans vote. ${moveSuivante ? `Passe suivante : ${moveSuivante.movementName}.` : 'C\'est fini pour cette session.'}`
                     );
                     avancer();
                   }}

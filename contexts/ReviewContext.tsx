@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { AppState, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { danceMoves } from '@/data/danceMoves';
 
@@ -6,6 +7,8 @@ import { danceMoves } from '@/data/danceMoves';
 // jamais un appel réseau — opaque au serveur.
 const CLEF_STOCKAGE_REVIEW = 'rock4me.review.v1';
 const TAILLE_FILE_JOUR = 12;
+// Story 7 : le créneau suivant ouvre 4 h après la fin de la dernière session
+const DELAI_CRENEAU_MS = 4 * 60 * 60 * 1000;
 
 export interface ReviewState {
   fileDuJour: string[];
@@ -20,6 +23,8 @@ export interface ReviewState {
   vues: string[];
   // Nombre de passes vues du jour, figé à la fin de session (story 1.4, EXPERIENCE.md:86)
   passesVues?: number;
+  // Fin de la dernière session : le créneau suivant se recompose 4 h plus tard (story 7)
+  finDerniereSession?: number;
 }
 
 const ETAT_INITIAL: ReviewState = {
@@ -65,6 +70,7 @@ interface ReviewContextType {
   termine: boolean;
   sues: number;
   passesVues?: number;
+  prochaineRevision: number | null;
   estCharge: boolean;
   avancer: () => void;
   voter: (vote: 'arevoir' | 'hesite' | 'su') => void;
@@ -104,11 +110,18 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
             // exclusions et vues : absents d'avant la story 1.4 -> [] (rétrocompatible)
             const exclusions = Array.isArray(sauvegarde.exclusions) ? sauvegarde.exclusions : [];
             const vues = Array.isArray(sauvegarde.vues) ? sauvegarde.vues : [];
-            const memeJour =
-              sauvegarde.dernierLancement != null &&
-              new Date(sauvegarde.dernierLancement).toDateString() === new Date().toDateString();
+            // Story 7 : la recomposition suit le créneau — 4 h depuis la fin de session,
+            // ou 4 h depuis le lancement d'une session encore ouverte (abandonnée, re-vivable) ;
+            // un état terminé sans horodatage est dû immédiatement
+            const creneauEcoule =
+              (sauvegarde.termine &&
+                (!sauvegarde.finDerniereSession ||
+                  Date.now() - sauvegarde.finDerniereSession >= DELAI_CRENEAU_MS)) ||
+              (!sauvegarde.termine &&
+                sauvegarde.dernierLancement != null &&
+                Date.now() - sauvegarde.dernierLancement >= DELAI_CRENEAU_MS);
 
-            if (memeJour) {
+            if (!creneauEcoule) {
               etatCharge = {
                 ...sauvegarde,
                 carteIndex: Math.min(Math.max(indexValide, 0), sauvegarde.fileDuJour.length),
@@ -117,15 +130,16 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
                 vues,
               };
             } else {
-              // Jour suivant (EXPERIENCE.md:84) : ratées/hésitées de la veille puis jamais vues ;
+              // Créneau suivant : ratées/hésitées du créneau écoulé puis jamais vues ;
               // « vues » ne s'étend PAS à la composition : une passe devient vue quand elle sort de l'écran,
-              // les passes non atteintes en cours de route restent proposables le lendemain
+              // les passes non atteintes en cours de route restent proposables au créneau suivant
               const nouvelleFile = composerFile(sauvegarde.fileDuJour, votes, exclusions, vues);
               etatCharge = {
                 fileDuJour: nouvelleFile,
                 carteIndex: 0,
                 dernierLancement: Date.now(),
                 termine: false,
+                finDerniereSession: undefined,
                 votes,
                 exclusions,
                 vues,
@@ -166,6 +180,49 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
     };
   }, []);
 
+  // Le créneau se rattrape quand l'app revit au premier plan sans remontage du provider
+  // (onglet web re-visité, native revenue du fond) — sinon Réviser reste verrouillée avec une heure passée
+  const rattraperCreneau = useCallback(() => {
+    setEtat(prev => {
+      if (!prev || !prev.termine) return prev;
+      if (prev.finDerniereSession && Date.now() - prev.finDerniereSession < DELAI_CRENEAU_MS) {
+        return prev;
+      }
+      const nouvelleFile = composerFile(prev.fileDuJour, prev.votes, prev.exclusions, prev.vues);
+      return {
+        fileDuJour: nouvelleFile,
+        carteIndex: 0,
+        dernierLancement: Date.now(),
+        termine: false,
+        finDerniereSession: undefined,
+        votes: prev.votes,
+        exclusions: prev.exclusions,
+        vues: prev.vues,
+        passesVues: 0,
+      };
+    });
+  }, []);
+
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      const surVisible = () => {
+        if (document.visibilityState === 'visible') rattraperCreneau();
+      };
+      document.addEventListener('visibilitychange', surVisible);
+      return () => document.removeEventListener('visibilitychange', surVisible);
+    }
+    const souscription = AppState.addEventListener('change', etatApp => {
+      if (etatApp === 'active') rattraperCreneau();
+    });
+    return () => souscription.remove();
+  }, [rattraperCreneau]);
+
+  // Onglet laissé ouvert à travers l'échéance : rattrapage à intervalle régulier
+  useEffect(() => {
+    const tempo = setInterval(rattraperCreneau, 30_000);
+    return () => clearInterval(tempo);
+  }, [rattraperCreneau]);
+
   // Chaque changement est persisté : la progression survit au rechargement
   useEffect(() => {
     if (!etat) return;
@@ -185,7 +242,7 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
       const vues = [...(prev.vues ?? []), passeSortante];
       const surDerniere = prev.carteIndex >= prev.fileDuJour.length - 1;
       return surDerniere
-        ? { ...prev, vues, termine: true, passesVues: (prev.passesVues ?? 0) + 1 }
+        ? { ...prev, vues, termine: true, passesVues: (prev.passesVues ?? 0) + 1, finDerniereSession: Date.now() }
         : { ...prev, vues, carteIndex: prev.carteIndex + 1, passesVues: (prev.passesVues ?? 0) + 1 };
     });
   };
@@ -206,7 +263,7 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
       const vues = [...(prev.vues ?? []), passe];
       const surDerniere = prev.carteIndex >= prev.fileDuJour.length - 1;
       return surDerniere
-        ? { ...prev, votes, vues, termine: true, passesVues: (prev.passesVues ?? 0) + 1 }
+        ? { ...prev, votes, vues, termine: true, passesVues: (prev.passesVues ?? 0) + 1, finDerniereSession: Date.now() }
         : { ...prev, votes, vues, carteIndex: prev.carteIndex + 1, passesVues: (prev.passesVues ?? 0) + 1 };
     });
   };
@@ -223,6 +280,7 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
         exclusions: [...new Set([...prev.exclusions, id])],
         vues: [...(prev.vues ?? []), id],
         termine: fileRestante.length === 0 ? true : prev.termine,
+        finDerniereSession: fileRestante.length === 0 ? Date.now() : prev.finDerniereSession,
         passesVues: (prev.passesVues ?? 0) + 1,
       };
     });
@@ -238,6 +296,8 @@ export function ReviewProvider({ children }: ReviewProviderProps) {
     termine: etat?.termine ?? false,
     sues,
     passesVues: etat?.passesVues,
+    prochaineRevision:
+      etat?.termine && etat?.finDerniereSession ? etat.finDerniereSession + DELAI_CRENEAU_MS : null,
     estCharge: etat !== null,
     avancer,
     voter,

@@ -5,10 +5,14 @@ import { router } from 'expo-router';
 import { useReview } from '@/contexts/ReviewContext';
 
 export default function ReviseScreen() {
-  const { fileDuJour, carteIndex, termine, sues, estCharge } = useReview();
+  const { fileDuJour, carteIndex, termine, sues, prochaineRevision, estCharge } = useReview();
 
   const restantes = termine ? 0 : Math.max(0, fileDuJour.length - carteIndex);
   const fileVide = restantes === 0;
+  const heureProcreneau =
+    prochaineRevision && prochaineRevision > Date.now()
+      ? new Date(prochaineRevision).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+      : null;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,7 +26,9 @@ export default function ReviseScreen() {
         </View>
       ) : fileVide ? (
         <View style={styles.vide}>
-          <Text style={styles.videTexte}>Rien à revoir aujourd'hui.</Text>
+          {heureProcreneau && (
+            <Text style={styles.videTexte}>Rien à revoir pour l'instant — prochaine révision vers {heureProcreneau}</Text>
+          )}
           <Text style={styles.suesTexte}>
             {sues === 1 ? '1 passe sue' : `${sues} passes sues`}
           </Text>
