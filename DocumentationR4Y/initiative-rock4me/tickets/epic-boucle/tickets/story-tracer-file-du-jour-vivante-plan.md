@@ -3,7 +3,7 @@ title: 'Tracer : file du jour vivante (epic-boucle / story 1.1)'
 type: 'feature'
 ticket: '1'
 created: '2026-10-29'
-status: 'built'
+status: done
 baseline_revision: '19f81168e5ae84bd8e994dda54fa1b7a972637af'
 route: 'full'
 route_source: 'auto'
