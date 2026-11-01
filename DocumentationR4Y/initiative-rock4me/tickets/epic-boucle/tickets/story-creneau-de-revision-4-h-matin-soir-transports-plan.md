@@ -3,7 +3,7 @@ title: 'Créneau de révision 4 h (matin/soir transports) (epic-boucle / story 1
 type: 'feature'
 ticket: '7'
 created: '2026-10-30'
-status: 'built'
+status: done
 baseline_revision: '8ab8812f5c9b59ecbe45c322b1f421bbbe8efb4b'
 route: 'oneshot'
 route_source: 'auto'

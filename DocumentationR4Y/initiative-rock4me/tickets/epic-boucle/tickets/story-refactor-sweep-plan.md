@@ -3,7 +3,7 @@ title: 'Refactor sweep (epic-boucle / story 1.5)'
 type: 'refactor'
 ticket: '5'
 created: '2026-10-30'
-status: 'built'
+status: done
 baseline_revision: '3c82ae60813480b77ae83b47f10ef981e00cc041'
 route: 'oneshot'
 route_source: 'auto'
