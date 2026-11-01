@@ -390,11 +390,11 @@ export default function SearchScreen() {
               <ResponsiveGrid<DanceMove>
                 data={filteredMoves}
                 keyExtractor={(item) => item.id}
-                renderItem={({ item: move }) => (
+                renderItem={({ item: move, largeur, colonnes }) => (
                   <MoveCard
                     move={move}
-                    width={itemWidth}
-                    columns={columns}
+                    width={largeur}
+                    columns={colonnes}
                     isPlaying={playingGifs.has(move.id)}
                     isFavorite={isFavoriteMove(move.id)}
                     onTogglePlay={toggleGifPlayback}
@@ -708,8 +708,8 @@ export default function SearchScreen() {
           <ResponsiveGrid<DanceMove>
             data={filteredMoves}
             keyExtractor={(item) => item.id}
-            renderItem={({ item: move }) => (
-              <View style={[styles.moveCard, { width: itemWidth }]}> 
+            renderItem={({ item: move, largeur, colonnes }) => (
+              <View style={[styles.moveCard, { width: largeur }]}>
                 <View style={styles.gifContainer}>
                   <GifPlayer
                     move={move}
@@ -717,7 +717,7 @@ export default function SearchScreen() {
                     onTogglePlay={() => toggleGifPlayback(move.id)}
                     size="responsive"
                     aspectRatio={16/9}
-                    maxWidth={itemWidth - 30}
+                    maxWidth={largeur - 30}
                     maxHeight={200}
                   />
                   <TouchableOpacity
@@ -729,7 +729,7 @@ export default function SearchScreen() {
                 </View>
                 <View style={styles.moveContent}>
                   <View style={styles.moveHeader}>
-                    <Text style={[styles.moveName, { fontSize: columns > 2 ? 16 : 18 }]} numberOfLines={2}>
+                    <Text style={[styles.moveName, { fontSize: colonnes > 2 ? 16 : 18 }]} numberOfLines={2}>
                       {move.movementName}
                     </Text>
                     <View style={styles.difficultyBadge}>
@@ -754,11 +754,11 @@ export default function SearchScreen() {
                   <Text style={styles.courseName} numberOfLines={1}>{move.courseName}</Text>
                   <Text style={styles.family} numberOfLines={1}>Famille: {move.family}</Text>
                   
-                  {move.remarks && columns === 1 && (
+                  {move.remarks && colonnes === 1 && (
                     <Text style={styles.remarks} numberOfLines={2}>{move.remarks}</Text>
                   )}
                   
-                  {columns === 1 && (
+                  {colonnes === 1 && (
                     <View style={styles.technicalInfo}>
                       <Text style={styles.technicalText}>
                         {move.startPosition} → {move.endPosition}
