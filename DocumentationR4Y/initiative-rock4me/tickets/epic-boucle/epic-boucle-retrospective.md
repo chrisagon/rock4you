@@ -72,7 +72,7 @@ headless: false
 
 ## Action items (proposés — à la décision humaine)
 
-1. **Redéployer le bundle corrigé** (`dist` local, entry `8911df6f` avec `gif.kartaro.fr` embarqué) sur les projets `rock4me` et `rock4you` (`--branch=main`) dès que le réseau Cloudflare revient — puis re-vérifier le bundle servi. Owner : Christophe (ou agent sur son go). **Bloqué : réseau API Cloudflare (4 timeouts en série à 20h42).**
+1. **✅ FAIT 2026-11-01 — Redéployer le bundle corrigé** (entry `8911df6f` avec `gif.kartaro.fr` embarqué) sur `rock4me` (en ligne, vérifié par téléchargement du bundle servi ✓) ; le projet secondaire `rock4you` reste sur le build `9a5eb4f6` (déploiements en timeout répétés — à refaire sans urgence).
 2. **Rattraper les passes « Passées »** dans la composition (`ReviewContext.tsx:55-61`) — une passe présentée non votée non exclue doit être re-proposable. Owner : Sofia (à trancher : règle de ré-entrée).
 3. **Faire survivre l'écran de fin à l'échéance du créneau** (`ReviewContext.tsx:201, 221-224`) — le rattrapage ne doit pas effacer « C'est fini pour cette session » sous les yeux ; recomposer à la prochaine navigation. Owner : Sofia (story à trancher).
 4. **Dé-duplication** : porte média (GifPlayer/FullScreenImageModal), clones GifPlayer↔CachedGif, transitions ReviewContext, config R2, blocs cookie worker. Owner : épics suivants (story de ménage).
