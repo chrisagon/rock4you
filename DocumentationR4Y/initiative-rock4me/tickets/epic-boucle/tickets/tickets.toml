@@ -57,12 +57,23 @@ hitl = false
 risk = "low"
 
 [[entry]]
+id = 7
+type = "story"
+title = "Créneau de révision 4 h (matin/soir transports)"
+description = "La fin de session ne verrouille plus la journée : la file du créneau se recompose 4 h après la fin de la derniere session (pas au changement de calendrier), pour réviser matin et soir dans les transports. Les votes du créneau précédent alimentent la composition (ratees/hesitees en tete, puis jamais vues) ; fin de session « C'est fini pour cette session. » avec le nombre de passes vues et l'heure de la prochaine revision sur Réviser. Horloge locale, aucun serveur (AD-1)."
+verify = "Sur l'app web en dev local, après une session finie, Réviser affiche l'heure de la prochaine revision ; simuler l'écoulement de 4 h (ou tricher le stockage) recompose la file avec les ratees du creneau precedent en tete et permet de voter a nouveau sans attendre le lendemain."
+covers = ["R1"]
+after = [6]
+hitl = false
+risk = "medium"
+
+[[entry]]
 id = 5
 type = "story"
 title = "Refactor sweep"
-description = "Ménage seulement, à partir des plans et revues des stories 1-6 : code mort retiré, écrans alignés sur les tables des spines (DESIGN/EXPERIENCE), cibles et libellés d'accessibilité revérifiés ; aucun nouveau comportement."
-verify = "Typecheck et lint passent sur les fichiers touchés et aucune modification de comportement n'est rapportée par les vérifications des stories 1-6."
+description = "Ménage seulement, à partir des plans et revues des stories 1-7 : code mort retiré, écrans alignés sur les tables des spines (DESIGN/EXPERIENCE), cibles et libellés d'accessibilité revérifiés ; aucun nouveau comportement."
+verify = "Typecheck et lint passent sur les fichiers touchés et aucune modification de comportement n'est rapportée par les vérifications des stories 1-7."
 covers = []
-after = [6]
+after = [7]
 hitl = false
 risk = "low"

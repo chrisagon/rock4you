@@ -55,5 +55,6 @@ Pour Christophe : une révision qui expose ses manques et s'achève, avec chaque
 
 ## Notes
 
+- Decision: 2026-10-30, à la demande de l'utilisateur : le délai entre deux révisions passe à **4 heures** (matin et soir dans les transports) — la fin de session verrouille le prochain créneau (`finDerniereSession` + 4 h), plus le changement de calendrier ; la fin de session dit « C'est fini pour cette session. » et Réviser affiche l'heure de la prochaine ; story 7 « Créneau de révision 4 h » insérée avant le sweep, qui couvre 1-7. Remplace [HYPOTHÈSE] « file J+1/reprend les ratées d'hier » : les votes du créneau précédent alimentent la même composition.
 - Decision: la story 1 (« Tracer : file du jour vivante ») est le tracer bullet de l'épic ; les stories forment une voie unique 1→2→3→4→5 (même écran de session partagé), le sweep ferme l'épique. Daté 2026-10-29.
 - Decision: les vérifications de stories tournent en dev local (expo + worker localhost) ; les done-when intégrés à la Pages déployée tournent à la clôture de l'épique, sur le push de l'utilisateur (consent demandé à ce moment-là, jamais poussé par l'agent). Daté 2026-10-29.
