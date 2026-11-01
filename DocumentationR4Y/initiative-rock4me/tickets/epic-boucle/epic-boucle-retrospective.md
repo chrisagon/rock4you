@@ -63,8 +63,8 @@ headless: false
 ## Behavior verification
 
 - **Exercé en headless local** (sondes du run) : parcours complet register→revise→révélation→votes(3 états)→plein écran→croix ; barre de votes présente (À revoir/Hésité/Su/Passer/Plein écran = true dans le DOM après révélation) ; file recomposée sur simulation de jour ; garde des tabs tenue à 0,5 s ; cookie + `/auth/me`=200 après reload ✓ — références : les scripts de sonde cités dans les deux feuilles backlog + memlogs.
-- **Exercé sur le déployé** : hash du build vérifié (`entry-9a5eb4f6` puis `8911df6f` local prêt), CORS preflight prod pour `rock4me.pages.dev` = 204 + Allow-Origin ✓, `/health` prod healthy ✓.
-- **PAS encore exercé** : la session complète **conditions réelles sur la Pages déployée** par l'utilisateur (dernière ligne du done-when) — open ; et le bundle corrigé (`8911df6f`) n'est pas en ligne (réseau). Le done-when d'intégration reste donc **ouvert**.
+- **Exercé sur le déployé** : hash du build vérifié (`9a5eb4f6` → `8911df6f` → `78571d18` tous servis à tour de rôle), CORS preflight prod pour `rock4me.pages.dev` = 204 + Allow-Origin ✓, `/health` prod healthy ✓, worker prod déployé (version 76337037 : `/me` lit le cookie + CORS).
+- **Validé par l'utilisateur sur la déployée 2026-11-01** : « J'ai testé. Le résultat me convient. » (tests sur `rock4me.pages.dev` : fix grille desktop + le produit épic) — le done-when d'intégration (« la Pages déployée joue une session complète en conditions réelles ») est couvert par cette validation utilisateur, l'utilisateur jouant ses sessions sur l'URL de production depuis le déploiement.
 
 ## Previous-retro follow-through
 
@@ -72,7 +72,7 @@ headless: false
 
 ## Action items (proposés — à la décision humaine)
 
-1. **✅ FAIT 2026-11-01 — Redéployer le bundle corrigé** (entry `8911df6f` avec `gif.kartaro.fr` embarqué) sur `rock4me` (en ligne, vérifié par téléchargement du bundle servi ✓) ; le projet secondaire `rock4you` reste sur le build `9a5eb4f6` (déploiements en timeout répétés — à refaire sans urgence).
+1. **✅ FAIT 2026-11-01 — Redéployer le bundle corrigé** sur `rock4me` (en ligne : `8911df6f` puis `78571d18` grille corrigée, vérifiés par téléchargement du bundle servi ✓). Le projet secondaire `rock4you` : config production branch corrigée (`majergonomie` → `main`) mais son déploiement dernier a échoué réseau (build en attente dans `dist/`, 1 commande à rejouer).
 2. **Rattraper les passes « Passées »** dans la composition (`ReviewContext.tsx:55-61`) — une passe présentée non votée non exclue doit être re-proposable. Owner : Sofia (à trancher : règle de ré-entrée).
 3. **Faire survivre l'écran de fin à l'échéance du créneau** (`ReviewContext.tsx:201, 221-224`) — le rattrapage ne doit pas effacer « C'est fini pour cette session » sous les yeux ; recomposer à la prochaine navigation. Owner : Sofia (story à trancher).
 4. **Dé-duplication** : porte média (GifPlayer/FullScreenImageModal), clones GifPlayer↔CachedGif, transitions ReviewContext, config R2, blocs cookie worker. Owner : épics suivants (story de ménage).
